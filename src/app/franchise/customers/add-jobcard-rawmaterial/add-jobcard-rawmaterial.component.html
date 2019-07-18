@@ -1,0 +1,144 @@
+<mat-dialog-content style="overflow: hidden;">
+	<div class="convert-franchies-modle mr16" style="min-width: inherit; max-width: inherit;">
+		<div class="header">
+			<h1>ADD RAW MATERIAL</h1>
+			<button mat-button color="primary" mat-dialog-close><i class="material-icons">clear</i></button>
+		</div>
+	</div>   
+	<div class="cs-spinner full-page" *ngIf = "loading_list">
+		<div class="outer">
+			<div class="innear">
+				<mat-spinner></mat-spinner>
+				<P>LOADING . . .</P>
+			</div>
+		</div>
+		</div>
+		<div class="cs-container">
+			<div class="cs-row">
+				<div class="contst">
+					<div class="cs-heading">
+						<h2>Add Items</h2>
+					</div>
+					
+					<div class="form-field">
+						<div class="row">
+							<form name="job_card_form" #r="ngForm" novalidate>
+								<div class="row">
+									
+									<!-- <div class="control-field col-4">
+										<mat-form-field class="cs-multi-select">
+											<mat-select placeholder="Category Name" name="category" [(ngModel)]="raw_form.category" (selectionChange)="get_allbrands()" required>
+												<mat-option *ngFor="let row of categoryList; let b = index" [value]="row.category">
+													{{ row.category }}
+												</mat-option>
+											</mat-select>
+										</mat-form-field>
+										
+										
+									</div> -->
+									
+									
+									
+									<div class="control-field col-4">
+										
+										<mat-form-field class="cs-multi-select">
+											<mat-select placeholder="Brand Name" name="brand_name" [(ngModel)] = "raw_form.brand_name" #brands="ngModel" (selectionChange)='get_selected_brand(brands.value)'  required>
+												<mat-option *ngFor="let val of brandsdata" [value]="val.brand_name"> {{val.brand_name}} </mat-option>
+											</mat-select>
+										</mat-form-field>
+										
+										<mat-error color="primary" *ngIf="r.submitted && !brands.valid" >This field is required</mat-error>
+									</div>
+									
+									<div class="control-field col-4">
+										
+										<mat-form-field class="cs-multi-select">
+											<mat-select placeholder="Product Name" name="product_name" [(ngModel)] = "raw_form.product_name" #products="ngModel"  (selectionChange)='get_selected_product(products.value)'  required>
+												<mat-option *ngFor="let val of productsdata" [value]="val.product_name"> {{val.product_name}} </mat-option>
+											</mat-select>
+										</mat-form-field>
+										
+										<mat-error color="primary" *ngIf="r.submitted && !products.valid" >This field is required</mat-error> 
+									</div>
+									
+									<div class="control-field col-4" >
+										<mat-form-field class="cs-multi-select">
+											<mat-select placeholder="U O M" name="uom" [(ngModel)] = "raw_form.uom" #uoms="ngModel" (selectionChange)='get_selected_measures(uoms.value)'  required>
+												<mat-option *ngFor="let val of measures" [value]="val.uom"> {{val.uom}} </mat-option>
+											</mat-select>
+										</mat-form-field>
+										<mat-error color="primary" *ngIf="r.submitted && !uoms.valid" >This field is required</mat-error>
+									</div>
+									
+									
+									
+									<div class="control-field col-4">
+										<mat-form-field class="example-full-width cs-input">
+											<input matInput placeholder="Current Stock" name="current_stock" [(ngModel)] = "raw_form.current_stock" #current_stock="ngModel" readonly>
+										</mat-form-field>
+									</div>
+									
+									<div class="control-field col-4 pr70">
+										
+										<mat-form-field class="example-full-width cs-input" >
+											<input type="number" matInput placeholder="Q T Y" name="qty" [(ngModel)] = "raw_form.qty" #q="ngModel" required>
+										</mat-form-field>
+										<mat-error color="primary" *ngIf="r.submitted && !q.valid" >This field is required</mat-error>
+										
+										<div class="plus-btn" *ngIf="raw_form.current_stock > 0 && raw_form.current_stock >= raw_form.qty && raw_form.qty > 0">
+											<a mat-raised-button color="warn" [disabled]="r.invalid" (click)="r.valid && addtocart(r)">
+												<i class="material-icons">add</i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</form>
+							
+							<div class="cs-table mt20" *ngIf="cart_data.length > 0" >
+								<div class="header">
+									<table>
+										<tr>
+											<th>Item Description</th>
+											<th  class="w100">QTY</th>
+											<th  class="w100">UOM</th>
+											<th class="w70">&nbsp;</th>
+										</tr>
+									</table>
+								</div>
+								<div class="table-container">
+									<div class="table-body">
+										<table>
+											<tr *ngFor="let row of cart_data;let i = index">
+												<td> {{row.brand_name}} {{row.product_name}} {{row.attr_type}} {{row.attr_option}} {{row.uom}}</td>
+												<td  class="w100">{{row.qty}}</td>
+												<td  class="w100">{{row.uom}}</td>
+												<td class="delete-icon text-center w70">
+													<a mat-button color="primary" (click)="removeCartData(i)">
+														<i class="material-icons">delete_sweep</i>
+													</a>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</mat-dialog-content>
+	
+	<!-- ACTIONS BUTTONS -->
+	
+	<mat-dialog-actions class="mb0" align="end">
+		<div class="cs-btn fixedd pr10">
+			<button mat-raised-button color="warn" style="color: #fff;" [disabled]="!cart_data.length" (click)="saveraw_material()">SAVE</button>
+		</div>
+		<!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+	</mat-dialog-actions>
+	
+	
+	

@@ -1,0 +1,168 @@
+<div class="main-container">
+        <div class="master-heading">
+          <div class="heading">
+            <h1>MASTER's</h1>
+          </div>
+        </div>
+          <div class="cs-container">
+              <div class="cs-row cs-tabs-space">
+                <app-master-add-tabs></app-master-add-tabs>
+                  <div class="right-data">
+                    <form name="form" (ngSubmit)="f.form.valid && saveService()" #f="ngForm" novalidate>
+                      <div class="contst">
+                          <div class="cs-heading">
+                              <h2>Add Franchise Service</h2>
+                          </div>
+                          
+                          <div class="form-field">
+                              <div class="row">
+                                  <div class="control-field col-3">
+                                      <mat-form-field class="example-full-width cs-input select-input">
+                                          <input matInput placeholder="category" [matAutocomplete]="category" name="category" [(ngModel)] = "form.category" #category="ngModel" required>
+                                          <mat-autocomplete #category="matAutocomplete">
+                                              <mat-option *ngFor="let val of filteredCategory | async" [value]="val.name">
+                                                  <small>{{ val.name }}</small>
+                                              </mat-option>
+                                          </mat-autocomplete>
+                                      </mat-form-field>
+                                  </div>
+                                  
+                                  <div class="control-field col-3">
+                                      <mat-form-field class="example-full-width cs-input">
+                                          <input matInput placeholder="Service Name"  name="service_name" [(ngModel)] = "form.service_name" #service_name="ngModel" required>
+                                         </mat-form-field>
+                                  </div>
+      
+                                  <div class="control-field col-3">
+                                          <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="SAC" type="number" #sac_code name="sac"  [(ngModel)]="form.sac"  min="0" value="0" step="0.01">
+                                          </mat-form-field>
+                                        </div>
+      
+                                        
+                                  <div class="control-field col-3">
+                                          <mat-form-field class="example-full-width cs-input">
+                                            <input matInput type="number" #gst name="gst" placeholder="GST" [(ngModel)]="form.gst" max="70" min="0" value="0" step="0.01">
+                                          </mat-form-field>
+                                        </div>
+      
+      
+                              </div>
+                              
+                              <div class="row sprate-box">
+                         
+    
+                                  <div class="control-field col-3">
+                                      <mat-form-field class="cs-multi-select">
+                                        <mat-select placeholder="Unit Of Duration" name="unit_of_duration" [(ngModel)]="form.unit_of_duration" #unit_of_duration="ngModel" >
+                                          <mat-option value="Day">Day</mat-option>
+                                          <mat-option value="Month">Month</mat-option>
+                                          <mat-option value="Year">Year</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                    </div>
+    
+    
+                                          <div class="control-field col-3">
+    
+    
+                                              <mat-form-field class="cs-multi-select" *ngIf="( form.unit_of_duration == 'Year' || form.unit_of_duration == 'Month')" >
+                                                <mat-select placeholder="Value Of Duration" name="value_of_duration" [(ngModel)]="form.value_of_duration" value_of_duration="ngModel" >
+                                                
+                                                    <mat-option value="1">1</mat-option>
+                                                    <mat-option value="2">2</mat-option>
+                                                    <mat-option value="3">3</mat-option>
+                                                    <mat-option value="4">4</mat-option>
+                                                    <mat-option value="5">5</mat-option>
+                                                    <mat-option value="6">6</mat-option>
+                                                    <mat-option value="7">7</mat-option>
+                                                    <mat-option value="8">8</mat-option>
+                                                    <mat-option value="9">9</mat-option>
+                                                    <mat-option value="10">10</mat-option>
+                                                    <mat-option value="11">11</mat-option>
+                                                   
+    
+                                                </mat-select>
+                                              </mat-form-field>
+    
+                                              <div class="control-field col-3">
+                                                  <mat-form-field class="example-full-width cs-input inr-input" *ngIf="form.unit_of_duration == 'Day' ">
+                                                      <input matInput placeholder="Value Of Duration"  name="value_of_duration" [(ngModel)]="form.value_of_duration"  #value_of_duration  type="number" >
+                                                  </mat-form-field>
+                                              </div>
+    
+    
+                                            </div>
+                                            
+                                   
+      
+      
+                                  
+                                
+      
+                                  <div class="control-field col-3">
+                                      <mat-form-field class="example-full-width cs-input inr-input">
+                                          <input matInput placeholder="Price" #price name="price" [(ngModel)]="form.price" type="number">
+                                      </mat-form-field>
+                                  </div>
+      
+                      
+                                      <div class="control-field col-3 pr70">
+      
+                                      <mat-form-field class="example-full-width cs-input">
+                                              <textarea matInput placeholder="Description" class="h100" name="description" [(ngModel)] = "form.description" #description="ngModel"></textarea>
+                                              </mat-form-field>
+                                      
+                                      <div class="plus-btn">
+                                          <a mat-raised-button color="warn" (click)="storeUnitData( form.value_of_duration, form.unit_of_duration, form.price, form.description )">
+                                              <i class="material-icons">add</i>
+                                          </a>
+                                      </div>
+                                  </div>
+                                  
+                                  <div class="cs-table" *ngIf="!!itemlist?.length">
+                                      <div class="header">
+                                          <table>
+                                              <tr>
+                                                  <th>Duration</th>
+                                                  <th>Description</th>
+                                                  <th>Price (&#x20B9; )</th>
+                                                  <th class="w100">&nbsp;</th>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                      <div class="table-container">
+                                          <div class="table-body">
+                                              <table>
+                                                  <tr *ngFor="let data of itemlist;  let i = index">
+                                                      <td>{{ data.value_of_duration + ' ' + data.unit_of_duration }}</td>
+                                                      <td>{{ data.description }} </td>
+                                                      <td>{{ data.price }} </td>
+                                                      <td class="delete-icon text-center w100">
+                                                          <a mat-button color="primary" (click)="removeAttrData(i, data.id)">
+                                                              <i class="material-icons">delete_sweep</i>
+                                                          </a>
+                                                      </td>
+                                                  </tr>
+                                              </table>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              
+                          </div>
+                      </div>
+                      <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: sendingData}">
+                        <div class="in-btn">
+                          <button mat-raised-button color="primary" [attr.disabled]="sendingData">save</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <div class="h100"></div>
+      

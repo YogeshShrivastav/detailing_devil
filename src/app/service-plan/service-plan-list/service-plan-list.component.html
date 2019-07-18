@@ -1,0 +1,179 @@
+<div class="main-container">
+
+  <div class="master-heading" >
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+    <div class="top-search wp50 ml190">
+      <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getServicePlanList()">
+      <i class="material-icons">search</i>
+    </div>
+    <div class="top-pagination m-right-data">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getServicePlanList()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container" >
+    <div class="cs-row cs-tabs-space">
+
+            <!-- TABS Component -->
+            <app-master-listing-tabs></app-master-listing-tabs>
+            <!-- TABS Component -->
+
+            <div class="right-data tabs-listing">
+              <div class="cs-spinner half-page" *ngIf = "loading_list">
+              <div class="outer">
+                <div class="innear">
+                  <mat-spinner></mat-spinner>
+                  <P>LOADING . . .</P>
+                </div>
+              </div>
+            </div>
+              <div class="data-not-available" *ngIf="!loading_list && searchData && (service_plans.length < 1)">
+                <div class="outer">
+                  <div class="iinear">
+                    <div class="figure" matRipple>
+                      <div class="header">
+                        <img src="assets/img/data-not-available-header.svg" alt="">
+                      </div>
+
+                      <div class="description">
+                        <div class="cs-heading">
+                          <h2>Service plans</h2>
+                        </div>
+                        <div class="img">
+                          <i class="material-icons">error_outline</i>
+                        </div>
+                        <div class="psc">
+                          <p>data not available</p>
+                          <p>Tap on <a routerLink="/service_plans/add" >ADD NEW</a> for Service Plans</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="data-not-available" *ngIf="!loading_list && !searchData && search">
+                <div class="outer">
+                  <div class="iinear">
+                    <div class="figure" matRipple>
+                      <div class="header">
+                        <img src="assets/img/data-not-available-header.svg" alt="">
+                      </div>
+
+                      <div class="description">
+                        <div class="cs-heading">
+                          <h2>{{ search }}</h2>
+                        </div>
+                        <div class="img">
+                          <i class="material-icons">search</i>
+                        </div>
+                        <div class="psc">
+                          <p>data not available</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-table mt15" >
+                    <div class="header sticky-header">
+                        <table>
+                            <tr>
+                                <th class="w100">Vehicle Type</th>
+                                <th class="w100">Plan Name</th>
+                                <th class="w150">Category Type</th>
+                                <th class="w50">SAC</th>
+                                <th class="w50 text-center">Visit</th>
+                                <th class="w110">Invoice Name</th>
+                                <th class="w60 text-right">Price</th>
+                                <th class="w50 text-center">GST</th>
+                                <th class="w80 text-center">Duration</th>
+                                <th>Description</th>
+                                <!-- <th class="w110 text-center">Visit Type</th> -->
+                                <th>Raw Material</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let service_plan of service_plans; let i = index">
+                                    <td class="w100">{{ service_plan.vehicle_type }}</td>
+                                    <td class="w100">{{ service_plan.plan_name | strRplce }}</td>
+                                    <td class="w150">{{ service_plan.category_type }}</td>
+                                    <td class="w50">{{ service_plan.sac }}</td>
+                                    <td class="w50 text-center">{{ service_plan.number_of_visits }}</td>
+                                    <td class="w110">{{ service_plan.invoice_name }}</td>
+                                    <td class="w60 text-right"><p>{{ service_plan.price }}</p></td>
+                                    <td class="w50 text-center"><p>{{ service_plan.gst }}</p></td>
+                                    <td class="w80 text-center">{{ service_plan.interval_value + ' '+ service_plan.interval_type }}</td>
+                                    <td>{{ service_plan.description }}</td>
+                                    <!-- <td class="w110 in-table">
+                                     <ng-container *ngFor="let types of visit_types">
+                                      <table>
+                                        <ng-container *ngFor="let val of types; let i = index">
+                                          <ng-container *ngIf="val.service_plan_id == service_plan.id">
+                                            <tr><td>{{ val.visit_type }}</td></tr>
+                                          </ng-container>
+                                        </ng-container>
+                                      </table>
+                                    </ng-container>
+                                    </td> -->
+                                    <td class="in-table hv-actions">
+                                      <ng-container *ngFor="let materials of raw_materials">
+                                        <table>
+                                          <ng-container *ngFor="let val of materials; let i = index">
+                                            <ng-container *ngIf="val.service_plan_id == service_plan.id">
+                                              <tr>
+                                                <td>
+                                                  <div class="tags">
+                                                    <span *ngFor = "let val of val.raw_materials.split(',')">{{ val }}</span>
+                                                  </div>
+                                                </td>
+                                              </tr>
+                                            </ng-container>
+                                          </ng-container>
+                                        </table>
+                                      </ng-container>
+                                      <!-- <div class="action-btns">
+                                        <div class="outer">
+                                          <div class="innear">
+                                            <a mat-button class="edit" routerLink="{{service_plan.id}}/edit" routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                                            <a mat-button class="delete" (click) = "deleteServicePlan(service_plan.id)"><i class="material-icons">delete_sweep</i> Delete</a>
+                                          </div>
+                                        </div>
+                                      </div> -->
+
+                                      <div class="action-btns">
+                                        <a mat-button class="edit" routerLink="{{service_plan.id}}/edit" routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                                        <button mat-button class="delete" (click) = "deleteServicePlan(service_plan.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                                        </div>       
+                                    </td>
+                                    <!-- <td class="w100 text-center defult-hover">
+                                        <ul>
+                                          <li>
+                                             <a class="edit" matTooltip="Edit" routerLink="{{service_plan.id}}/edit" routerLinkActive="active"><i class="material-icons green-clr">edit</i></a>
+                                          </li>
+                                          <li>
+                                         <a class="delete" matTooltip="Delete" (click) = "deleteServicePlan(service_plan.id)"><i class="material-icons red-clr">delete_sweep</i></a>
+ 
+                                          </li>
+                                        </ul>
+                                       
+                                     </td> -->
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+
+<div class="h100"></div>

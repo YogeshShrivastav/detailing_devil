@@ -1,0 +1,76 @@
+<form name="form" (ngSubmit)="f.form.valid && identifyCustomer()" #f="ngForm" novalidate>
+        <mat-dialog-content class="convert-franchies-modle di-hidden">
+            <div class="header" style="padding: 0px 10px 10px 10px;">
+                <h1>Identify Customer</h1>
+                <button mat-button color="primary" mat-dialog-close class="mr0"><i class="material-icons">clear</i></button>
+            </div>
+            <div class="m-body form-field pl15 pr30">
+                <div class="row">
+                    <div class="control-field col-12">
+                        <div class="control-field col-6">
+                            <mat-form-field class="example-full-width cs-input">
+                                <input matInput placeholder="ENTER CONTACT NO." name="contact_no" [(ngModel)] = "validateForm.contact_no" #contact_no="ngModel" required>
+                            </mat-form-field>
+                            <mat-error color="primary" *ngIf="f.submitted && !contact_no.valid" >This field is required</mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
+        
+        <div class="cs-divider pt20 left-right-15">
+            <mat-divider></mat-divider>
+        </div>
+        
+        <!-- ACTIONS BUTTONS -->
+        
+        <mat-dialog-actions align="end">
+            <div class="cs-btn fixed pr10" [ngClass]="{loading: savingData}">
+                <div class="in-btn">
+                    <button type="submit" mat-raised-button color="warn"   style="color:#000 !important;cursor:pointer !important;">Identify</button>
+                </div>
+            </div>
+            <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+        </mat-dialog-actions>
+    </form>
+    <div class="cs-divider pt20 left-right-15">
+        <mat-divider></mat-divider>
+    </div>
+    <div class="convert-franchies-modle di-hidden" *ngIf = "f.submitted && f.form.valid">
+        <div class="header" style="padding: 0px 10px 10px 10px;" *ngIf = "temp.isExist">
+           
+            <div *ngIf = "consumer.type == 1">
+                <div class="condition-content">
+                        <h3>Customer Identified</h3>
+                    <h2>Customer is Available as Lead</h2>
+                    <span>{{consumer.first_name}} {{consumer.last_name}}</span>
+                    <a class="right-btn" mat-raised-button color="warn" routerLink="/addjobcard/{{consumer.id}}/0/{{f_id}}" (click)="create_job_card_lead()">Create Job Card</a>
+                </div>
+            </div>
+            <div *ngIf = "consumer.type == 2">
+                <div class="condition-content">
+                        <h3>Customer Identified</h3>
+                    <span>{{consumer.first_name}} {{consumer.last_name}}</span>
+                    <a mat-button  class="link"  (click)="create_job_card_lead()" >Create Job Card</a>               
+                </div>  
+            </div>
+
+            <div class="condition-content" *ngIf = "consumer.type == 2"  >
+                    <button class="right-btn" mat-raised-button color="warn" (click)="detail()" >View Detail</button>
+                </div>
+
+                <div class="condition-content" *ngIf = "consumer.type == 1"  >
+                        <button class="right-btn" mat-raised-button color="warn" (click)="leadDetail()" >View Detail</button>
+                    </div>
+
+
+        </div>
+        <div class="condition-content"  *ngIf = "temp.isExist == false ">
+                <h2>Customer Notidentified</h2>
+                <button class="right-btn" mat-raised-button color="warn" (click)="addLead()" >Add as Lead</button>
+            </div>
+            
+           
+
+    </div>
+    

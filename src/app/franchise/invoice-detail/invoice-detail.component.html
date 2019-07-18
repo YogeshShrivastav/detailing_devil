@@ -1,0 +1,283 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="back-btn">
+      <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li><p>
+          <span class="blue">  </span> 
+          <i class="material-icons r-arrow">keyboard_arrow_right</i> 
+          <span class="blue">Job Card</span> 
+          <i class="material-icons r-arrow">keyboard_arrow_right</i> 
+          <!-- <span>#652536</span> </p> -->
+        </li>
+        <!-- <li><p class="light">Status : <span class="green-clr">DONE</span></p></li>  -->
+        <!-- <li class="af-none"><p class="light">Amount : <span class="black-clr">&#8377; 54122.00</span></p></li>  -->
+      </ul>
+    </div>
+  </div>
+	<div class="cs-container">
+		<div class="cs-row cs-tabs-space">
+			<!-- TABS Component -->
+      <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+     
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+        <div class="row">
+          <div class="col-12">
+            <div class="contst">
+              
+              <div class="row">
+                <div class="col-8" style="padding-right: 7.5px;">
+                  <div class="cs-section">
+                    <div class="cs-heading">
+                      <h2>CUSTOMER DETAIL</h2>
+                    </div>
+                    
+                    <div class="side-by-side mt10" style="display: inherit;">
+                      <div class="row mr0">
+                        <div class="figure grid-three">
+                          <p>Name</p>
+                          <p>Adrina Sen</p>
+                        </div>
+                        <div class="figure grid-three">
+                          <p>Contact No</p>
+                          <p>8860774322</p>
+                        </div>
+                        <div class="figure grid-three">
+                          <p>Email</p>
+                          <p>adrina@gmail.com</p>
+                        </div>
+                        <div class="figure">
+                          <p>Address</p>
+                          <p>5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121001</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="cs-heading mt20">
+                      <h2>PLAN INFO</h2>
+                    </div>
+                    
+                    <div class="side-by-side">
+                        <div class="figure">
+                          <p>Plan Name</p>
+                          <p>All Cover X (5 Year)</p>
+                        </div>
+                        <div class="figure">
+                          <p>Valid Upto</p>
+                          <p>25 Jan 2019</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                <div class="col-4" style="padding-left: 7.5px;">
+                  
+                  <div class="cs-section">
+                    <div class="cs-heading">
+                      <h2>VEHICLE INFO</h2>
+                    </div>
+                    <div class="side-by-side mt10" style="display: inherit;">
+                      <div class="row mr0">
+                        <div class="figure grid-two">
+                          <p>Type</p>
+                          <p>Sedan</p>
+                        </div>
+                        <div class="figure grid-two">
+                          <p>Brand / Car Name</p>
+                          <p>Hyundai Verna</p>
+                        </div>
+                        <div class="figure grid-two">
+                          <p>Reg No.</p>
+                          <p>HR 51 BC 1742</p>
+                        </div>
+                        <div class="figure grid-two">
+                          <p>Last Service</p>
+                          <p>1 August 2018</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+					
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+              <div class="cs-table left-right-15">
+                  <div class="header">
+                      <table>
+                          <tr>
+                              <th class="w130">Brand</th>
+                              <th>Product</th>
+                              <th class="w80 text-center">QTY</th>
+                              <th class="w120 text-center">Measurement</th>
+                              <th class="w80 text-center">Rate</th>
+                              <th class="w100 text-center">Discount</th>
+                              <th class="w80 text-center">GST</th>
+                              <th class="w110 text-center">Amount</th>
+                          </tr>
+                      </table>
+                  </div>
+                  <div class="table-container">
+                      <div class="table-body">
+                          <table>
+                              <tr>
+                                  <td class="w130">Brand</td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td><p>Product Description</p></td></tr>
+                                          <tr><td><p>Product Description</p></td></tr>
+                                          <tr><td><p>Product Description</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="w80 in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>25</p></td></tr>
+                                          <tr><td class="text-center"><p>32</p></td></tr>
+                                          <tr><td class="text-center"><p>40</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="w120 in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>10ml</p></td></tr>
+                                          <tr><td class="text-center"><p>10ml</p></td></tr>
+                                          <tr><td class="text-center"><p>10ml</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="w80 in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>2500</p></td></tr>
+                                          <tr><td class="text-center"><p>3200</p></td></tr>
+                                          <tr><td class="text-center"><p>3200</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="w100 in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>200</p></td></tr>
+                                          <tr><td class="text-center"><p>300</p></td></tr>
+                                          <tr><td class="text-center"><p>100</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="w80 in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>250</p></td></tr>
+                                          <tr><td class="text-center"><p>320</p></td></tr>
+                                          <tr><td class="text-center"><p>110</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="w110 in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>25000</p></td></tr>
+                                          <tr><td class="text-center"><p>32000</p></td></tr>
+                                          <tr><td class="text-center"><p>15000</p></td></tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                              
+                              <tr>
+                                  <td class="">Brand</td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td><p>Product Description</p></td></tr>
+                                          <tr><td><p>Product Description</p></td></tr>
+                                          <tr><td><p>Product Description</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>25</p></td></tr>
+                                          <tr><td class="text-center"><p>32</p></td></tr>
+                                          <tr><td class="text-center"><p>40</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>10ml</p></td></tr>
+                                          <tr><td class="text-center"><p>10ml</p></td></tr>
+                                          <tr><td class="text-center"><p>10ml</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>2500</p></td></tr>
+                                          <tr><td class="text-center"><p>3200</p></td></tr>
+                                          <tr><td class="text-center"><p>3200</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>200</p></td></tr>
+                                          <tr><td class="text-center"><p>300</p></td></tr>
+                                          <tr><td class="text-center"><p>100</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>250</p></td></tr>
+                                          <tr><td class="text-center"><p>320</p></td></tr>
+                                          <tr><td class="text-center"><p>110</p></td></tr>
+                                      </table>
+                                  </td>
+                                  <td class="in-table">
+                                      <table>
+                                          <tr><td class="text-center"><p>25000</p></td></tr>
+                                          <tr><td class="text-center"><p>32000</p></td></tr>
+                                          <tr><td class="text-center"><p>15000</p></td></tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                              
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+              <div class="invoice-details">
+                  <table class="invoice-table">
+                    <tr>
+                      <td class="td">Item Total</td>
+                      <td class="w220 td">&#8377;  43,54000.00</td>
+                    </tr>
+                    <tr>
+                      <td class="td">Discount Amount</td>
+                      <td class="td">
+                        &#8377;  2500.000
+                        <div class="dis-input">
+                        <span><i class="material-icons dp48">create</i></span>
+                        <input type="text">
+                      </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="td">Sub Total</td>
+                      <td class="td">&#8377; 4351500.00</td>
+                    </tr>
+                    <tr>
+                      <td class="td">GST</td>
+                      <td class="td">&#8377; 18%</td>
+                    </tr>
+                    <tr>
+                      <td class="td">Grand Total</td>
+                      <td class="td">&#8377; 5214000.00</td>
+                    </tr>
+                  </table>
+                </div>
+          </div>
+        </div>
+      </div>
+		</div>
+    
+		<div class="h100"></div>
+	</div>
+</div>

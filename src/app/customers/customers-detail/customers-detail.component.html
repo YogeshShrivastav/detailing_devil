@@ -1,0 +1,189 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="back-btn">
+      <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li><a class="link">{{franchise_name}}</a></li>
+        <li><a class="link">Customers</a></li>
+        <li class="af-none"><p>{{detail.first_name}} {{detail.last_name}}</p></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <!-- <app-franchise-left-tabs></app-franchise-left-tabs> -->
+      <div class="master-tabs">
+        <ul>
+					<li><a mat-raised-button routerLink="/franchise-detail/{{franchise_id}}" routerLinkActive="active">{{franchise_name}}</a></li>
+					<li><a mat-raised-button routerLink="/franchise-stock/{{franchise_id}}" routerLinkActive="active">Stock</a></li>
+					<li><a mat-raised-button routerLink="/franchise-consumers/{{franchise_id}}" routerLinkActive="active">Leads</a></li>
+					<li><a mat-raised-button routerLink="/franchise-followup/{{franchise_id}}" routerLinkActive="active">Followup</a></li>
+				<!-- pooja code start-->
+					<li><a mat-raised-button routerLink="/franchise-customers/{{franchise_id}}/2" routerLinkActive="active">Customers</a></li>
+				<!-- pooja code end-->
+        </ul>
+        
+      </div>
+      <!-- TABS Component -->
+      
+      <div class="right-data">
+        <div class="row">
+          <div class="col-12">
+            <app-franchise-customer-left-tabs></app-franchise-customer-left-tabs>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="contst">
+              <div class="cs-heading">
+                <h2>BASIC DETAIL</h2>
+              </div>
+              
+              <div class="side-by-side mt10" style="display: inherit;">
+                <div class="row mr0">
+                  <div class="figure grid-three">
+                    <p>Name</p>
+                    <p>{{detail.first_name}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Contact No</p>
+                    <p>{{detail.phone}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Email</p>
+                    <p>{{detail.email}}</p>
+                  </div>
+                  <div class="figure">
+                    <p>Address</p>
+                    <p>{{detail.address}}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="cs-heading  mt15">
+                <h2>VEHICLE INFO</h2>
+                <div class="df-action position-set">
+                  <ul>
+                    <li>
+                      <a class="green-clr">
+                        <i class="material-icons">edit</i>
+                        Edit
+                      </a>
+                      
+                    </li>
+                    <li>
+                      <a class="red-clr">
+                        <i class="material-icons">delete_sweep</i>
+                        Delete
+                      </a>
+                      
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="cs-table mt10 left-right-15">
+                <div class="header">
+                  <table>
+                    <tr>
+                      <th>Type</th>
+                      <th>Brand / Car Name</th>
+                      <th>Reg No.</th>
+                      <th>Plan Name </th>
+                      <th>Valid Upto</th>
+                      <!-- <th>Next Service</th> -->
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container info-table">
+                  <div class="table-body">
+                    <table>
+                      <tr *ngFor="let veh of vehicle_info">
+                        <td>
+                          <mat-checkbox class="input-check"></mat-checkbox>
+                          {{veh.vehicle_type}}</td>
+                          <td> {{veh.model_no}}</td>
+                          <td>{{veh.regn_no}}</td>
+                          <td><a>{{veh.service_name}}</a></td>
+                          <td>{{veh.plan_end_date | date: 'dd MMM yyyy'}}</td>
+                          <!-- <td>96 Days</td> -->
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>     
+                
+                
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="right-data pl20">
+                <div class="contst summary">
+                  <div class="cs-heading">
+                    <h2>SUMMARY</h2>
+                  </div>
+                  
+                  <ul>
+                    <li class="grey-bg">
+                      <div class="head">
+                        <p class="name"># JOIN US</p>
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                    </li>
+                    
+                    <li class="green-bg">
+                      <div class="head">
+                        <div class="name">
+                          <p >JOB CARD #DD25324<br><span>Mohit Kumar</span></p>
+                        </div>
+                        
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                    </li>
+                    
+                    <li class="red-bg">
+                      <div class="head">
+                        <p class="name">JOB CARD #DD25324 <br><span>Mohit Kumar</span></p>
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                    </li>
+                    <li class="blue-bg">
+                      <div class="head">
+                        <div class="name">
+                          <p>INVOICE CREATED #356587</p>
+                          <p>JOB CARD #DD25324</p>
+                          <p>Mohit Kumar</p>
+                          <p>Amount: <span class="red-clr">5000</span></p>
+                        </div>
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                      
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="h100"></div>
+    </div>
+  </div>
+  

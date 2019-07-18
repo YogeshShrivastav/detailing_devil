@@ -1,0 +1,731 @@
+<div class="main-container">
+  <div class="master-heading bcspace h75" *ngIf="!franchise_id">
+    <div class="lead-step">
+      <ul>
+        <li>
+          <label class="active" >
+            <a>1</a>
+            <p>Franchising Information</p>
+          </label>
+        </li>
+        <li>
+          <label  >
+            <a [ngClass]="{'active': franch_stock.franchise_id }">2</a>
+            <p>Plan Information </p>
+          </label>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container pt90 detail" >
+    <div class="cs-row" *ngIf="franch_stock.franchise_id == '' ">
+      <div class="right-data left-right-space">
+        <form name="franchiseForm" (ngSubmit)="f.form.valid && saveFranchiseLead(f)" #f="ngForm" novalidate autocomplete="off">
+          <div class="contst">
+            <div class="cs-heading">
+              <h2>BASIC DETAIL</h2>
+              <p>Indicates required fields ( <span>*</span> ) </p>
+            </div>            
+            <div class="form-field">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Director/Owner Name " name="name" [(ngModel)] = "franchiseForm.name" #name="ngModel" required>
+                      </mat-form-field>
+                      <mat-error color="primary" *ngIf="f.submitted && !name.valid" >This field is required</mat-error>
+                    </div>
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Contact NO." (keypress)="numeric_Number($event)" name="contact_no" [(ngModel)] = "franchiseForm.contact_no" #contact_no="ngModel" maxlength="10" minlength="10" required>
+                      </mat-form-field>
+                      <mat-error color="primary" *ngIf="f.submitted && !contact_no.valid" >This field is required</mat-error>
+                    </div>
+                    
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Email" name="email" type="email"   pattern="[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" [(ngModel)] = "franchiseForm.email" #email="ngModel" required>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Pan No." name="pan_no" [(ngModel)] = "franchiseForm.pan_no" #pan_no="ngModel" >
+                      </mat-form-field>
+                    </div>
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Adhaar No." name="aadhaar_no" [(ngModel)] = "franchiseForm.aadhaar_no" #aadhaar_no="ngModel" >
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Director/Owner Name 2" name="name2" [(ngModel)] = "franchiseForm.name2" #name2="ngModel" required>
+                      </mat-form-field>
+                      <mat-error color="primary" *ngIf="f.submitted && !name2.valid" >This field is required</mat-error>
+                    </div>
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Contact No. 2" (keypress)="numeric_Number($event)" name="contact_no2" [(ngModel)] = "franchiseForm.contact_no2" #contact_no2="ngModel" maxlength="10" minlength="10" required>
+                      </mat-form-field>
+                      <mat-error color="primary" *ngIf="f.submitted && !contact_no2.valid" >This field is required</mat-error>
+                    </div>
+                    
+                    <div class="control-field col-4">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input matInput placeholder="Email 2" name="email2" type="email"  pattern="[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" [(ngModel)] = "franchiseForm.email2" #email2="ngModel" required>
+                      </mat-form-field>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              
+              <div class="cs-divider pt20 left-right-15">
+                <mat-divider></mat-divider>
+              </div>
+              
+              <div class="cs-heading mt20">
+                <h2>COMPANY INFO</h2>
+              </div>
+              
+              <div class="row">
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Company Name" name="company_name" [(ngModel)] = "franchiseForm.company_name" #company_name="ngModel" required>
+                  </mat-form-field>
+                </div>
+                
+                
+                <div class="control-field col-4">                  
+                  <mat-form-field class="cs-multi-select">
+                    <mat-select placeholder="Constitution" name="constitution" [(ngModel)] = "franchiseForm.constitution" #constitution="ngModel" required>
+                      <mat-option value="Pvt. Ltd.">Pvt. Ltd.</mat-option>
+                      <mat-option value="LTD">LTD</mat-option>
+                      <mat-option value="Partnership">Partnership</mat-option>
+                      <mat-option value="Proprietorship">Proprietorship</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4">   
+                  <mat-form-field class="cs-input cs-date-picker">
+                    <input placeholder="Training Start Date" [(ngModel)]="franchiseForm.training_start" name="training_start" matInput [matDatepicker]="picker" >
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4">   
+                  <mat-form-field class="cs-input cs-date-picker">
+                    <input  placeholder="Training End Date" [(ngModel)]="franchiseForm.training_end" name="training_end" matInput [matDatepicker]="picker1"   >
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                  
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Company Pan No." name="company_pan_no" [(ngModel)] = "franchiseForm.company_pan_no" #company_pan_no="ngModel" required>
+                  </mat-form-field>
+                  <!-- <mat-error color="primary" *ngIf="f.submitted && !company_name.valid" >This field is required</mat-error> -->
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="GSTIN" name="company_gstin" [(ngModel)] = "franchiseForm.company_gstin" #company_gstin="ngModel" required>
+                  </mat-form-field>
+                  <!-- <mat-error color="primary" *ngIf="f.submitted && !company_name.valid" >This field is required</mat-error> -->
+                </div>
+                
+                <!-- new -->
+                
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Business Type" name="business_type" [(ngModel)] = "franchiseForm.business_type" #business_type="ngModel" required>
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !business_type.valid" >This field is required</mat-error>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Business Loaction" name="business_loc" [(ngModel)] = "franchiseForm.business_loc" #business_loc="ngModel">
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4">   
+                  <mat-form-field class="cs-input cs-date-picker">
+                    <input placeholder="Date Of Association" [(ngModel)]="franchiseForm.associated_date " name="associated_date" matInput [matDatepicker]="picker2" #associated_date="ngModel" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !associated_date.valid" >This field is required</mat-error>
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Year Of Establishment" name="year_of_est" [(ngModel)] = "franchiseForm.year_of_est" #year_of_est="ngModel">
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4" style="display:none !important;">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="City Applying For" name="city_apply_for" [(ngModel)] = "franchiseForm.city_apply_for" #city_apply_for="ngModel">
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4" style="display:none !important;">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Automotive Exp" name="automotive_exp" [(ngModel)] = "franchiseForm.automotive_exp" #automotive_exp="ngModel">
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Pre fix" name="pre_fix" [(ngModel)] = "franchiseForm.pre_fix" #pre_fix="ngModel" required>
+                  </mat-form-field>
+                </div>
+                
+              </div>
+              
+              
+              <div class="cs-divider pt20 left-right-15">
+                <mat-divider></mat-divider>
+              </div>
+              
+              <div class="cs-heading mt20">
+                <h2>BANK ACCOUNT DETAIL</h2>                
+              </div>
+              <div class="row">
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Bank name" name="bank_name" [(ngModel)] = "franchiseForm.bank_name" #bank_name="ngModel" >
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !bank_name.valid" >This field is required</mat-error>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Company Name (AS PER BANK ACCOUNT)" name="company_name_in_bank" [(ngModel)] = "franchiseForm.company_name_in_bank" #company_name_in_bank="ngModel" >
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !company_name_in_bank.valid" >This field is required</mat-error>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Account Number" name="account_no" [(ngModel)] = "franchiseForm.account_no" #account_no="ngModel" >
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !account_no.valid" >This field is required</mat-error>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Account Type" name="account_type" [(ngModel)] = "franchiseForm.account_type" #account_type="ngModel" >
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !account_type.valid" >This field is required</mat-error>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="IFSC Code" name="ifsc_code" [(ngModel)] = "franchiseForm.ifsc_code" #ifsc_code="ngModel" >
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !ifsc_code.valid" >This field is required</mat-error>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Branch Name" name="branch_name" [(ngModel)] = "franchiseForm.branch_name" #branch_name="ngModel" >
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !branch_name.valid" >This field is required</mat-error>
+                </div>
+                <div class="col-4">
+                  <div class="control-field col-12">
+                    <mat-form-field class="example-full-width cs-input">
+                      <textarea matInput placeholder="Bank Address" class="h125" name="bank_address" [(ngModel)] = "franchiseForm.bank_address" #bank_address="ngModel" ></textarea>
+                    </mat-form-field>
+                    <mat-error color="primary" *ngIf="f.submitted && !bank_address.valid" >This field is required</mat-error>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="cs-divider pt20 left-right-15">
+                <mat-divider></mat-divider>
+              </div>
+              
+              
+              
+              <div class="cs-heading mt20">
+                <h2>ADDRESS </h2>
+              </div>
+              <div class="cs-heading mt20"> <h4>REGISTERED ADDRESS </h4></div>
+              <div class="row">                
+                <div class="control-field col-4">                   
+                  <mat-form-field class="cs-multi-select" >
+                    <mat-select placeholder="Country" [(ngModel)]="franchiseForm.country_id"  name="country_id" (selectionChange)="getLocations()"  required>
+                      <mat-option  *ngFor="let val of countries" [value]="val.id" >{{val.name}}</mat-option>
+                    </mat-select>
+                    <mat-error color="primary" *ngIf="f.submitted ">This field is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4 " >
+                  <div *ngIf="franchiseForm.country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="State" name = "state"   [(ngModel)] = "franchiseForm.state" #state = "ngModel" required>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select State" name="state"  (selectionChange)="getDistrictList(1)" [(ngModel)]="franchiseForm.state" #state="ngModel" required>
+                        <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="control-field col-4 ">
+                  <div *ngIf="franchiseForm.country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder = "District" name = "district"  [(ngModel)] = "franchiseForm.district" #district = "ngModel" required>                                               
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select District" name="district"  (selectionChange)="getCityList(1)"  [(ngModel)]="franchiseForm.district" #district="ngModel" required>
+                        <mat-option *ngFor="let val of districts" [value]="val.district_name"> {{val.district_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>                                          
+                </div>
+                <div class="control-field col-4 ">                              
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder = "City" name = "city"  [(ngModel)] = "franchiseForm.city" #city = "ngModel" required>                                               
+                  </mat-form-field>                              
+                </div>
+                <div class="control-field col-4 ">
+                  <div *ngIf="franchiseForm.country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder = "Pincode" name = "pincode"  [(ngModel)] = "franchiseForm.pincode" #pincode = "ngModel" required>                                               
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select Pincode" name="pincode"  [(ngModel)]="franchiseForm.pincode" #pincode="ngModel" required>
+                        <mat-option *ngFor="let val of pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>                                          
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="cs-multi-select" >
+                    <mat-select placeholder="Location" name="location_id" [(ngModel)] = "franchiseForm.location_id" #location_id="ngModel" required>
+                      <mat-option  *ngFor="let val of locations" [value]="val.id" >{{val.location_name}}</mat-option>
+                    </mat-select>
+                    <mat-error color="primary" *ngIf="f.submitted && location_id.invalid" >This field is required</mat-error>
+                  </mat-form-field>
+                </div>
+                
+                
+                <div class="col-5">
+                  <div class="control-field col-12">
+                    <mat-form-field class="example-full-width cs-input">
+                      <textarea matInput placeholder="Address" class="h125" name="address" [(ngModel)] = "franchiseForm.address" #address="ngModel" required></textarea>
+                    </mat-form-field>
+                    <mat-error color="primary" *ngIf="f.submitted && !address.valid" >This field is required</mat-error>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <!-- new -->
+              <div class="cs-heading mt20"> <h4 class="mb10"> ADDRESS OF CORRESPONDENCE </h4>
+                <mat-checkbox class="checbox-list" name="corscheck"  value="1" [ngModel]="franchiseForm.checkbox_corspondenceaddress" (ngModelChange)="correspondence_address($event)"><span>If different from permanent address</span></mat-checkbox>                            
+              </div>
+              <div class="row" *ngIf = "corespond">                
+                <div class="control-field col-4">                   
+                  <mat-form-field class="cs-multi-select" >
+                    <mat-select placeholder="Country" [(ngModel)]="franchiseForm.cors_country_id"  name="cors_country_id" (selectionChange)="getStateList()"  >
+                      <mat-option  *ngFor="let val of countries" [value]="val.id" >{{val.name}}</mat-option>
+                    </mat-select>                      
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4 " >
+                  <div *ngIf="franchiseForm.cors_country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="State" name = "cors_state"   [(ngModel)] = "franchiseForm.cors_state" #cors_state = "ngModel" >
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.cors_country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select State" name="cors_state"  (selectionChange)="getDistrictList(2)" [(ngModel)]="franchiseForm.cors_state" #cors_state="ngModel" >
+                        <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="control-field col-4 ">
+                  <div *ngIf="franchiseForm.cors_country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder = "District" name = "cors_district"  [(ngModel)] = "franchiseForm.cors_district" #cors_district = "ngModel" >                                               
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.cors_country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select District" name="cors_district"  (selectionChange)="getCityList(2)"  [(ngModel)]="franchiseForm.cors_district" #cors_district="ngModel" >
+                        <mat-option *ngFor="let val of corr_districts" [value]="val.district_name"> {{val.district_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>                                          
+                </div>
+                <div class="control-field col-4">                              
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder = "City" name = "cors_city"  [(ngModel)] = "franchiseForm.cors_city" #cors_city = "ngModel" >                                               
+                  </mat-form-field>                              
+                </div>
+                <div class="control-field col-4">
+                  <div *ngIf="franchiseForm.cors_country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder = "Pincode" name = "cors_pincode"  [(ngModel)] = "franchiseForm.cors_pincode" #cors_pincode = "ngModel">                                               
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.cors_country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select Pincode" name="cors_pincode"  [(ngModel)]="franchiseForm.cors_pincode" #cors_pincode="ngModel" required>
+                        <mat-option *ngFor="let val of corr_pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>                                          
+                </div>
+                
+                <div class="col-5">
+                  <div class="control-field col-12">
+                    <mat-form-field class="example-full-width cs-input">
+                      <textarea matInput placeholder="Address" class="h125" name="cors_address" [(ngModel)] = "franchiseForm.cors_address" #cors_address="ngModel" required></textarea>
+                    </mat-form-field>
+                    <mat-error color="primary" *ngIf="f.submitted && !address.valid" >This field is required</mat-error>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <div class="cs-heading mt20"> <h4>SHIPPING ADDRESS</h4> </div>
+              <div class="row" >                
+                <div class="control-field col-4">                   
+                  <mat-form-field class="cs-multi-select" >
+                    <mat-select placeholder="Country" [(ngModel)]="franchiseForm.ship_country_id"  name="ship_country_id" (selectionChange)="getStateList()"  >
+                      <mat-option  *ngFor="let val of countries" [value]="val.id" >{{val.name}}</mat-option>
+                    </mat-select>                      
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4 " >
+                  <div *ngIf="franchiseForm.ship_country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="State" name = "ship_state"   [(ngModel)] = "franchiseForm.ship_state" #ship_state = "ngModel" >
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.ship_country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select State" name="ship_state"  (selectionChange)="getDistrictList(3)" [(ngModel)]="franchiseForm.ship_state" #ship_state="ngModel" >
+                        <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="control-field col-4 ">
+                  <div *ngIf="franchiseForm.ship_country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder = "District" name = "ship_district"  [(ngModel)] = "franchiseForm.ship_district" #ship_district = "ngModel" >                                               
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.ship_country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select District" name="ship_district"  (selectionChange)="getCityList(3)"  [(ngModel)]="franchiseForm.ship_district" #ship_district="ngModel" >
+                        <mat-option *ngFor="let val of ship_districts" [value]="val.district_name"> {{val.district_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>                                          
+                </div>
+                <div class="control-field col-4 ">                              
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder = "City" name = "ship_city"  [(ngModel)] = "franchiseForm.ship_city" #ship_city = "ngModel" >                                               
+                  </mat-form-field>                              
+                </div>
+                <div class="control-field col-4 ">
+                  <div *ngIf="franchiseForm.ship_country_id != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder = "Pincode" name = "ship_pincode"  [(ngModel)] = "franchiseForm.ship_pincode" #ship_pincode = "ngModel" >                                               
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="franchiseForm.ship_country_id == 99">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Select Pincode" name="ship_pincode"  [(ngModel)]="franchiseForm.ship_pincode" #ship_pincode="ngModel" >
+                        <mat-option *ngFor="let val of ship_pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>                                          
+                </div>
+                
+                <div class="col-5">
+                  <div class="control-field col-12">
+                    <mat-form-field class="example-full-width cs-input">
+                      <textarea matInput placeholder="Address" class="h125" name="ship_address" [(ngModel)] = "franchiseForm.ship_address" #ship_address="ngModel" ></textarea>
+                    </mat-form-field>                      
+                  </div>
+                </div>
+                
+              </div>
+              <!-- new -->              
+            </div>
+          </div>
+          
+          <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: savingData}">
+            <div class="in-btn">
+              <button mat-raised-button  [disabled]="savingData" color="primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="cs-row" *ngIf="franch_stock.franchise_id">
+      <div class="right-data">
+        <div class="contst">
+          <div class="cs-heading">
+            <h2>BASIC INFORMATION</h2>
+          </div>
+          <div class="row">            
+            <div class="col-12">
+              <section class="check-section mt15">
+                <mat-checkbox class="check-first mr75" name="franchise_plan" (change)="clear_plan()" [(ngModel)]="franch_stock.franchise_plan" value="1">Select Plan</mat-checkbox>
+                <mat-checkbox class="check-first"  name="franchise_assign_product" [(ngModel)]="franch_stock.franchise_assign_product" value="1">Assign Product</mat-checkbox>
+              </section>
+            </div>
+          </div>
+          
+          <div class="cs-divider pt20 left-right-15">
+            <mat-divider></mat-divider>
+          </div>
+          
+          <mat-dialog-content class="convert-franchies-modle"  >
+            <div class="m-body mt15 left-right-15">
+              <div class="row mt15">
+                <div class="col-3 plan-list step2 shadow-none" *ngIf="franch_stock.franchise_id && franch_stock.franchise_plan == '1' ">
+                  <div class="head">
+                    <div class="cs-heading">
+                      <h2>Brand </h2>
+                    </div>
+                    
+                    <div class="search">
+                      <button mat-button><i class="material-icons">search</i></button>
+                    </div>
+                  </div>
+                  
+                  <div class="listing">
+                    
+                    <!-- <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Service Plan" name="service_plan" [(ngModel)]="consumerForm.service_plan" #service_plan="ngModel">
+                        <mat-option *ngFor="let val of service_plans" [value]="val.id"> {{val.plan_name}} </mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                    
+                    <mat-radio-group [(ngModel)]="franch_stock.plan_id" (change)="get_stock()" name="plan_id">
+                      <mat-radio-button  *ngFor="let val of service_plans" [value]="val.id"> {{val.plan}} </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                
+                <div  [ngClass]="{'col-9' : franch_stock.franchise_id && franch_stock.franchise_plan == '1', 'col-12' : franch_stock.franchise_id && franch_stock.franchise_assign_product == '1' }">
+                  
+                  <div class="form-field" *ngIf="franch_stock.franchise_id && franch_stock.franchise_assign_product == '1'">
+                    <form name="product_item" (ngSubmit)="a.form.valid && addProductItem(a)" #a="ngForm" novalidate autocomplete="off">
+                      
+                      <div class="row">
+                        <div class="control-field col-3" style="padding-top: 0px !important;">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Category Name" name="category" [(ngModel)]="addProduct.category" (selectionChange)="getBrandList()" required>
+                              <mat-option *ngFor="let row of categoryList; let b = index" [value]="row.category">
+                                <small>{{ row.category }}</small>
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        <div class="control-field col-3" style="padding-top: 0px !important;">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Brand" name="brand" [(ngModel)]="addProduct.brand" (selectionChange)="get_products()" required>
+                              <mat-option *ngFor="let val of brands;let i = index" [value]="val.brand_name"> {{val.brand_name}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        <div class="control-field col-3" style="padding-top: 0px !important;">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Product" name="product_id"  [(ngModel)]="addProduct.product_id" (selectionChange)="get_unit()" required>
+                              <mat-option *ngFor="let val of products;let i = index" [value]="val.id">{{val.product_name}}</mat-option>                              
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        
+                        <div class="control-field col-3" style="padding-top: 0px !important;">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Unit of Measurement" name="unit_measurement"  [(ngModel)]="addProduct.unit_measurement" required>
+                              <mat-option *ngFor="let val of units;let i = index" [value]="val.unit_of_measurement">{{val.unit_of_measurement}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        
+                        <div class="control-field col-3" [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Attribute type" name="attribute_type" [(ngModel)]="addProduct.attribute_type" (selectionChange)="getAttributeOptionList()">
+                              <mat-option *ngFor="let row of attributeTypeList; let r = index" [value]="row.attr_type">
+                                <small>{{row.attr_type}}</small>
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        
+                        <div class="control-field col-3"  [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Attribute Option" name="attribute_option" [(ngModel)]="addProduct.attribute_option">
+                              <mat-option *ngFor="let row of attributeOptionList; let r = index" [value]="row.attr_option">
+                                <small>{{row.attr_option}}</small>
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        
+                        <div class="control-field col-3" style="padding-top: 0px !important;margin-top:18px">                            
+                          <mat-form-field class="example-full-width cs-input">
+                            <input matInput placeholder="Qty" name="quantity" [(ngModel)] = "addProduct.quantity" #quantity="ngModel" required>
+                          </mat-form-field>
+                          <div class="plus-btn" style="top: 10px; margin:0 0 0 10px"> 
+                            <div class="in-btn" [ngClass]="{loading: savingData}">
+                              <button mat-raised-button type="submit" [attr.disabled]="savingData" color="warn" [attr.disabled]="savingData" color="primary">add</button>
+                            </div>                            
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  
+                  <div class="row" *ngIf="franch_stock.franchise_id && franch_stock.franchise_plan == '1'  && franch_stock.plan_id  ">
+                    <div class="col-6">
+                      <div class="sprate">
+                        <table>
+                          <tr>
+                            <td class="w150">Plan Name</td>
+                            <td class="w50 text-center">:</td>
+                            <td>{{plan_data.plan}}</td>
+                          </tr>
+                          <tr>
+                            <td class="w150">Plan Name</td>
+                            <td class="w50 text-center">:</td>
+                            <td>{{plan_data.price}}</td>
+                          </tr>
+                          <tr>
+                            <td>Description</td>
+                            <td class="text-center">:</td>
+                            <td>{{plan_data.description}}</td>
+                          </tr>
+                          <!-- <tr>
+                            <td>Accessories</td>
+                            <td class="text-center">:</td>
+                            <td><ng-container *ngFor="let val of accessories;let x = index">{{val.accessories_name+','}}</ng-container></td>
+                          </tr> -->
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="cs-table" *ngIf="franch_stock.franchise_id && ( (franch_stock.franchise_plan == '1'  && franch_stock.plan_id ) ||  franch_stock.franchise_assign_product == '1' )">
+                    <div class="header pt0 pb0 mr0">
+                      <table>
+                        <tr>
+                          <th class="w90">Category</th>
+                          <th class="w100">Brand Name</th>
+                          <th class="w200">Product Name</th>
+                          <th>Attribute</th>
+                          <th class="w80">HSN</th>
+                          <!--<th>Description</th>-->                            
+                          <th class="w160">Initial Stock</th>
+                          <th class="w160">QTY.</th>
+                          <th class="w60">Action</th>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="table-container table-input">
+                      <div class="table-body">
+                        <table>
+                          <tr  *ngFor="let val of stock;let i = index">
+                            <td class="w90">{{val[1].category}}</td>
+                            <td class="w100">{{val[1].brand}}</td>
+                            <td class="w200">{{val[1].product}}</td>
+                            <td>{{val[1].attribute_type}}, {{val[1].attribute_option}}</td>
+                            <td class="w80">{{val[1].hsn_code}}</td>
+                            
+                            <!--<td>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</td>-->
+                            
+                            <td class="w320 in-table">
+                              <table>
+                                <tr  *ngFor="let m of val[0];let x = index">
+                                  <td>{{m.unit_measurement}}</td>
+                                  <!-- class="active" -->
+                                  <td [ngClass]="{'active':a == i && b == x }">
+                                    {{m.quantity}}
+                                    <span class="edit-icon ml10" (click)="a = i; b = x" style="cursor: pointer;">
+                                      <i class="material-icons">edit</i>
+                                    </span>
+                                    <span class="delete-icon del-icon" (click)="remove(i,x)" style="cursor: pointer; color: #e53035;">
+                                      <i class="material-icons" style="font-size:20px;">delete</i>
+                                    </span>
+                                    
+                                    <div class="form-field td-input" *ngIf="a == i && b == x">
+                                      <div class="row">
+                                        <div class="control-field" style="padding-top: 15px !important;">
+                                          <mat-form-field class="cs-input">
+                                            <input matInput [(ngModel)]="m.quantity" (keyup.enter)="a = '-1'; b = '-1'">
+                                          </mat-form-field>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                
+                                
+                              </table>
+                            </td>
+                            <td class="w60" *ngIf="stock.length > 0">
+                              <button mat-button color="primary" (click)="delete_product(i)" style="cursor: pointer;">
+                                <i class="material-icons">delete_sweep</i>
+                              </button>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-dialog-content> 
+        </div>
+        
+        <div class="cs-btn fixedd mt32 text-right">
+          <div class="in-btn" (click)="submit_initial_stock()" [ngClass]="{loading: savingData}">
+            <a mat-raised-button color="primary" [attr.disabled]="savingData" >Save</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

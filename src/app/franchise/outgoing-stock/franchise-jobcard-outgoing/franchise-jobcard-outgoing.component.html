@@ -1,0 +1,109 @@
+<div class="main-container">
+  <div class="master-heading">
+      <div class="heading">
+          <h1>Transaction</h1>
+      </div>
+  </div>
+  <div class="cs-container">
+      <div class="cs-row cs-tabs-space">
+          <!-- TABS Component -->
+          <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+     
+          <!-- TABS Component -->
+          <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+              <div class="cs-spinner full-page" *ngIf = "loading_list">
+                  <div class="outer">
+                      <div class="innear">
+                          <mat-spinner></mat-spinner>
+                          <P>LOADING . . .</P>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="contst">
+                          <div class="cs-heading">
+                              <h2>Product DETAIL</h2>
+                          </div>
+                          <div class="side-by-side mt10" style="display: inherit;">
+                              <div class="row mr0">
+                                  <div class="figure grid-five">
+                                      <p>Category</p>
+                                      <p>{{unit.category}}</p>
+                                  </div>
+                                  <div class="figure grid-five">
+                                      <p>Brand</p>
+                                      <p>{{unit.brand}}</p>
+                                  </div>
+                                  <div class="figure grid-five">
+                                      <p>Product</p>
+                                      <p>{{unit.product}}</p>
+                                  </div>
+                                  <div class="figure grid-five">
+                                      <p>UOM</p>
+                                      <p>{{ unit.unit_measurement }}</p>
+                                  </div>
+                                  
+                                  <div class="figure grid-five">
+                                    <p>Current Stock </p>
+                                    <p>{{ unit.current_stock }}</p>
+                                </div>
+
+                                <div class="figure grid-five">
+                                    <p>Stock Alert </p>
+                                    <p>{{ unit.stock_limit }}</p>
+                                </div>
+
+                            
+
+                                
+                              </div>
+                          </div>
+                          
+                          
+                    <app-outgoing-tabs></app-outgoing-tabs>
+                          
+                          <div class="cs-table left-right-15 mt20">
+                              <div class="header">
+                                  <table class="sno-border">
+                                      <tr>
+                                          <th class="w30 border-right-none"></th>
+                                          <th>Date / Created By</th>
+                                          <th>Job Card Id</th>
+                                          <!-- <th class="w140 text-center">Issued To</th>
+                                          <th class="w140 text-center">Type</th>
+                                          <th>Franchise</th> -->
+                                          <th class="w160 text-center">HSN Code </th>
+                                          <th class="w100 text-center">UOM</th>
+                                          <th class="w160 text-center">QTY</th>
+                                      </tr>
+                                  </table>
+                              </div>
+                              <div class="table-container">
+                                  <div class="table-body">
+                                      <table class="sno-border">
+                                          <tr  *ngFor="let unit of raw_data">
+                                              <td class="w30 text-center"></td>
+                                              <td>{{unit.date_created | date: 'dd MMM yyyy'}} / {{ unit.first_name }}</td>
+                                              <td> <a mat-button routerLink="/franchise/customer_jobcard-detail/{{franchise_id | crypt}}/{{unit.customer_id | crypt}}/{{unit.jc_id | crypt}}" routerLinkActive="active" class="link">#{{unit.jc_id}}</a></td>
+                                              <!-- <td class="w140 text-center">{{ unit.type }}</td>
+                                              <td  *ngIf="unit.franchise_id == '0' ">----</td>
+                                              <td *ngIf="unit.franchise_id != '0' ">{{unit.location_name}} ({{unit.company_name }})</td> -->
+                                              <td class="w160 text-center">{{ unit.hsn_code }}</td>
+                                              <td class="w100 text-center">{{ unit.uom }}</td>
+                                              <td class="w160 text-center">{{ unit.quantity }}</td>
+                                          </tr>
+                                          
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>   
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="h100"></div>

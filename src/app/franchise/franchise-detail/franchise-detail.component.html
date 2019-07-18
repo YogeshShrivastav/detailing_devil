@@ -1,0 +1,656 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()" ><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <li><p><span>{{db.franchise_name}}</span></p></li>
+                <li class="af-none" *ngIf="db.datauser.franchise_id == '0'"><a mat-button  color="warn" class="edit-page"   (click)="edit()"><i class="material-icons"  >create</i></a></li>
+            </ul>
+        </div>
+        
+        
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+            
+            <div class="right-data " [ngClass]="{'pl0' : db.datauser.franchise_id}">
+                <div class="cs-spinner full-page" *ngIf="loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="row">
+                    <div class="col-8">	
+                        <div class="contst">
+                            <div class="cs-heading">
+                                <h2>BASIC DETAIL</h2>
+                            </div>
+                            
+                            <div class="side-by-side mt10" style="display: inherit;">
+                                <div class="row mr0">
+                                    <div class="figure grid-three">
+                                        <p>Name</p>
+                                        <p>{{frchise.name}}</p>
+                                    </div>
+                                    <div class="figure grid-three">
+                                        <p>Contact No</p>
+                                        <p>{{frchise.contact_no}}</p>
+                                    </div>
+                                    <div class="figure grid-three">
+                                        <p>Email</p>
+                                        <p>{{frchise.email_id}}</p>
+                                    </div>
+                                    
+                                    <div class="figure mt15">
+                                        <p>Address</p>
+                                        <p>{{frchise.address}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-heading mt20">
+                                <h2>COMPANY INFO</h2>
+                            </div>
+                            
+                            <div class="side-by-side mt10" style="display: inherit;">
+                                <div class="row mr0">
+                                    <div class="figure grid-two">
+                                        <p>Company Nmae</p>
+                                        <p>{{frchise.company_name}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Constitution</p>
+                                        <p>{{frchise.constitution}}</p>
+                                    </div>
+                                    <div class="figure grid-two" *ngIf="frchise.training_start != '0000-00-00'">
+                                        <p>Training Start Date</p>
+                                        <p>{{frchise.training_start | date:'dd MMM,y'}}</p>
+                                    </div>
+                                    <div class="figure grid-two" *ngIf="frchise.training_end != '0000-00-00'">
+                                        <p>Training End Date</p>
+                                        <p>{{frchise.training_end | date:'dd MMM,y'}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Company Pan No</p>
+                                        <p>{{frchise.company_pan_no}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>GSTIN</p>
+                                        <p>{{frchise.company_gstin}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Business Location</p>
+                                        <p>{{frchise.business_loc}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Year Of Establishment</p>
+                                        <p>{{frchise.year_of_est}}</p>
+                                    </div>
+                                    
+                                    <div class="figure grid-two" *ngIf="frchise.associated_date != '0000-00-00'">
+                                        <p>Date Of Association</p>
+                                        <p>{{frchise.associated_date | date:'dd MMM,y'}}</p>
+                                    </div>
+                                    
+                                    <div class="figure grid-two">
+                                        <p>City Applying For</p>
+                                        <p>{{frchise.city_apply_for}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Automotive Exp</p>
+                                        <p>{{frchise.automotive_exp}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Pre Fix</p>
+                                        <p>{{frchise.pre_fix}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-heading mt20">
+                                <h2>BANK ACCOUNT DETAIL</h2>
+                            </div>
+                            
+                            <div class="side-by-side mt10" style="display: inherit;">
+                                <div class="row mr0">
+                                    <div class="figure grid-two">
+                                        <p>Bank Name</p>
+                                        <p>{{frchise.bank_name}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Company name(As Per Bank Account)</p>
+                                        <p>{{frchise.company_name_in_bank}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Account Number</p>
+                                        <p>{{frchise.account_no}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Account Type</p>
+                                        <p>{{frchise.account_type}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>IFSC Code</p>
+                                        <p>{{frchise.ifsc_code}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Branch Name</p>
+                                        <p>{{frchise.branch_name}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Bank Address</p>
+                                        <p>{{frchise.bank_address}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-heading mt20">
+                                <h2>ADDRESS INFO</h2>
+                            </div>
+                            
+                            <div class="side-by-side mt10" style="display: inherit;">
+                                <div class="row mr0">
+                                    <div class="figure grid-two">
+                                        <p>Country</p>
+                                        <p>{{frchise.country_name}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>State</p>
+                                        <p>{{frchise.state}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>District</p>
+                                        <p>{{frchise.district}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>City</p>
+                                        <p>{{frchise.city}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Pincode</p>
+                                        <p>{{frchise.pincode}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Location</p>
+                                        <p>{{frchise.location_name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-heading mt20" *ngIf="frchise.ship_country_name">
+                                <h2>SHIPPING ADDRESS INFO</h2>
+                            </div>
+                            
+                            <div class="side-by-side mt10" style="display: inherit;" *ngIf="frchise.ship_country_name">
+                                <div class="row mr0">
+                                    <div class="figure grid-two">
+                                        <p>Country</p>
+                                        <p>{{frchise.ship_country_name}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>State</p>
+                                        <p>{{frchise.ship_state}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>District</p>
+                                        <p>{{frchise.ship_district}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>City</p>
+                                        <p>{{frchise.ship_city}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Pincode</p>
+                                        <p>{{frchise.ship_pincode}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Address</p>
+                                        <p>{{frchise.ship_address}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="cs-heading mt20"  *ngIf="frchise.plan_id">
+                                <h2>Franchise Plan Info</h2>
+                            </div>
+                            
+                            <div class="side-by-side mt10" style="display: inherit;"  *ngIf="frchise.plan_id">
+                                <div class="row mr0">
+                                    <div class="figure grid-two">
+                                        <p>Plan</p>
+                                        <p>{{franchise_plan.plan}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Description</p>
+                                        <p>{{franchise_plan.description}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Price</p>
+                                        <p>{{franchise_plan.price}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Invoice Id</p>
+                                        <p>{{invoice.invoice_id}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Created By</p>
+                                        <p>{{invoice.created_name}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Total Amount</p>
+                                        <p>{{invoice.gross_total}}</p>
+                                    </div>
+                                    
+                                    <div class="figure grid-two">
+                                        <p>GST</p>
+                                        <p>{{invoice.gst_amt}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Shipping Charges</p>
+                                        <p>{{invoice.shipping_gst}}</p>
+                                    </div>
+                                    <div class="figure grid-two">
+                                        <p>Received Amount</p>
+                                        <p>{{invoice.received}}</p>
+                                    </div>
+                                    
+                                    <div class="figure grid-two" *ngIf="invoice && invoice.balance">
+                                        <p>Balance</p>
+                                        <p>{{invoice.balance}}</p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="col-4 pl20">
+                        <div class="col-12" *ngIf="!db.datauser.franchise_id">
+                            <div class="contst left-calls-info white-bg save-remark">
+                                <div class="cs-heading" >
+                                    <h2>Assign Saless Agent</h2>
+                                    <a class="edit" *ngIf="!enable_user_assign" (click)="enable_user_assign=true"><i class="material-icons">create</i></a>
+                                </div>
+                                
+                                <mat-divider class="mt10 mb10 left-right-15"></mat-divider>
+                                <div class="control-field" [ngClass]="{'active': enable_user_assign}">
+                                    <mat-form-field class="cs-multi-select cs-input wp100 " >
+                                        <mat-select placeholder="Assign Sales Agent" [disabled]="!enable_user_assign" name="user_assign" [(ngModel)] = "agent_assign" #user_assign="ngModel" multiple required>
+                                            <mat-option *ngFor="let val of user_list" [value]="val.id">{{val.first_name}}</mat-option>
+                                        </mat-select>
+                                        
+                                    </mat-form-field>
+                                </div>
+                                
+                                
+                                <div class="send-remark" [ngClass]="{'active': enable_user_assign}">
+                                    <textarea matInput placeholder="Remark" class="h50" name="remark" [(ngModel)] = "frchise.remark" #remark="ngModel"></textarea>
+                                    <i class="material-icons" matRipple (click)="assignSalesAgent()" *ngIf="enable_user_assign">arrow_forward</i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 mt15">
+                            <div class="contst left-calls-info">
+                                <div class="head-tabs">
+                                    <a (click)="mode = '1'; "  [ngClass]="{'active': mode == '1' }" >Followup's</a>
+                                    <a (click)="mode = '2'; "  [ngClass]="{'active': mode == '2' }" *ngIf="!db.datauser.franchise_id">Remarks</a>
+                                    
+                                </div>
+                                
+                                <ul *ngIf="mode == '1' ">
+                                    <li *ngFor="let val of follow_ups; let i = index">
+                                        <div class="head">
+                                            <p class="date">{{ val.created_at | date: 'dd MMM yyyy' }}</p>
+                                        </div>
+                                        <div class="description">
+                                            <p><strong>{{ val.follow_type }}:</strong>&nbsp;{{ val.description }}</p>
+                                            <p *ngIf="val.next_follow_type!='' ">Next Followup Type:&nbsp;{{ val.next_follow_type }}</p>
+                                            <p *ngIf="val.next_follow_date!='' && val.next_follow_type!='' ">Next Followup Date:&nbsp;{{ val.next_follow_date | date: 'dd MMM yyyy' }}</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                
+                                
+                                <ul *ngIf="mode == '2' ">
+                                    <li *ngFor="let val of remarks; let i = index">
+                                        <div class="head">
+                                            <div>
+                                                <p class="name"><strong>Assign by : </strong>{{ val.first_name  }}</p>
+                                            </div>
+                                            <p class="date">{{ val.date_created | date: 'dd MMM yyyy h:mm:ss a' }}</p>
+                                            
+                                        </div>
+                                        <div class="description">
+                                            <p><strong>Assign To :</strong>{{ val.assign_sales  }}</p>
+                                        </div>
+                                        <div class="description">
+                                            <p><strong>Remark :</strong> {{ val.remark }}</p>
+                                            
+                                        </div>
+                                    </li>
+                                </ul>
+                                
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="h100"></div>
+    </div>
+    
+    <div class="fix-btn-group" *ngIf="invoiceItemDetail.length > 0">
+        <ul>
+            <li (click)="print()">
+                <a matRipple class="botm-btn"><i class="material-icons">print</i></a>
+            </li>
+        </ul>
+    </div>
+    
+</div>
+
+
+
+
+<div  id="print-section" hidden class="print-section"  *ngIf="frchise.plan_id"> 
+    <table  width="1024px" style="border-collapse: collapse;">
+        <tr>
+            <td width="1024px" style="background: #fff;">
+                <table class="table1" width="1024px" style="border-collapse: collapse;">
+                    <tr>
+                        <td width="324px" *ngIf="invoiceDetail.org_logo">
+                            <img [src]="this.db.myurl + 'app/uploads/' + invoiceDetail.org_logo">
+                        </td>
+                        <td style="text-align: right;">
+                            <h2 style="line-height: 10px; font-size: 15px;">{{invoiceDetail.admin_company_name}}</h2>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.admin_address}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.admin_city}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.admin_district}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.admin_state}} {{invoiceDetail.admin_pincode}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.admin_country_name}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">GSTIN {{invoiceDetail.company_gstin}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 30px;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td width="600" style="text-align: left; background: #fff; vertical-align: top;">
+                            <h2 style="line-height: 10px; font-size: 15px;">Bill To</h2>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.company_name}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.address}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.pincode}} {{invoiceDetail.state}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.country_name}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">GSTIN: {{invoiceDetail.company_gstin}}</p>
+                        </td>
+                        <td text-align="right"  style="text-align: right;  background: #fff;">
+                            <table width="424px" style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 5px;">Invoice</td>
+                                    <td style="  border: 0.5px solid #565656; vertical-align: top; background: #fff; font-size: 13px; text-align: left; padding: 5px;">{{invoiceDetail.invoice_id}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 5px;">Invoice Date</td>
+                                    <td style="  border: 0.5px solid #565656; vertical-align: top; background: #fff; font-size: 13px; text-align: left; padding: 5px;">{{invoiceDetail.date_created | date: 'dd MMM yyyy'  }}</td>
+                                </tr>
+                                <tr *ngIf="invoiceDetail.balance && invoiceDetail.due_terms != '0000-00-00' ">
+                                    <td style="  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 5px;">Due Terms</td>
+                                    <td style="  border: 0.5px solid #565656; vertical-align: top; background: #fff; font-size: 13px; text-align: left; padding: 5px;">{{invoiceDetail.due_terms | date: 'dd MMM yyyy'}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 30px;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td style="text-align: left; background: #fff; vertical-align: top;">
+                            <h2 style="line-height: 10px; font-size: 15px;">Ship To</h2>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.company_name}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.ship_address}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.ship_city}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.ship_district}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.ship_pincode}} {{invoiceDetail.ship_state}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.country_name}}</p>
+                            <h2 style="line-height: 10px; font-size: 14px; margin-top:25px;">Contact Details</h2>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.name}}</p>
+                            <p style="line-height: 6px; font-size: 13px;">{{invoiceDetail.contact_no}}</p>
+                            
+                        </td>
+                        <td  style="text-align: right;  background: #fff;">
+                            &nbsp;
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 20px;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td style="text-align: left; background: #fff; vertical-align: top;">
+                            <p style="line-height: 10px; font-size: 13px; padding-bottom: 15px;">Place Of Supply: {{invoiceDetail.state}} ({{invoiceDetail.company_gstin.substring(0, 2) }}) </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td width="1024"  style="text-align: right;  background: #fff;">
+                            <table  style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="width:24px;     border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px;">#</td>
+                                    <td style="width:500px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; text-align: left; padding: 5px;">Product & Description </td>
+                                    <td style="width:70px;     border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;">HSN</td>
+                                    <td style="width:80px;     border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;">UOM</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;">Price</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;">Qty</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;">Amount</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;" *ngIf="invoiceDetail.dis_amt"  >Discount</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;" *ngIf="invoiceDetail.cgst_amt">CGST</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;" *ngIf="invoiceDetail.sgst_amt">SGST</td>
+                                    <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; font-weight: 500; padding: 5px; text-align: right;" *ngIf="invoiceDetail.igst_amt">IGST</td>
+                                    <td style="width:150px;   border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 15px; padding: 5px; text-align: right;">Net Amount</td>
+                                </tr>
+                                <tr *ngFor="let val of invoiceItemDetail">
+                                    <td style="width:24px;    border: 0.5px solid #565656; background: #fff; font-size: 12px; padding: 5px;"></td>
+                                    <td style="width:500px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px;"> 
+                                        {{val.item_name}} <br>
+                                        <span style="font-size:11px; color:#2b2b2b; display: inline-flex; padding-left: 8px;"> {{val.description}}</span>
+                                        
+                                    </td>
+                                    <td style="width:70px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;">
+                                        {{val.hsn_code}}
+                                    </td>
+                                    
+                                    <td style="width:80px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;">
+                                        {{val.item_measurement_type}}
+                                    </td>
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;">
+                                        &#8377;{{val.item_rate}}
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;">
+                                        {{val.item_qty}}
+                                    </td>
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;">
+                                        &#8377;{{val.item_amount}}
+                                    </td>
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;" *ngIf="invoiceDetail.dis_amt">
+                                        &#8377;{{val.discount_amount}}<br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.discount}}%)</span>
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;" *ngIf="invoiceDetail.cgst_amt">
+                                        &#8377;{{val.cgst_amt}}<br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.cgst_per}}%)</span>
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;" *ngIf="invoiceDetail.sgst_amt">
+                                        &#8377;{{val.sgst_amt}}<br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.sgst_per}}%)</span> 
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;" *ngIf="invoiceDetail.igst_amt" >
+                                        &#8377;{{val.igst_amt}} <br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.igst_per}}%)</span>
+                                    </td>
+                                    
+                                    <td style="width:150px;   border: 0.5px solid #565656; background: #fff; font-size: 13px; padding: 5px; text-align:right;">
+                                        &#8377;{{val.item_total}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td width="600px"  style="text-align: right; vertical-align: top;  background: #fff;  padding-top: 25px;">
+                            <table  style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="text-align: center; background: #fff; vertical-align: top; font-size: 16px; text-align: left; padding: 5px;">Thanks for the business.</td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                        <td  style="text-align: right;  background: #fff;  padding-top: 25px;">
+                            <table width="424px" style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="width:320px; vertical-align: top;  background: #fff; font-size: 15px; text-align: right; padding: 7px;">Item Total</td>
+                                    <td style="vertical-align: top;  background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377; {{invoiceDetail.sub_total}} </p></td>
+                                </tr>
+                                <tr *ngIf="invoiceDetail.dis_amt">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 15px; text-align: right; padding: 7px; text-align: right;">Discount({{invoiceDetail.dis_per}}%)</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377; {{invoiceDetail.dis_amt}} </p></td>
+                                </tr>
+                                
+                                <tr  *ngIf="invoiceDetail.dis_amt"  >
+                                    <td  style="vertical-align: top; background: #fff; font-size: 15px; text-align: right; padding: 7px;">Sub Total</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377; {{invoiceDetail.gross_total}}</p></td>
+                                </tr>
+                                
+                                <tr *ngIf="invoiceDetail.shipping_charges">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 15px; text-align: right; padding: 7px;">Shipping Charges( <span *ngIf="invoiceDetail.shiping_cgst_per && invoiceDetail.shiping_sgst_per" style="font-size: 10px !important;">SGST({{invoiceDetail.shiping_cgst_per}}%) +  CGST({{invoiceDetail.shiping_sgst_per}}%)</span> <span style="font-size: 10px !important;" *ngIf="invoiceDetail.shiping_igst_per">IGST({{invoiceDetail.shiping_igst_per}}%)</span> )</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377;  {{invoiceDetail.shipping_charges}} </p></td>
+                                </tr>
+                                
+                                <tr  *ngIf="invoiceDetail.sgst_amt"  >
+                                    <td  style="vertical-align: top; background: #fff; font-size: 15px; text-align: right; padding: 7px;">SGST</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377;  {{invoiceDetail.sgst_amt}} </p></td>
+                                </tr>
+                                
+                                <tr *ngIf="invoiceDetail.cgst_amt">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 15px; text-align: right; padding: 7px;">CGST</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377;  {{invoiceDetail.cgst_amt}} </p></td>
+                                </tr>
+                                
+                                <tr *ngIf="invoiceDetail.igst_amt">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 15px; text-align: right; padding: 7px;">IGST</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 7px;"><p>&#8377;  {{invoiceDetail.igst_amt}} </p></td>
+                                </tr>
+                                
+                                
+                                
+                                
+                                <tr>
+                                    <td   style="border-top:1px solid #565656; border-bottom:1px solid #565656; vertical-align: top; background: #fff; font-size: 15px; font-weight: 600; text-align: right; padding: 15px 5px;">Total Amount</td>
+                                    <td style="border-top:1px solid #565656; border-bottom:1px solid #565656;  vertical-align: top; background: #fff; font-size: 13px; text-align: right; padding: 15px 5px;"> <p>&#8377;  {{invoiceDetail.invoice_total}} </p></td>
+                                </tr>
+                                <tr *ngIf="invoiceDetail.balance">
+                                    <td   style="border-bottom:1px solid #565656; vertical-align: top; background: #fff; text-align: right; color: #1f86ca; font-size: 15px; font-weight: 600; text-align: right; padding: 15px 5px;">Balance Due</td>
+                                    <td style="border-bottom:1px solid #565656; vertical-align: top; background: #fff; text-align: right; color: #1f86ca; font-size: 13px; text-align: right; padding: 15px 5px;"><p>&#8377;  {{invoiceDetail.balance}} </p></td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <tr *ngIf="invoiceDetail.invoice_total">
+            <td width="1024px" style="background: #fff; vertical-align: top; text-align: right;">
+                <table  width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td  style=" background: #fff; float: right;">
+                            <table >
+                                <tr>
+                                    <td style="vertical-align: top; background: #fff; font-size: 13px; padding: 15px 5px; font-weight: 600;">Total Amount In Words:</td> 
+                                    <td style="vertical-align: top; background: #fff;font-size: 13px; text-transform: capitalize;  padding: 15px 5px;">{{invoiceDetail.invoice_total | converToWord }} </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 50px;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td style="text-align: left; background: #fff; vertical-align: top;">
+                            <h2 style="line-height: 10px; font-size: 15px;">Bank Detail</h2>
+                            <p style="line-height: 10px; font-size: 13px;">Beneficiary name: {{invoiceDetail.admin_company_name_in_bank}}</p>
+                            <p style="line-height: 10px; font-size: 13px;">Account no: {{invoiceDetail.admin_account_no}}</p>
+                            <p style="line-height: 10px; font-size: 13px;">Account Type: {{invoiceDetail.admin_account_type}}</p>
+                            <p style="line-height: 10px; font-size: 13px;">Bank name: {{invoiceDetail.admin_bank_name}}</p>
+                            <p style="line-height: 10px; font-size: 13px;">IFSC: {{invoiceDetail.admin_ifsc_code}}</p>
+                            <p style="line-height: 10px; font-size: 13px;">Branch Address: {{invoiceDetail.admin_bank_address}}</p>
+                        </td>
+                        <td  style="text-align: right;  background: #fff;">
+                            
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="background: #fff;  border-bottom: 1px solid #565656; padding:30px 0px 15px 0px;"><h2 style="font-size: 16px; font-weight: 600px; margin:0px; ">Terms & Conditions</h2></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; background: #fff; vertical-align: top; padding-top: 25px;">
+                
+                <p style="line-height: 10px; font-size: 13px;">1) Goods once sold will not be taken back or exchanged except manufacturing defect</p>
+                <p style="line-height: 10px; font-size: 13px;">2) Once invoice made cannot be modified or cancelled for any reasons thereof.</p>
+                <p style="line-height: 10px; font-size: 13px;">3) This is computer generated invoice hence signature's not required,</p>
+                <p style="line-height: 10px; font-size: 13px;">4) The court at Delhi shall have exclusive jurisdiction for deciding any disputes arising out of this sale invoice</p>
+            </td>
+        </tr>
+        
+    </table>
+</div>
+
+
+<div class="h100"></div>

@@ -1,0 +1,177 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <li class="af-none">
+                    <p><span class="blue"> {{db.franchise_name}} </span> <i class="material-icons r-arrow">keyboard_arrow_right</i> <span>Leads</span></p>
+                </li>
+            </ul>
+        </div>
+        <div class="top-search wp30 ml30">
+            <input type="text" placeholder="SEARCH Name or Mobile. . ." [(ngModel)]="filter.master"  (keyup.enter)="current_page = 1;getConsumers()">
+            <i class="material-icons">search</i>
+        </div>     
+               
+        <div class="top-pagination m-right-data">
+            <ul>
+                <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getConsumers()"></li>
+                <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div>
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <!-- TABS Component -->
+            <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+            
+            <!-- TABS Component -->
+            <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+                <div class="cs-spinner full-page" *ngIf = "loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cs-table">
+                            <div class="header sticky-header">
+                                <table class="sno-border">
+                                    <tr>
+                                        <th class="w30 border-right-none"></th>
+                                        <!-- <th class="w150">Date</th> -->
+                                        <th class="w150">
+                                            <div class="filter">
+                                                <mat-form-field class="cs-input cs-date-picker">
+                                                    <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getConsumers()"  [matDatepicker]="picker1" >
+                                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                    <mat-datepicker #picker1></mat-datepicker>
+                                                </mat-form-field>
+                                            </div>
+                                        </th>
+                                        <th class="w150">Name </th>
+                                        <th class="w100">Phone</th>
+                                        <th class="w140">
+                                            
+                                            <div class="filter">                                       
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Vehicle Type"  [(ngModel)]="filter.vehicle_type" (selectionChange)="getConsumers()">
+                                                        
+                                                        <mat-option value="">None</mat-option>
+                                                        <mat-option *ngFor="let val of v_type_arr" [value]="val.vehicle_type">{{val.vehicle_type}} </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                        </th>
+                                        <th class="w140">Car Model</th>
+                                        <th class="w100">
+                                            <div class="filter">                                       
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Interested In"  [(ngModel)]="filter.interested_in" (selectionChange)="getConsumers()">
+                                                        <mat-option value="">None</mat-option>
+                                                        <mat-option value="Exterior Protection">Exterior Protection</mat-option>
+                                                        <mat-option value="Interior Protection">Interior Protection</mat-option>
+                                                        <mat-option value="Exterior Detailing">Exterior Detailing</mat-option>
+                                                        <mat-option value="Interior Detailing">Interior Detailing</mat-option>
+                                                        <mat-option value="SRS">SRS</mat-option>
+                                                        <mat-option value="Others">Others</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </th>
+                                        <th class="w120">
+                                            <div class="filter">
+                                                <mat-form-field>
+                                                    <mat-select placeholder="Source" [(ngModel)]="filter.source" (selectionChange)="getConsumers()">
+                                                        <mat-option value="">None</mat-option>
+                                                        <mat-option value="Email">Email</mat-option>
+                                                        <mat-option value="Facebook">Facebook</mat-option>
+                                                        <mat-option value="Facebook Form">Facebook Form</mat-option>
+                                                        <mat-option value="Inbound">Inbound</mat-option>
+                                                        <mat-option value="Instagram">Instagram</mat-option>
+                                                        <mat-option value="Missed Call">Missed Call</mat-option>
+                                                        <mat-option value="Other">Other</mat-option>
+                                                        <mat-option value="Outbound">Outbond</mat-option>
+                                                        <mat-option value="Walk In">Walk in</mat-option>
+                                                        <mat-option value="Website">Website</mat-option>
+                                                        <mat-option value="Website Chat">Website Chat</mat-option>
+                                                        
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                        </th>
+                                        <th class="w120">
+                                            <div class="filter">
+                                                <mat-form-field >
+                                                    <mat-select placeholder="Status" [(ngModel)]="filter.lead_status" (selectionChange)="getConsumers()">
+                                                        <mat-option value="">None</mat-option>
+                                                        <mat-option value="Already finalized">Already finalized</mat-option>
+                                                        <mat-option value="new">New</mat-option>
+                                                        <mat-option value="attempted_to_contact">Attempted to Contact</mat-option>
+                                                        <mat-option value="booked">Booked</mat-option>
+                                                        <mat-option value="cancelled_booking">Cancelled Booking</mat-option>
+                                                        <mat-option value="convert">Convert</mat-option>
+                                                        <mat-option value="cold">Cold</mat-option>
+                                                        <mat-option value="contact_in_future">Contact in Future</mat-option>
+                                                        <mat-option value="contacted">contacted</mat-option>
+                                                        <mat-option value="demo">Demo</mat-option>
+                                                        <mat-option value="hot">Hot</mat-option>
+                                                        <mat-option value="junk">Junk</mat-option>
+                                                        <mat-option value="lost">Lost</mat-option>
+                                                        <mat-option value="meeting">Meeting</mat-option>
+                                                        <mat-option value="other state">Other State</mat-option>
+                                                        <mat-option value="other studio">Other Studio</mat-option>
+                                                        <mat-option value="not_contacted">Not Contacted</mat-option>
+                                                        <mat-option value="not_interested">Not interested</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </th>
+                                        <!-- <th class="hv-actions">Address</th> -->
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="table-container">
+                                <div class="table-body">
+                                    <table class="sno-border">
+                                        <tr *ngFor="let val of consumers; let i = index">
+                                            <td class="w30 text-center">{{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }}</td>
+                                            <td class="w150">{{val.created_at | date: 'dd MMM yyyy' }}/{{val.created_name}}</td>
+                                            <td class="w150"><a mat-button class="link" routerLink="/consumer_leads/details/{{val.id |crypt}}" routerLinkActive="active">{{val.first_name}} {{val.last_name}}</a></td>
+                                            <td class="w100">{{val.phone}}</td>
+                                            <td class="w140">{{ val.vehicle_type }}</td>
+                                            <td class="w140">{{ val.car_model }}</td>
+                                            <td class="w100">{{ val.interested_in }}</td>
+                                            <td class="w120 {{ val.source }}">{{ val.source | titlecase }}</td>
+                                            <td class="w120">{{val.lead_status}}
+                                                <!-- <td>{{ val.address | titlecase}} -->
+                                                    <div class="action-btns">
+                                                        <div class="outer">
+                                                            <div class="innear">
+                                                                <a mat-button class="view" routerLink="/consumer_leads/details/{{val.id |crypt}}" routerLinkActive="active" ><i class="material-icons">remove_red_eye</i> View</a>
+                                                                <a mat-button class="delete" (click)="deleteLead(val.id)"><i class="material-icons">delete_sweep</i> Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>										
+                                        </table>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    

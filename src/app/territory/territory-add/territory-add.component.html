@@ -1,0 +1,193 @@
+<div class="main-container">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+  <form name="form" (ngSubmit)="f.form.valid && saveLocation()" #f="ngForm" novalidate>
+  <div class="master-heading">
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-master-add-tabs></app-master-add-tabs>
+      <!-- TABS Component -->
+      
+      <div class="right-data">
+        <div class="contst" style="overflow: hidden;">
+          <div class="cs-heading">
+            <h2>Territory Information</h2>
+          </div>
+          
+          <div class="cs-divider left-right-15 pt10">
+              <mat-divider></mat-divider>
+          </div>
+          
+          <div class="form-field mb15">
+              <div class="row">
+                  <div class="control-field col-4 edit-input">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Territory Name" name="location_name" [(ngModel)]="form.location_name" required>
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 edit-input">
+                      <mat-form-field class="cs-multi-select">                          
+                          <mat-select placeholder="Select Franchises" name="assign_to_franchise" [(ngModel)]="form.assign_to_franchise" #assign_to_franchise="ngModel">
+                              <mat-option value=""> None </mat-option>
+                              <mat-option *ngFor="let val of franchises" [value]="val.id"> {{val.name}} </mat-option>
+                          </mat-select>                          
+                      </mat-form-field>
+                  </div>                  
+                  <div class="control-field col-4 edit-input">
+                      <!-- <mat-form-field class="example-full-width cs-input">
+                          <input matInput placeholder="COUNTRY" name="country" [(ngModel)] = "form.country" #country="ngModel" required>
+                      </mat-form-field> -->
+                      <mat-form-field class="cs-multi-select">
+                          <mat-select placeholder="Select Country" name="country_id" [(ngModel)]="form.country_id" #country_id="ngModel" (selectionChange)="getStateList()" required>
+                              <mat-option *ngFor="let val of countries" [value]="val.id" (click)="set_country_name(val.name)"> {{val.name}} </mat-option>
+                          </mat-select>
+                      </mat-form-field>
+                      <!-- <mat-error color="primary" *ngIf="f.submitted && !country_id.valid" >This field is required</mat-error> -->
+                  </div>
+                  
+                  <div class="control-field col-4 edit-input" *ngIf="form.country_id != 99">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input *ngIf="form.country_id != 99" matInput placeholder="Province/State" name="state" [(ngModel)]="form.state" required>
+                      </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 edit-input"  *ngIf="form.country_id != 99">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input *ngIf="form.country_id != 99" matInput placeholder="District" name="district" [(ngModel)]="form.district" required>
+                      </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 edit-input"  *ngIf="form.country_id != 99">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input *ngIf="form.country_id != 99" matInput placeholder="City" name="city" [(ngModel)]="form.city" required>
+                      </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 edit-input"  *ngIf="form.country_id != 99">
+                      <mat-form-field class="example-full-width cs-input">
+                        <input *ngIf="form.country_id != 99" matInput type="number" placeholder="Pincode" name="pincode" [(ngModel)]="form.pincode" maxlength="6" required>
+                      </mat-form-field>
+                  </div>
+                  
+
+                </div>
+          </div>         
+          
+          <mat-dialog-content class="convert-franchies-modle" *ngIf="form.country_id == 99">
+            <div class="m-body mr0">
+              <div class="row">
+                <div class="col-4 plan-list shadow-none pr10">
+                  <div class="info-box">
+                    <div class="head search-head">
+                      <div class="cs-heading">
+                        <h2>STATE</h2>
+                      </div>
+                      <div class="search">
+                        <button class="fix-search" mat-button><i class="material-icons">search</i></button>
+                        <input type="text" placeholder="search">
+                      </div>
+                      <mat-checkbox class="fix-check">&nbsp;</mat-checkbox>
+                    </div>                    
+                    <div class="listing">
+                      <section class="checbox-section">                        
+                        <mat-checkbox class="checbox-list" *ngFor="let val of states; let g=index" [name]="'state'+val.state_name+g"  [value]="val.state_name" [ngModel]="form.checkboxState" (ngModelChange)="getDistrictList(val.state_name,$event)" >{{val.state_name}}</mat-checkbox>  
+                   <!-- <mat-checkbox class="checbox-list" [value]="val.state_name" [name]="'statess'+i" [(ngModel)]="form.state" >{{val.state_name}}</mat-checkbox> -->                      
+                      </section>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4 plan-list shadow-none pr10 pl10">
+                  <div class="info-box">
+                    <div class="head search-head">
+                      <div class="cs-heading">
+                        <h2>DISTRICTS</h2>
+                      </div>
+                      <div class="search">
+                        <button class="fix-search" mat-button><i class="material-icons">search</i></button>
+                        <input type="text" placeholder="search">
+                      </div>
+                      <mat-checkbox class="fix-check">&nbsp;</mat-checkbox>
+                    </div>
+                    <div class="listing">
+                      <section class="checbox-section">
+                        <ng-container *ngFor="let val of districts;let h=index">
+                          <mat-checkbox class="checbox-list check-bg mat-checkbox-checked"  disabled="true"   checked="true" [value]="val.state_name" name="'state_name'+h" >{{val.state_name}}</mat-checkbox>                          
+                          <ng-container *ngFor="let dist of val.district;let d=index">              
+                              <mat-checkbox class="checbox-list"  [value]="dist.district_name" [name]="'district_name'+val.state_name+d" [ngModel]="form.checkboxDistrict" (ngModelChange)="getCityList(val.state_name,dist.district_name,$event)">{{dist.district_name}}</mat-checkbox>  
+                          </ng-container>
+                        </ng-container>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-4 pl10">
+                  <div class="plan-list shadow-none">
+                    <div class="info-box">
+                      <div class="head search-head">
+                        <div class="cs-heading">
+                          <h2>AREA PINCODES</h2>
+                        </div>                        
+                        <div class="search">
+                          <button class="fix-search" mat-button><i class="material-icons">search</i></button>
+                          <input type="text" placeholder="search">
+                        </div>
+                        <mat-checkbox class="fix-check">&nbsp;</mat-checkbox>
+                      </div>
+                      <div class="listing">
+                          <section class="checbox-section">                          
+                            <ng-container *ngFor="let val of cities2;let h=index">
+                              <div style="  position: relative;">
+                              <mat-checkbox class="checbox-list pincode-bg check-bg mat-checkbox-checked"    [ngModel]="form.checkboxcity" (ngModelChange)="storecity(val.city_name,$event,h)" [value]="val.city_name" [name]="'city_names'+val.city_name+h" >{{val.city_name}} </mat-checkbox>  
+                              <!-- <a class="drop-icon" >Drop</a>    -->
+                              <a class="drop-icon" (click)="drop_me = ( drop_me == h ) ? '-1': h ">&nbsp;</a>   
+                              </div>
+                              <ng-container *ngFor="let pin of val.pincodes;let d=index" >      
+                                <div class="slide-none" [ngClass]="{'slide-block' : h == drop_me }" >
+                                <mat-checkbox class="checbox-list"  [value]="pin.pincode" [ngModel]="pin.pincodeCheck" (ngModelChange)="storepincode(pin.pincode,$event)" [name]="'pincode'+val.city_name+d">{{pin.pincode}}</mat-checkbox> 
+                                </div>                                  
+                              </ng-container>
+                            </ng-container> 
+                          </section>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <div class="bottom-fix-content">
+                    <div class="">
+                      <!-- <a>Add New</a> -->
+                      <div class="inner-search">
+                        <input type="text" placeholder="Enter Pincode">
+                        <button matRipple class="input-btn">Save</button>
+                        <select class="pincode-list" form="carform">
+                          <option value="faridabad">Faridabad</option>
+                          <option value="121002">121002</option>
+                          <option value="rohtak">Rohtak</option>
+                          <option value="121007">121007</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-dialog-content>
+        </div>
+        <div class="cs-btn fixedd mt32 text-right">
+          <button mat-raised-button color="primary">save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+
+<div class="h100"></div>

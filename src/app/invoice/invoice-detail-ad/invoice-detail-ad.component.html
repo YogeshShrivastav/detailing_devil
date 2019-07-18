@@ -1,0 +1,719 @@
+<div class="main-container">
+    <div *ngIf="loading_list && invoiceDetail.id" class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>  
+                <li><p class="light">Invoice ID : <span class="black-clr"> #{{invoiceDetail.invoice_id}}</span></p></li>
+                <li><p class="light">Payment Status : <span class="yellow-clr"> {{invoiceDetail.payment_status}}</span></p></li>
+                <li><p class="light"> Amount : <span class="black-clr"> &#8377; {{invoiceDetail.invoice_total}}</span></p></li>
+                <li *ngIf="invoiceDetail.balance"><p class="light" > Balance : <span class="black-clr"> &#8377; {{invoiceDetail.balance}}</span></p></li>
+                <li *ngIf="invoiceDetail.due_terms != '0000-00-00' "><p class="light"> Due Date : <span class="black-clr">  {{invoiceDetail.due_terms  | date: 'dd MMM yyyy'  }}</span></p></li>
+                <li *ngIf="invoiceDetail.balance > 0 && invoiceDetail.del != 2">
+                    <p>
+                        <a class="edit" matTooltip="Payment Receive"  (click) = "openReceivePaymentDialog()"><i class="material-icons red-clr">payment</i></a>
+                    </p>
+                </li>
+                
+                <li *ngIf="invoiceDetail.del != 2">
+                    <p>
+                        <a mat-button class="edit" matTooltip="EDit Invoice" routerLink="/order-invoice-edit/{{invoiceDetail.id |crypt}}" routerLinkActive="active" ><i class="material-icons">edit</i> </a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="cs-spinner full-page" *ngIf = "!loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="loading_list && invoiceDetail.id" class="cs-container detail">
+        <div class="row">
+            <div class="col-8">
+                <div class="right-data pl0">
+                    
+                    <div class="contst">
+                        <div class="cs-heading">
+                            <h2>{{invoiceDetail.company_name}}</h2>
+                            <p><i class="material-icons ic-watch">watch_later</i>{{invoiceDetail.created_at}}</p>
+                        </div>
+                        <div class="cs-divider pt10">
+                            <mat-divider></mat-divider>
+                        </div>
+                        
+                        <div class="form-field">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Name" readonly="" value="{{invoiceDetail.company_name}}">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Mobile No" readonly="" value="{{invoiceDetail.contact_no}}">
+                                            
+                                            
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Email" readonly="" value="{{invoiceDetail.email_id}}">
+                                            
+                                            
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <textarea matInput placeholder="ADDRESS" readonly="" class="h125" value="{{invoiceDetail.address}} {{invoiceDetail.city}} {{invoiceDetail.pin_code}}"></textarea>
+                                            
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-divider pt20 left-right-15">
+                                <mat-divider></mat-divider>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-4">
+                <div class="right-data pl20">
+                    <div class="contst summary">
+                        <div class="cs-heading">
+                            <h2>INVOICE LOGS</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="cs-heading mt20 mb10">
+                    <h2>ITEM DETAIL</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="cs-table left-right-15">
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th>Product Description</th>
+                                <th class="w200">Description</th>
+                                <th class="w80 text-center">HSN</th>
+                                <th class="w100 text-center">UOM</th>
+                                <th class="w80 text-center">Price</th>
+                                <th class="w80 text-center">QTY</th>
+                                <th class="w140 text-center">Amount</th>
+                                <th class="w100 text-center" *ngIf="invoiceDetail.dis_amt">Discount</th>
+                                <th class="w150 text-center" *ngIf="invoiceDetail.dis_amt">Sub Amount</th>
+                                <th class="w130 text-center" *ngIf="invoiceDetail.cgst_amt">CGST</th>
+                                <th class="w130 text-center" *ngIf="invoiceDetail.sgst_amt">SGST</th>
+                                <th class="w130 text-center" *ngIf="invoiceDetail.igst_amt">IGST</th>
+                                <th class="w170 text-center">Net Amount</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let val of invoiceItemDetail">
+                                    <td>
+                                        {{val.category}}, {{val.brand_name}}, {{val.item_name}}, {{val.item_attribute_type}}, {{val.item_attribute_value}}
+                                    </td>
+                                    <td class="w200">{{val.description}}</td>
+                                    <td class="w80 text-center">{{val.hsn_code}}</td>
+                                    <td class="w100 text-center">{{val.item_measurement_type}}</td>
+                                    <td class="w80 text-center">&#8377; {{val.item_rate}}</td>                                    
+                                    <td class="w80 text-center">{{val.item_qty}}</td>
+                                    <td class="w140 text-center">&#8377; {{val.item_amount}}</td>                                    
+                                    <td class="w100 text-center" *ngIf="invoiceDetail.dis_amt">
+                                        {{val.discount_amount}} <span style="font-size:12px; color: #959595;   " >({{val.discount}}%)</span>
+                                    </td>
+                                    <td class="w150 text-center" *ngIf="invoiceDetail.dis_amt">
+                                        &#8377; {{val.gross_amount}}
+                                    </td>
+                                    <td class="w130 text-center" *ngIf="invoiceDetail.cgst_amt">
+                                        &#8377; {{val.cgst_amt}} 
+                                        <span style="font-size:12px; color: #959595;">({{val.cgst_per}}%)</span>
+                                    </td>
+                                    
+                                    <td class="w130 text-center" *ngIf="invoiceDetail.sgst_amt">
+                                        {{val.sgst_amt}}
+                                        <span style="font-size:12px; color: #959595;">({{val.sgst_per}}%)</span>
+                                    </td>
+                                    
+                                    <td class="w130 text-center" *ngIf="invoiceDetail.igst_amt">
+                                        &#8377; {{val.igst_amt}}
+                                        <span style="font-size:12px; color: #959595;">({{val.igst_per}}%)</span>
+                                    </td>
+                                    
+                                    <td class="w170 text-center">
+                                        &#8377; {{val.item_total}}
+                                    </td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div *ngIf="invoiceItemDetail.length && invoiceDetail.organization_id" class="row">
+            <div class="col-8">&nbsp;</div>
+            <div class="col-4">
+                <div class="invoice-details">
+                    
+                    <table class="invoice-table">
+                        <tr>
+                            <td class="td">Item Total</td>
+                            <!-- .toFixed(2) -->
+                            <td class="w150 td">&#8377;  {{invoiceDetail.itemTotal}}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td class="td">
+                                
+                                <div class="add-disc">
+                                    Discount({{invoiceDetail.netDiscountPer}}%)
+                                </div>
+                            </td>
+                            <td class="td">
+                                &#8377;  {{invoiceDetail.netDiscountAmount}}
+                            </td>
+                        </tr>
+                        
+                        <tr >
+                            <td class="td">Sub Total</td>
+                            <!-- .toFixed(2) -->
+                            <td class="w150 td">&#8377;  {{invoiceDetail.netGrossAmount}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="td">Shipping Charges({{ (this.invoiceDetail.shipping_charges > 0 )?invoiceDetail.shiping_gst_per : 0}}%)</td>
+                            <td class="td">   
+                                {{invoiceDetail.shipping_charges}}
+                                <!-- <input class="simple-input w70" [(ngModel)]="invoiceDetail.shipping_charges" type="number" min="0" (input)="calculateNetInvoiceTotal()" name="shipping_charges" #shipping_charges="ngModel"  style="text-align: right;"> -->
+                                
+                            </td>
+                        </tr>
+                        <tr *ngIf="invoiceDetail.cgst_amt > 0 && invoiceDetail.sgst_amt > 0" >
+                            <td class="td">
+                                <div class="gst-box">
+                                    <ul>
+                                        <li >
+                                            <p>CGST ({{invoiceDetail.cgst_amt}}) </p>
+                                        </li>
+                                        <li class="w30"  >
+                                            <i class="material-icons">add</i>
+                                        </li>
+                                        <li >
+                                            <p>SGST ({{invoiceDetail.sgst_amt}})</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td class="td">{{invoiceDetail.netGstAmount}}</td>
+                        </tr>
+                        
+                        <tr *ngIf="invoiceDetail.igst_amt > 0">
+                            <td class="td">IGST</td>
+                            <td class="td">&#8377; {{invoiceDetail.igst_amt}}</td>
+                        </tr>
+                        <tr>
+                            <td class="td">Grand Amount</td>
+                            <td class="td">
+                                <!-- .toFixed(2) -->
+                                &#8377;  {{invoiceDetail.netAmount}}
+                            </td>
+                        </tr>
+                        
+                        <!-- <tr >
+                            <td class="td">Received Amount</td>
+                            <td class="td">
+                                <input  class="simple-input w70" type="number" [(ngModel)]="invoiceDetail.receivedAmount" name="receivedAmount" #receivedAmount="ngModel" [disabled]=" invoiceDetail.balance < 0 || ( invoiceDetail.already_received > invoiceDetail.netAmount )  ? true : false "  (input)="onReceivedChangeHandler()" style="text-align: right;">                  
+                            </td>
+                        </tr> -->
+                        
+                        <!-- <tr *ngIf="( invoiceDetail.balance < 0 || ( invoiceDetail.already_received > invoiceData.netAmount )  )">
+                            <td class="td">Refund Amount </td>
+                            <td class="td">
+                                <input  class="simple-input w70" type="number" [(ngModel)]="invoiceData.refund" name="refund" #refund="ngModel"  (input)="onReceivedChangeHandler()" style="text-align: right;">                  
+                            </td>
+                        </tr> -->
+                        
+                        <!-- <tr >
+                            <td class="td">Mode</td>
+                            <td class="td">
+                                
+                                <select name="mode" [(ngModel)]="invoiceDetail.mode" (change)="changeMode()" required>
+                                    <option value="">Select Mode</option>
+                                    <option value="None">None</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="Payment Gateway">Payment Gateway</option>
+                                    <option value="NEFT">NEFT</option>
+                                </select>
+                                <p class="red-clr" *ngIf="!invoiceDetail.mode">This field is required</p>
+                                
+                            </td>
+                        </tr> -->
+                        
+                        <tr >
+                            <td class="td">Balance</td>
+                            
+                            <td class="td">&#8377; {{invoiceDetail.balance.toFixed(2)}}</td>
+                        </tr>
+                        <!-- <tr *ngIf="invoiceDetail.balance">
+                            <td class="td">Due Date</td>
+                            <td class="td">
+                                <mat-form-field class="cs-input cs-date-picker w100">
+                                    <input placeholder="DATE" [(ngModel)]="invoiceDetail.due_terms" name="due_terms" required matInput [matDatepicker]="picker" required="invoiceDetail.balance?true:false">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </tr> -->
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="cs-heading mt20 mb10">
+                    <h2>PAYMENT DETAILS</h2>
+                </div>
+                
+                <div class="cs-table left-right-15">
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w200">Payment Date</th>
+                                <th class="w140 text-center">Invoice ID</th>
+                                <th>Mode</th>
+                                <th>Note</th>
+                                <th class="w150">Amount</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let row of invoicePaymentList">
+                                    <td class="w200">{{row.date_created}}/{{row.first_name}}</td>
+                                    <td class="w140 text-center">
+                                        <a mat-button routerLink="/order-invoice-detail/{{row.invoice_id |crypt}}" routerLinkActive="active" class="link"> #{{row.prfx_invoice_id}}</a></td>
+                                        <td>{{row.mode}}</td>
+                                        <td>{{row.note}}</td>
+                                        <td class="w150">&#8377; {{row.amount}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>     
+                </div>
+            </div>
+            
+        </div>
+        <div class="fix-btn-group">
+            <ul>
+                <li (click)="print()">
+                    <a matRipple class="botm-btn"><i class="material-icons">print</i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <!-- hidden -->
+    <div  id="print-section" hidden  class="print-section"> 
+        <table  width="1024px" style="border-collapse: collapse;">
+            <tr>
+                <td width="1024px" style="background: #fff;">
+                    <table class="table1" width="1024px" style="border-collapse: collapse;">
+                        <tr>
+                            <td width="324px" style="vertical-align: bottom;" *ngIf="invoiceDetail.org_logo">
+                                <img style="height: 150px;" [src]="this.db.myurl + 'app/uploads/' + invoiceDetail.org_logo">
+                                
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="padding-left: 110px;">
+                                    <h2 style="line-height: 10px; font-size: 16px; line-height: 10px;">{{invoiceDetail.admin_company_name}}</h2>
+                                    <p style="line-height: 6px; font-size: 16px; line-height: 16px;">{{invoiceDetail.admin_address}}</p>
+                                    <p style="line-height: 6px; font-size: 16px; line-height: 10px;">{{invoiceDetail.admin_city}}</p>
+                                    <p style="line-height: 6px; font-size: 16px; line-height: 10px;">{{invoiceDetail.admin_district}}</p>
+                                    <p style="line-height: 6px; font-size: 16px; line-height: 10px;">{{invoiceDetail.admin_state}} {{invoiceDetail.admin_pincode}}</p>
+                                    <p style="line-height: 6px; font-size: 16px; line-height: 10px;">{{invoiceDetail.admin_country_name}}</p>
+                                    <p style="line-height: 6px; font-size: 16px; line-height: 10px;">GSTIN {{invoiceDetail.org_company_gstin}}</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr>
+                <td width="1024" style="background: #fff; padding: 40px 0px;">
+                    <div style="width: 100%; display:flex; justify-content: center;  align-items: center; position: relative;">
+                        <div style="width: 100%; height: 2px; background: #ccc; "><h2 style="font-size:30px; background: #fff; position: absolute; top: -40px; left:50%; transform: translateX(-50%); padding: 0px 20px; color: #59a4f5">INVOICE</h2></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 30px;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse; padding-right: 80px;">
+                        <tr>
+                            <td width="600" style="text-align: left; background: #fff; vertical-align: top;">
+                                <div style="padding-right: 100px;">
+                                    <h2 style="line-height:10px; font-size: 16px; line-height: 10px;">Bill To</h2>
+                                    <p style="line-height: 6px;  font-size: 16px; line-height: 10px;">{{invoiceDetail.company_name}}</p>
+                                    <p style="line-height: 6px;  font-size: 16px; line-height: 16px;"> {{invoiceDetail.address}}</p>
+                                    <p style="line-height: 6px;  font-size: 16px; line-height: 10px;">{{invoiceDetail.pincode}} {{invoiceDetail.state}}</p>
+                                    <p style="line-height: 6px;  font-size: 16px; line-height: 10px;">{{invoiceDetail.country_name}}</p>
+                                    <p style="line-height: 6px;  font-size: 16px; line-height: 10px;">GSTIN: {{invoiceDetail.company_gstin}}</p>
+                                </div>
+                            </td>
+                            <td text-align="right"  style="text-align: right;  background: #fff;">
+                                <table width="424px" style="border-collapse: collapse;">
+                                    <tr>
+                                        <td style="  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 10px;">Invoice</td>
+                                        <td style="  border: 0.5px solid #565656; vertical-align: top; background: #fff; font-size: 16px; text-align: left; padding: 10px;">{{invoiceDetail.invoice_id}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 10px;">Invoice Date</td>
+                                        <td style="  border: 0.5px solid #565656; vertical-align: top; background: #fff; font-size: 16px; text-align: left; padding: 10px;">{{invoiceDetail.date_created | date: 'dd MMM yyyy'  }}</td>
+                                    </tr>
+                                    <tr *ngIf="invoiceDetail.balance && invoiceDetail.due_terms != '0000-00-00' ">
+                                        <td style="  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 10px;">Due Terms</td>
+                                        <td style="  border: 0.5px solid #565656; vertical-align: top; background: #fff; font-size: 16px; text-align: left; padding: 10px;">{{invoiceDetail.due_terms | date: 'dd MMM yyyy'}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr >
+                <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 40px;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; background: #fff; vertical-align: top;">
+                                <h2 style="line-height: 10px; font-size: 16px;">Ship To</h2>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.company_name}}</p>
+                                <p style="line-height: 18px; font-size: 16px;">{{invoiceDetail.ship_address}}</p>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.ship_city}}</p>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.ship_district}}</p>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.pincode}} {{invoiceDetail.ship_state}}</p>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.country_name}}</p>
+                                
+                                <h2 style="line-height: 10px; font-size: 16px; margin-top:40px;">Contact Details</h2>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.name}}</p>
+                                <p style="line-height: 10px; font-size: 16px;">{{invoiceDetail.contact_no}}</p>
+                                
+                            </td>
+                            <td  style="text-align: right;  background: #fff;">
+                                &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top; padding: 40px 0px;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; background: #fff; vertical-align: top;">
+                                <p style="line-height: 10px; font-size: 16px; padding-bottom: 15px;">Place Of Supply: {{invoiceDetail.state}} ({{ invoiceDetail.company_gstin ? invoiceDetail.company_gstin.substring(0, 2) : '' }}) </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td width="1024"  style="text-align: right;  background: #fff;">
+                                <table  style="border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width:24px;  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px;">#</td>
+                                        <td style="width:500px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; text-align: left; padding: 10px;">Product & Description </td>
+                                        <td style="width:70px;  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;">HSN</td>
+                                        <td style="width:80px;  border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;">UOM</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;">Price</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;">Qty</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;">Amount</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;" *ngIf="invoiceDetail.dis_amt"  >Discount</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;" *ngIf="invoiceDetail.cgst_amt">CGST</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;" *ngIf="invoiceDetail.sgst_amt">SGST</td>
+                                        <td style="width:100px; border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; font-weight: 500; padding: 10px; text-align: right;" *ngIf="invoiceDetail.igst_amt">IGST</td>
+                                        <!-- <td style="width:100px;    border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 12px; padding: 10px;">GST</td> -->
+                                        <!-- <td style="width:100px; text-align: right;   border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 12px; padding: 10px;">SGST</td> -->
+                                        <td style="width:150px;   border: 0.5px solid #565656; vertical-align: top; background: #e8f7fe; font-size: 16px; padding: 10px; text-align: right;">Net Amount</td>
+                                    </tr>
+                                    <tr *ngFor="let val of invoiceItemDetail">
+                                        <td style="width:24px;    border: 0.5px solid #565656; background: #fff; font-size: 12px; padding:20px 10px;"></td>
+                                        <td style="width:500px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px;"> 
+                                            {{val.item_name}} <br>
+                                            <span style="font-size:11px; color:#2b2b2b; display: inline-flex; padding-left: 8px;"> {{val.description}}</span>
+                                            <!-- <table>
+                                                <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px;">{{val.item_name}}<br><span style="padding-left: 5px; font-size:11px; color:#808080; display: inline-flex; line-height: 12px; text-align: justify;">{{val.description}}</span></td></tr>
+                                            </table>
+                                        -->
+                                    </td>
+                                    <td style="width:70px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;">
+                                        {{val.hsn_code}}
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">{{val.hsn_code}}</td></tr>
+                                        </table> -->
+                                        
+                                        
+                                    </td>
+                                    
+                                    <td style="width:80px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;">
+                                        {{val.item_measurement_type}}
+                                        <!-- <table>
+                                            <tr  *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">{{val.item_measurement_type}}</td></tr>
+                                        </table> -->
+                                    </td>
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;">
+                                        &#8377;{{val.item_rate}}
+                                        
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.item_rate}}</td></tr>
+                                        </table> -->
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;">
+                                        {{val.item_qty}}
+                                        <!-- <table>
+                                            <tr  *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">{{val.item_qty}}</td></tr>
+                                        </table> -->
+                                    </td>
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;">
+                                        &#8377; {{val.item_amount}}
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.item_amount}}</td></tr>
+                                        </table> -->
+                                    </td>
+                                    
+                                    
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;" *ngIf="invoiceDetail.dis_amt">
+                                        &#8377;{{val.discount_amount}}<br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.discount}}%)</span>
+                                        
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.discount_amount}}<span style="font-size: 16px; color: #888;"> ({{val.discount}}%)</span></td></tr>
+                                        </table> -->
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;" *ngIf="invoiceDetail.cgst_amt">
+                                        &#8377;{{val.cgst_amt}}<br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.cgst_per}}%)</span>
+                                        
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.cgst_amt}}<span style="font-size: 16px; color: #888;"> ({{val.cgst_per}}%)</span></td></tr>
+                                        </table> -->
+                                        
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;" *ngIf="invoiceDetail.sgst_amt">
+                                        &#8377; {{val.sgst_amt}}<br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.sgst_per}}%)</span> 
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.sgst_amt}}<span style="font-size: 16px; color: #888;"> ({{val.sgst_per}}%)</span></td></tr>
+                                        </table> -->
+                                        
+                                    </td>
+                                    
+                                    <td style="width:100px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;" *ngIf="invoiceDetail.igst_amt" >
+                                        &#8377;{{val.igst_amt}} <br>
+                                        <span style="font-size:11px; color:#2b2b2b;">({{val.igst_per}}%)</span>
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.igst_amt}}<span style="font-size: 16px; color: #888;"> ({{val.igst_per}}%)</span></td></tr>
+                                        </table> -->
+                                        
+                                    </td>
+                                    
+                                    <td style="width:150px;   border: 0.5px solid #565656; background: #fff; font-size: 16px; padding:20px 10px; text-align:right;">
+                                        &#8377;{{val.item_total}}
+                                        
+                                        <!-- <table>
+                                            <tr *ngFor="let val of row.item_list"><td style="background: #fff; font-size: 16px; text-align: right;">&#8377; {{val.item_total}}</td></tr>
+                                        </table> -->
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td width="400px"  style="text-align: right; vertical-align: top;  background: #fff;  padding-top: 25px;">
+                            <table  style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="text-align: center; background: #fff; vertical-align: top; font-size: 16px; text-align: left; padding: 10px;">Thanks for the business.</td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                        <td  style="text-align: right;  background: #fff;  padding-top: 25px;">
+                            <table width="624px" style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="width:320px; vertical-align: top;  background: #fff; font-size: 16px; text-align: right; padding: 10px;">Item Total</td>
+                                    <td style="vertical-align: top;  background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377; {{invoiceDetail.sub_total}} </p></td>
+                                </tr>
+                                <tr *ngIf="invoiceDetail.dis_amt">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px; text-align: right;">Discount({{invoiceDetail.dis_per}}%)</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377; {{invoiceDetail.dis_amt}} </p></td>
+                                </tr>
+                                
+                                <!-- <tr  *ngIf="invoiceDetail.shipping_charges"  >
+                                    <td width="120"  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;">Shipping Charges({{invoiceDetail.shipping_gst}}%)</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377; {{invoiceDetail.shipping_charges}}</p></td>
+                                </tr> -->
+                                
+                                
+                                <tr  *ngIf="invoiceDetail.dis_amt"  >
+                                    <td  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;">Sub Total</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377; {{invoiceDetail.gross_total}}</p></td>
+                                </tr>
+                                
+                                <tr *ngIf="invoiceDetail.shipping_charges">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;">Shipping Charges( <span *ngIf="invoiceDetail.shiping_cgst_per && invoiceDetail.shiping_sgst_per" style="font-size: 10px !important;">SGST({{invoiceDetail.shiping_cgst_per}}%) +  CGST({{invoiceDetail.shiping_sgst_per}}%)</span> <span style="font-size: 10px !important;" *ngIf="invoiceDetail.shiping_igst_per">IGST({{invoiceDetail.shiping_igst_per}}%)</span> )</td>
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377;  {{invoiceDetail.shipping_charges}} </p></td>
+                                </tr>
+                                
+                                <tr  *ngIf="invoiceDetail.sgst_amt"  >
+                                    <td  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;">SGST</td>
+                                    <!-- ({{invoiceDetail.sgst_per}}%) -->
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377;  {{invoiceDetail.sgst_amt}} </p></td>
+                                </tr>
+                                
+                                <tr *ngIf="invoiceDetail.cgst_amt">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;">CGST</td>
+                                    <!-- ({{invoiceDetail.cgst_per}}%) -->
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377;  {{invoiceDetail.cgst_amt}} </p></td>
+                                </tr>
+                                
+                                <tr *ngIf="invoiceDetail.igst_amt">
+                                    <td  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;">IGST</td>
+                                    <!-- ({{invoiceDetail.igst_per}}%) -->
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 10px;"><p>&#8377;  {{invoiceDetail.igst_amt}} </p></td>
+                                </tr>
+                                
+                                
+                                
+                                
+                                
+                                
+                                <tr>
+                                    <td   style="border-top:1px solid #565656; border-bottom:1px solid #565656; vertical-align: top; background: #fff; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;">Total Amount</td>
+                                    <td style="border-top:1px solid #565656; border-bottom:1px solid #565656;  vertical-align: top; background: #fff; font-size: 16px;  font-weight: 600; text-align: right; padding: 15px 5px;"> <p>&#8377;  {{invoiceDetail.invoice_total}} </p></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td   style="border-top:1px solid #565656; border-bottom:1px solid #565656; vertical-align: top; background: #fff; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;">Received Amount</td>
+                                    <td style="border-top:1px solid #565656; border-bottom:1px solid #565656;  vertical-align: top; background: #fff; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;"> <p>&#8377;  {{invoiceDetail.received}} </p></td>
+                                </tr>
+                                
+                                
+                                <tr *ngIf="invoiceDetail.balance">
+                                    <td   style="border-bottom:1px solid #565656; vertical-align: top; background: #fff; text-align: right; color: #1f86ca; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;">Balance Due</td>
+                                    <td style="border-bottom:1px solid #565656; vertical-align: top; background: #fff; text-align: right; color: #1f86ca; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;"><p>&#8377;  {{invoiceDetail.balance}} </p></td>
+                                </tr>
+                                
+                                
+                                
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        
+        <tr *ngIf="invoiceDetail.invoice_total">
+            <td width="1024px" style="background: #fff; vertical-align: top; text-align: right;">
+                <table  width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td  style=" background: #fff; float: right;">
+                            <table >
+                                <tr>
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; padding: 15px 5px; ">Total Amount In Words:</td> 
+                                    <td style="vertical-align: top; background: #fff; font-size: 16px; text-transform: capitalize; font-weight: 600; padding: 15px 5px;"><i>{{ invoiceDetail.invoice_total | converToWord }}</i></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 50px;">
+                <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                    <tr>
+                        <td style="text-align: left; background: #fff; vertical-align: top;">
+                            <h2 style="line-height:0px; font-size: 16px;">Comapny Bank Detail</h2>
+                            <h2 style="line-height:0px; margin: 0px; padding:0px; font-size: 16px; display: flex; align-items: center;">Beneficiary name: <p style="margin-left: 5px;font-weight:normal;">{{invoiceDetail.admin_company_name_in_bank}}</p></h2>
+                            <h2 style="line-height:0px; margin: 0px; padding:0px; font-size: 16px; display: flex; align-items: center;">Account no: <p style="margin-left: 5px;font-weight:normal;">{{invoiceDetail.admin_account_no}}</p></h2>
+                            <h2 style="line-height:0px; margin: 0px; padding:0px; font-size: 16px; display: flex; align-items: center;">Account Type: <p style="margin-left: 5px;font-weight:normal;">{{invoiceDetail.admin_account_type}}</p></h2>
+                            <h2 style="line-height:0px; margin: 0px; padding:0px; font-size: 16px; display: flex; align-items: center;">Bank name: <p style="margin-left: 5px;font-weight:normal;">{{invoiceDetail.admin_bank_name}}</p></h2>
+                            <h2 style="line-height:0px; margin: 0px; padding:0px; font-size: 16px; display: flex; align-items: center;">IFSC: <p style="margin-left: 5px;font-weight:normal;">{{invoiceDetail.admin_ifsc_code}}</p></h2>
+                            <h2 style="line-height:0px; margin: 0px; padding:0px; font-size: 16px; display: flex; align-items: center;">Branch Address: <p style="margin-left: 5px;font-weight:normal;">{{invoiceDetail.admin_bank_address}}</p></h2>
+                        </td>
+                        <td  style="text-align: right;  background: #fff;">
+                            
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="background: #fff;  border-bottom: 1px solid #565656; padding:30px 0px 15px 0px;"><h2 style="font-size: 16px; font-weight: 600px; margin:0px; ">Terms & Conditions</h2></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; background: #fff; vertical-align: top; padding-top: 25px;">
+                
+                <p style="line-height: 10px; font-size: 16px;">1) Goods once sold will not be taken back or exchanged except manufacturing defect</p>
+                <p style="line-height: 10px; font-size: 16px;">2) Once invoice made cannot be modified or cancelled for any reasons thereof.</p>
+                <p style="line-height: 10px; font-size: 16px;">3) This is computer generated invoice hence signature's not required,</p>
+                <p style="line-height: 10px; font-size: 16px;">4) The court at Delhi shall have exclusive jurisdiction for deciding any disputes arising out of this sale invoice</p>
+            </td>
+        </tr>
+        
+    </table>
+</div>
+
+<div class="h100"></div>

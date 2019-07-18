@@ -1,0 +1,210 @@
+<div class="main-container">
+    <div class="master-heading">
+      <div class="top-tabs">
+        <button mat-button [ngClass]="{active: followup_type == 'pending'}" (click)="showPendingFollowUps()">Pending <span class="counter">{{ total_pending_follow_ups }}</span></button>
+        <button mat-button [ngClass]="{active: followup_type == 'appointment'}" (click)="showAppointmentFollowUps()">Appointment <span class="counter">{{ total_upcoming_appointment_follow_ups }}</span></button>
+        <button mat-button [ngClass]="{active: followup_type == 'done'}" (click)="showDoneFollowUps()">Done <span class="counter">{{ total_done_follow_ups }}</span></button>
+        <button mat-button [ngClass]="{active: followup_type == 'upcoming'}" (click)="showUpcomingFollowUps()">Upcoming <span class="counter">{{ total_upcoming_follow_ups }}</span></button>
+      </div>
+      <div class="top-search wp30 ml30">
+        <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getFollowUpList(followup_type)">
+        <i class="material-icons">search</i>
+      </div>
+      <div class="top-pagination m-right-data">
+        <ul>
+          <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+          <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+          <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getFollowUpList(followup_type)"></li>
+          <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="all-container">
+      <div class="cs-row">
+        <div class="right-data">
+          <div class="cs-spinner full-page" *ngIf = "loading_list">
+            <div class="outer">
+              <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+              </div>
+            </div>
+          </div>
+          <div class="data-not-available" *ngIf="!loading_list && !filtering &&  follow_ups.length < 1 ">
+            <div class="outer">
+              <div class="iinear">
+                <div class="figure" matRipple>
+                  <div class="header">
+                    <img src="assets/img/data-not-available-header.svg" alt="">
+                  </div>
+  
+                  <div class="description">
+                    <div class="cs-heading">
+                      <h2>Follow Up</h2>
+                    </div>
+                    <div class="img">
+                      <i class="material-icons">error_outline</i>
+                    </div>
+                    <div class="psc">
+                      <p>data not available</p>
+                      <!--<p>Tap on <a routerLink="/follow_ups/add" >ADD NEW</a> for Follow Up</p>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="cs-table header-fixed" *ngIf="(follow_ups.length > 0 || filtering) && followup_type == 'appointment' ">
+            <div class="header">
+              <table class="sno-border">
+                <tr>
+                  <th class="w30 border-right-none"></th>
+                  <th class="w130">Name</th>
+                  <th class="w100">Mobile</th>
+                  <th class="w130">Assign Franchise</th>
+                  <th class="w110">Intrested In </th>
+                  <th class="w110">Vehicle Model</th>
+                  <th class="w150">Appointment Date</th>
+                  <th class="w150">Booked By</th>
+                  <th class="w150">Remark</th>
+                  <!-- <th class="w150">Next Followup Date</th> -->
+                  <!-- <th class="w150">Followup Created By</th> -->
+                </tr>
+              </table>
+            </div>
+            <div class="table-container">
+              <div class="table-body">
+                <table class="sno-border">
+                  <tr *ngFor="let val of follow_ups; let i = index">
+                    <td class="w30 text-center">{{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }}</td>
+                    <td class="w130">  
+                      <a routerLink="/franchise_leads/details/{{val.franchise_id |crypt}}" routerLinkActive="active"  *ngIf="val.franchise_id " mat-button class="link">{{val.f_name  }}/{{  val.company_name  }} 
+                      </a>
+                      <a routerLink="/consumer_leads/details/{{val.consumer_id | crypt}}"  routerLinkActive="active" *ngIf="val.consumer_id " mat-button class="link"> {{val.first_name }} {{val.last_name }} </a>
+
+                    </td>
+                    <td class="w100">{{ val.phone || '' }} {{ val.contact_no || ''}}</td>
+                    <!-- <td class="w110">{{ val.franchise_id !=  '0' ? 'Franchise' : 'Consumer' }}</td> -->
+                    <td class="w130">{{  val.location_name }}</td>
+                    <td class="w110">{{  val.interested_in }}</td>
+                    <td class="w150">{{ val.car_model }}</td>
+                    <td class="w150">{{ val.next_follow_date != '0000-00-00' ? ( val.next_follow_date | date: 'dd MMM yyyy' ): '' }}</td>
+                    <td class="w150">{{val.created_name }}/{{ val.created_at  | date: 'dd MMM yyyy' }}</td>
+                    <td class="w150">{{ val.description }}
+                    <!-- <td class="w150">{{ val.created_by }}</td> -->
+                    <!-- <td >{{ val.description }} -->
+                      <div class="action-btns">
+                          <a routerLink="/franchise_leads/details/{{val.franchise_id |crypt}}" routerLinkActive="active"  *ngIf="val.franchise_id " mat-button class="link"><i class="material-icons">visibility icon</i>View</a>
+                          <a routerLink="/consumer_leads/details/{{val.consumer_id |crypt}}"  routerLinkActive="active" *ngIf="val.consumer_id " mat-button class="link"> <i class="material-icons">visibility icon</i>View </a>
+    
+                        <a mat-button class="edit" (click)="openCreateFollowupDialog( val.franchise_id ?  val.franchise_id :  val.consumer_id , val.franchise_id ? 'franchise' : 'consumer')" title="Create Followup" ><i class="material-icons">contact_phone</i> Create Followup</a>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-table header-fixed" *ngIf="(follow_ups.length > 0 || filtering) && followup_type != 'appointment' ">
+            <div class="header">
+              <table class="sno-border">
+                <tr>
+                  <th class="w30 border-right-none"></th>
+                  <th class="w180">Name / Company</th>
+                  <th class="w100">Mobile</th>
+                  <th class="w110">
+                      <div class="filter">
+                          <mat-form-field>
+                            <mat-select placeholder="Type" [(ngModel)]="filter.type" (selectionChange)="getFollowUpList(followup_type)">
+                              <mat-option value="">All</mat-option>
+                              <mat-option value="Consumer">Consumer</mat-option>
+                              <mat-option value="Franchise">Franchise</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                  </th>
+                  <th class="w150">Assign Franchise/ City</th>
+                  <th class="w150">
+                      <div class="filter">
+                          <mat-form-field>
+                            <mat-select placeholder="Followup Type" [(ngModel)]="filter.FollowupType" (selectionChange)="getFollowUpList(followup_type)">
+                                <mat-option value="">All</mat-option>
+                              <mat-option value="Appointment">Appointment</mat-option>
+                              <mat-option value="Call">Call</mat-option>
+                              <mat-option value="Meeting">Meeting</mat-option>
+                              <mat-option value="Demo">Demo</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                  </th>
+                  <th class="w180">Followup By</th>
+                  <th class="w150">
+                      <div class="filter">
+                          <mat-form-field>
+                            <mat-select placeholder="Next Followup Type" [(ngModel)]="filter.NextFollowupType" (selectionChange)="getFollowUpList(followup_type)">
+                                <mat-option value="">All</mat-option>
+                              <mat-option value="Appointment">Appointment</mat-option>
+                              <mat-option value="Call">Call</mat-option>
+                              <mat-option value="Meeting">Meeting</mat-option>
+                              <mat-option value="Demo">Demo</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                  </th>
+                  <th  class="w150">
+                      <div class="filter">
+                          <mat-form-field class="cs-input cs-date-picker">
+                            <input placeholder="Next Followup Date" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getFollowUpList(followup_type)"  [matDatepicker]="picker1" >
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                          </mat-form-field>
+                          </div>
+
+                  </th>  
+                  <!-- <th class="w150">Followup Created By</th> -->
+                  <th>Remark</th>
+                </tr>
+              </table>
+            </div>
+            <div class="table-container">
+              <div class="table-body">
+                <table class="sno-border">
+                  <tr *ngFor="let val of follow_ups; let i = index">
+                    <td class="w30 text-center">{{ i+1}}</td>
+                    <td class="w180">  
+                      <a routerLink="/franchise_leads/details/{{val.franchise_id |crypt}}" routerLinkActive="active"  *ngIf="val.franchise_id " mat-button class="link">{{val.f_name  }}/{{  val.company_name  }} 
+                      </a>
+                      <a routerLink="/consumer_leads/details/{{val.consumer_id |crypt}}"  routerLinkActive="active" *ngIf="val.consumer_id " mat-button class="link"> {{val.first_name }} {{val.last_name }} </a>
+
+                    </td>
+                    <td class="w100">{{ val.phone || '' }} {{ val.contact_no || ''}}</td>
+                    <td class="w110">{{ val.franchise_id !=  '0' ? 'Franchise' : 'Consumer' }}</td>
+                    <td class="w150">{{  val.franchise_id != '0' ? ( val.f_l_name ?   val.f_l_name+' / '+ val.city : val.city)  :   val.location_name   }}</td>
+                    <td class="w150">{{ val.follow_type }}</td>
+                    <td class="w180">{{val.created_name }}/{{ val.created_at  | date: 'dd MMM yyyy' }}</td>
+                    <td class="w150">{{ val.next_follow_type }}</td>
+                    <td class="w150">{{ val.next_follow_date != '0000-00-00' ? ( val.next_follow_date | date: 'dd MMM yyyy' ): '' }}</td>
+                    <!-- <td class="w150">{{ val.created_by }}</td> -->
+                    <td >{{ val.description }}
+                      <div class="action-btns">
+                          <a routerLink="/franchise_leads/details/{{val.franchise_id |crypt}}" routerLinkActive="active"  *ngIf="val.franchise_id " mat-button class="link"><i class="material-icons">visibility icon</i>View</a>
+                          <a routerLink="/consumer_leads/details/{{val.consumer_id |crypt}}"  routerLinkActive="active" *ngIf="val.consumer_id " mat-button class="link"> <i class="material-icons">visibility icon</i>View </a>
+    
+                        <a mat-button class="edit" (click)="openCreateFollowupDialog( val.franchise_id ?  val.franchise_id :  val.consumer_id , val.franchise_id ? 'franchise' : 'consumer')" title="Create Followup" ><i class="material-icons">contact_phone</i> Create Followup</a>
+                        </div>         
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="h100"></div>
+  

@@ -1,0 +1,125 @@
+<div class="main-container"> 
+    
+    
+    <div class="master-heading">
+        <div class="vl-info">
+            <ul>
+                <li>
+                    <p>
+                        From 
+                        <mat-form-field class="master-head-date">
+                            <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="search.date_from" name="date_from" #date_form="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </p> 
+                </li>
+                <li class="af-none">
+                    <p>
+                        To
+                        <mat-form-field class="master-head-date">
+                            <input matInput [matDatepicker]="date" placeholder="Choose a date" [(ngModel)]="search.date_to" name="date_to" #date_to="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                            <mat-datepicker #date></mat-datepicker>
+                        </mat-form-field>
+                    </p>
+                </li>
+                <li class="af-none">
+                    <div class="cs-btn">
+                        <div class="in-btn ">
+                            <button (click)="InvoiceList();" mat-raised-button color="warn" class="h30-btn">Search</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="top-pagination m-right-data">
+            <ul>
+                <li class="refresh-area">
+                    <a class="refresh-btn" mat-raised-button  matTooltip="Refresh" (click)="InvoiceList('refresh');" ><i class="material-icons"> refresh</i></a>
+                </li>
+                <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO"  [(ngModel)]="current_page"  (keyup.enter)="InvoiceList('refresh')"></li>
+                <li><button mat-button class="right-btn"  (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <app-report-tab></app-report-tab>
+            <div class="right-data tabs-listing">
+                <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                
+                <div *ngIf="loading_list && (invoiceList.length > 0)" class="cs-table header-fixed" #exportData>
+                    <div class="header">
+                        <table class="sno-border">
+                            <tr>
+                                <th class="w30 border-right-none"></th>
+                                <th class="w220">Date / Created By</th>
+                                <th class="w220">
+                                    <div class="filter">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Franchise">
+                                                <mat-option *ngFor="let f of franchiseList"  value="{{f.id}}" (click)="GetFranchiseName(f.name); InvoiceList();">{{f.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th class="w100">Invoice ID</th>
+                                <th class="w100">Order ID</th>
+                                <th class="w150">Amount</th>
+                                <th class="w150">Balance</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table class="sno-border">
+                                <tr *ngFor="let row of invoiceList; let i=index">
+                                    <td class="w30 text-center">{{i+1}}</td>
+                                    <td class="w220">{{row.date_created}} / {{row.created_by_type}}</td>
+                                    <td class="w220">{{row.name}}</td>
+                                    <td class="w100">
+                                        <a mat-button routerLink="/order-invoice-detail/{{row.id}}" routerLinkActive="active" class="link">#{{row.id}}</a>
+                                    </td>
+                                    
+                                    <td class="w100">
+                                        #{{row.order_id}}
+                                    </td>
+                                    <td class="w150"> &#8377; {{row.invoice_total}}</td>
+                                    <td class="w150">
+                                        &#8377; {{row.balance}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+        
+        
+        <div class="fix-btn-group">
+            <ul>
+                <li>
+                    <a class="botm-btn" matRipple  matTooltipPosition="before" matTooltip="Export Excel" (click)="exportToExcel();">
+                        <i class="material-icons">file_download</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

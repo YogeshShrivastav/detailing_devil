@@ -1,0 +1,223 @@
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf = "!loading_page">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  <div class="master-heading" *ngIf = "loading_page">
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+    <div class="top-search wp50 ml190">
+      <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getProductList()">
+      <i class="material-icons">search</i>
+    </div>
+    <div class="top-pagination m-right-data">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getProductList()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container" *ngIf="loading_page">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-master-listing-tabs></app-master-listing-tabs>
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing">
+        <div class="cs-spinner half-page" *ngIf="!loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div class="data-not-available" *ngIf="loading_list && searchData && (products.length < 1)">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>for Product</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">error_outline</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                    <p>Tap on <a routerLink="/products/add" >ADD NEW</a> for for Product</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="data-not-available" *ngIf="loading_list && !searchData && search">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>{{ search }}</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">search</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cs-table mt15" *ngIf="loading_list && (products.length > 0)">
+          <div class="header sticky-header">
+            <table>
+              <tr>
+                <th class="w150">Brand</th>
+                <th class="w250">Product</th>
+                <th class="w80">HSN Code</th>
+                <th class="w50">GST(%)</th>
+                <th class="w80 text-center">Meas</th>
+                <th class="w80 text-right">Sale Price (&#x20B9;)</th>
+                <th class="w80 text-right">Purchase price (&#x20B9;)</th>
+                <th>Description (&#x20B9;)</th>
+                <th class="w50 text-right">Stock Alert (&#x20B9;)</th>
+                <th class="w140">Attribute Type</th>
+                <th>Attribute Option</th>
+              </tr>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-body">
+              <table>
+                <tr *ngFor="let product of products; let i = index">
+                  <td class="w150">{{ product.brand_name }}</td>
+                  <td class="w250">{{ product.product_name }}</td>
+                  <td class="w80">{{ product.hsn_code }}</td>
+                  <td class="w50">{{ product.gst }}</td>
+                  <td class="w80 in-table">
+                    <ng-container *ngFor="let units of unit_prices">
+                      <table>
+                        <ng-container *ngFor="let val of units; let i = index">
+                          <ng-container *ngIf="val.product_id == product.id">
+                            <tr>
+                              <td class="text-center">{{ val.unit_of_measurement }}</td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </table>
+                    </ng-container>
+                  </td>
+                  <td class="w80 in-table">
+                    <ng-container *ngFor="let units of unit_prices">
+                      <table>
+                        <ng-container *ngFor="let val of units; let i = index">
+                          <ng-container *ngIf="val.product_id == product.id">
+                            <tr>
+                              <td class="text-right">
+                                <p *ngIf="val.sale_price">{{ val.sale_price }}</p>
+                                <p *ngIf="!val.sale_price">-</p>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </table>
+                    </ng-container>
+                  </td>
+                  <td class="w80 in-table">
+                    <ng-container *ngFor="let units of unit_prices">
+                      <table>
+                        <ng-container *ngFor="let val of units; let i = index">
+                          <ng-container *ngIf="val.product_id == product.id">
+                            <tr>
+                              <td class="text-right">
+                                <p *ngIf="val.purchase_price">{{ val.purchase_price }}</p>
+                                <p *ngIf="!val.purchase_price">-</p>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </table>
+                    </ng-container>
+                  </td>
+                  <td >
+                    <ng-container *ngFor="let units of unit_prices">
+                      <table>
+                        <ng-container *ngFor="let val of units; let i = index">
+                          <ng-container *ngIf="val.product_id == product.id">
+                            <tr>
+                              <td class="text-right">
+                                <p *ngIf="val.description">{{ val.description }}</p>
+                                <p *ngIf="!val.description">-</p>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </table>
+                    </ng-container>
+                  </td>
+                  <td class="w50 ">{{ product.stock_alert }}</td>
+                  <td class="w140 in-table">
+                    <ng-container *ngFor="let types of attr_types">
+                      <table>
+                        <ng-container *ngFor="let val of types; let i = index">
+                          <ng-container *ngIf="val.product_id == product.id">
+                            <tr><td>{{ val.attr_type }}</td></tr>
+                          </ng-container>
+                        </ng-container>
+                      </table>
+                    </ng-container>
+                  </td>
+                  <td class="in-table">
+                    <table>
+                      <ng-container *ngFor="let options of attr_options">
+                        <ng-container *ngFor="let val of options; let i = index">
+                          <ng-container *ngIf="val.product_id == product.id">
+                            <tr>
+                              <td>
+                                <div class="tags">
+                                  <span *ngFor = "let a_option of val.attr_option.split(',')">{{ a_option }}</span>
+                                </div>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </table>
+                    <div class="action-btns">
+                      <a mat-button class="edit" routerLink="/accessory-edit/{{product.id}}"  routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                      <button mat-button class="delete" (click)="deleteProduct(product.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                    </div>      
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

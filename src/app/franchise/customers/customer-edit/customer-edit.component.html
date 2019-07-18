@@ -1,0 +1,340 @@
+<div class="main-container">
+  
+  <div class="cs-container detail">
+    <div class="cs-spinner full-page" *ngIf = "!loading_list">
+      <div class="outer">
+        <div class="innear">
+          <mat-spinner></mat-spinner>
+          <P>LOADING . . .</P>
+        </div>
+      </div>
+    </div>
+    <form name="form" (ngSubmit)="f.form.valid && updateLead()" #f="ngForm" novalidate  *ngIf = "loading_list">
+      <div class="row">
+        <div class="col-12">
+          <div class="right-data pl0">
+            <div class="contst">
+              <div class="cs-heading">
+                <h2>Basic Detail</h2>
+              </div>
+              
+              <div class="form-field">
+                <div class="row">
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_first_name}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="FIRST NAME"  name = "first_name" [(ngModel)]="lead.first_name" #first_name="ngModel">
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_last_name}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="LAST NAME" name = "last_name"  [(ngModel)]="lead.last_name" #last_name="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_phone}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput (keypress)="numeric_Number($event)" placeholder="YOUR PHONE"  name = "phone" [(ngModel)]="lead.phone" #phone="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_email}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="YOUR EMAIl" type="email"  name = "email" [(ngModel)]="lead.email" pattern="[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" #email="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-8 " [ngClass]="{'active': enable_car_model}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Vehicle MODEL"  name  ="car_model" [(ngModel)]="lead.car_model" #car_model="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-4">
+                    <div class="control-field col-12  addrs-input" [ngClass]="{'active': enable_address}">
+                      <mat-form-field class="example-full-width cs-input" >
+                        <textarea matInput placeholder="ADDRESS"  class="h125" name = "address" [(ngModel)]="lead.address" #address="ngModel"></textarea>
+                        
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  
+                  <div class="col-8">
+                    <div class="control-field col-12  addrs-input" [ngClass]="{'active': enable_message}">
+                      <mat-form-field class="example-full-width cs-input">
+                        <textarea matInput placeholder="MESSAGE"  class="h125" name = "message" [(ngModel)]="lead.message" #message="ngModel"></textarea>
+                        
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_source}">
+                    <mat-form-field class="cs-multi-select cs-input" >
+                      <mat-select placeholder="Source" name="source" [(ngModel)] = "lead.source" #source="ngModel">
+                        <mat-option value="Email">Email</mat-option>
+                        <mat-option value="Facebook">Facebook</mat-option>
+                        <mat-option value="Inbound">Inbound</mat-option>
+                        <mat-option value="Missed Call">Missed Call</mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                        <mat-option value="Outbound">Outbond</mat-option>
+                        <mat-option value="Walk In">Walk in</mat-option>
+                        <mat-option value="Instagram">Instagram</mat-option>
+                        <mat-option value="Facebook Form">Facebook Form</mat-option>
+                        <mat-option value="Website">Website</mat-option>
+                        <mat-option value="Website Chat">Website Chat</mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                        
+                      </mat-select>
+                      
+                    </mat-form-field>
+                    <mat-error color="primary" *ngIf="f.submitted && !source.valid" >This field is required</mat-error>
+                    
+                  </div>
+                  
+                </div>
+                
+                <div class="cs-heading">
+                  <h2>Address</h2>
+                  <p><i class="material-icons ic-watch">watch_later</i>{{ lead.created_at | date: 'dd MMM yyyy' }}</p>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row">
+                      <!-- <div class="control-field col-4 ">
+                        <mat-form-field class="cs-multi-select cs-input">
+                          <mat-select placeholder="Country" [disabled]="!enable_location" name="country_id" [(ngModel)]="lead.country_id" #country_id="ngModel"  (selectionChange)="getLocations(country_id.value)" required>
+                            <mat-option *ngFor="let val of countries" [value]="val.id"> {{val.name}} </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-error color="primary" *ngIf="f.submitted && !country_id.valid" >This field is required</mat-error>
+                      </div> -->
+                      
+                      
+                      <div class="control-field col-4 " [ngClass]="{'active': enable_country}">
+                        <mat-form-field class="cs-multi-select cs-input" >
+                          <mat-select placeholder="Country" name="country" [(ngModel)] = "lead.country" #country="ngModel" (selectionChange)="getLocations()" required>
+                            <mat-option *ngFor="let val of countries" [value]="val.id"> {{val.name}} </mat-option>                                               
+                          </mat-select>
+                          
+                        </mat-form-field>
+                        <!-- <mat-error color="primary" *ngIf="f.submitted && !profile.valid" >This field is required</mat-error> -->
+                        
+                      </div>                                       
+                      <!-- <div class="control-field col-4  pr55">
+                        <mat-form-field class="cs-multi-select cs-input">
+                          <mat-select placeholder="Location" [disabled]="!enable_location" name="location_id" [(ngModel)]="lead.location_id" #location_id="ngModel" required>
+                            <mat-option value=""> None</mat-option>
+                            <mat-option *ngFor="let val of locations" [value]="val.id"> {{val.location_name}} </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-error color="primary" *ngIf="f.submitted && !location_id.valid" >This field is required</mat-error>
+                        <div class="edit-icon right-side" [ngClass]="{'active': enable_location}">
+                          <button mat-button class="save dark-green-bg" type="submit"><i class="material-icons" title="Save">save</i></button>
+                          <a mat-button class="edit" *ngIf="!enable_location" (click)="enable_location=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                        </div>
+                      </div> -->
+                      
+                      <div class="control-field col-4 "  [ngClass]="{'active': enable_state}" *ngIf="lead.country != 99"  >
+                        <mat-form-field class="example-full-width cs-input">
+                          <input matInput placeholder="State"  name="state" [(ngModel)]="lead.state" #state="ngModel">                                         
+                          
+                        </mat-form-field>
+                        <mat-error color="primary" *ngIf="f.submitted && !state.valid" >This field is required</mat-error>
+                      </div>
+                      
+                      <div class="control-field col-4 " *ngIf="lead.country == 99" [ngClass]="{'active': enable_state}">
+                        <mat-form-field class="cs-multi-select cs-input" >
+                          <mat-select placeholder="State" name="state" [(ngModel)] = "lead.state" #state="ngModel"  (selectionChange)="getDistrictList()">
+                            <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>                                              
+                          </mat-select>
+                          
+                          
+                        </mat-form-field>
+                        <mat-error color="primary" *ngIf="f.submitted && !profile.valid" >This field is required</mat-error>
+                        
+                      </div>
+                      
+                      
+                      
+                      <div class="control-field col-4 "  [ngClass]="{'active': enable_district}" *ngIf="lead.country != 99"  > 
+                        <mat-form-field class="example-full-width cs-input">
+                          <input matInput placeholder="District"  name="district" [(ngModel)]="lead.district" #district="ngModel" >                                        
+                          
+                        </mat-form-field>                    
+                      </div>
+                      
+                      <div class="control-field col-4 " *ngIf="lead.country == 99" [ngClass]="{'active': enable_district}">
+                        <mat-form-field class="cs-multi-select cs-input" >
+                          <mat-select placeholder="District" name="district" [(ngModel)] = "lead.district"   (selectionChange)="getCityList()" #district="ngModel" >
+                            <mat-option *ngFor="let val of districts" [value]="val.district_name"> {{val.district_name}} </mat-option>                                             
+                          </mat-select>
+                          
+                        </mat-form-field>
+                        
+                      </div>
+                      
+                      <div class="control-field col-4 " [ngClass]="{'active': enable_city}" > 
+                        <mat-form-field class="example-full-width cs-input" >
+                          <input matInput placeholder="City" name="city" [(ngModel)]="lead.city" #city="ngModel" >                                        
+                          
+                        </mat-form-field>                    
+                      </div>
+                      
+                      <div class="control-field col-4 "  [ngClass]="{'active': enable_pin_code}"  *ngIf="lead.country != 99">
+                        <mat-form-field class="example-full-width cs-input">
+                          <input matInput placeholder="Pin-code"  (keypress)="numeric_Number($event)"  name="pin" [(ngModel)]="lead.pin" #pin="ngModel" maxlength="6">
+                          
+                        </mat-form-field>            
+                      </div>
+                      
+                      <div class="control-field col-4 " *ngIf="lead.country == 99" [ngClass]="{'active': enable_pin_code}">
+                        <mat-form-field class="cs-multi-select cs-input" >
+                          <mat-select placeholder="Pin-Code" name="pin" [(ngModel)] = "lead.pin" #pin="ngModel" >
+                            <mat-option *ngFor="let val of pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>                                           
+                          </mat-select>
+                          
+                          
+                        </mat-form-field>
+                        
+                      </div>
+                      
+                      
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="cs-heading mt20">
+                  <h2>Company Detail</h2>
+                </div>
+                <div class="row">
+                  
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_company_name}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Company Name"  name = "company_name" [(ngModel)]="lead.company_name" #company_name="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  
+                  
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_company_contact_no}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Company Contact No"   name = "company_contact_no" [(ngModel)]="lead.company_contact_no" #company_contact_no="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  
+                  
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_gstin}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="GSTIN" name = "gstin"  [(ngModel)]="lead.gstin" #gstin="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_company_address}">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput  placeholder="Company Address"  name = "company_address" [(ngModel)]="lead.company_address" #company_address="ngModel">
+                      
+                    </mat-form-field>
+                  </div>
+                  
+                </div>
+                
+                
+                
+                
+                
+                <div class="row">
+                  
+                  <div class="control-field col-4 " >
+                    <mat-form-field class="cs-multi-select cs-input" >
+                      <mat-select placeholder="Country" name="company_country" [(ngModel)] = "lead.company_country" #company_country="ngModel" (selectionChange)="getCompanyStateList()" required>
+                        <mat-option *ngFor="let val of company_countries" [value]="val.id"> {{val.name}} </mat-option>                                               
+                      </mat-select>
+                      
+                    </mat-form-field>
+                    
+                  </div>  
+                  
+                  <div class="control-field col-4 " *ngIf="lead.company_country != 99"  >
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Company State"  name="company_state" [(ngModel)]="lead.company_state" #company_state="ngModel">                                         
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-4 " *ngIf="lead.company_country == 99">
+                    <mat-form-field class="cs-multi-select cs-input" >
+                      <mat-select placeholder="State" name="company_state" [(ngModel)] = "lead.company_state" #state="ngModel"  (selectionChange)="getCompanyDistrictList()">
+                        <mat-option *ngFor = "let val of company_states" [value]="val.state_name"> {{val.state_name}} </mat-option>  
+                        
+                      </mat-select>
+                      
+                      
+                    </mat-form-field>
+                    
+                  </div>
+                  
+                  
+                  
+                  <div class="control-field col-4 "  *ngIf="lead.company_country != 99"  > 
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Company District"  name="company_district" [(ngModel)]="lead.company_district" #company_district="ngModel" >                                        
+                      
+                    </mat-form-field>                    
+                  </div>
+                  
+                  <div class="control-field col-4 " *ngIf="lead.company_country == 99">
+                    <mat-form-field class="cs-multi-select cs-input" >
+                      <mat-select placeholder="District" name="company_district" [(ngModel)] = "lead.company_district"   (selectionChange)="getCompanyCityList()" #company_district="ngModel" >
+                        <mat-option *ngFor="let val of company_districts" [value]="val.district_name"> {{val.district_name}} </mat-option>   
+                      </mat-select>
+                      
+                    </mat-form-field>
+                    
+                  </div>
+                  
+                  <div class="control-field col-4 " [ngClass]="{'active': enable_company_city}" > 
+                    <mat-form-field class="example-full-width cs-input" >
+                      <input matInput placeholder="Company City" name="company_city" [(ngModel)]="lead.company_city" #company_city="ngModel" >                                        
+                      
+                    </mat-form-field>                    
+                  </div>
+                  
+                  <div class="control-field col-4 "   *ngIf="lead.company_country != 99">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Pin-code"  (keypress)="numeric_Number($event)"  name="company_pincode" [(ngModel)]="lead.company_pincode" #company_pincode="ngModel" maxlength="6">
+                      
+                    </mat-form-field>            
+                  </div>
+                  
+                  <div class="control-field col-4 " *ngIf="lead.company_country == 99">
+                    <mat-form-field class="cs-multi-select cs-input" >
+                      <mat-select placeholder="Pin-Code" name="company_pincode" [(ngModel)] = "lead.company_pincode" #company_pincode="ngModel" >
+                        <mat-option *ngFor="let val of company_pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                        
+                      </mat-select>
+                      
+                    </mat-form-field>
+                    
+                  </div>
+                  
+                </div>
+                
+                
+                
+              </div>
+            </div>
+            <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: savingData}">
+              <div class="in-btn">
+                <button mat-raised-button color="primary" [disabled]="savingData">save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="h100"></div>

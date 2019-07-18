@@ -1,0 +1,64 @@
+<div class="login">
+    <div class="row">
+        <div class="col-8">
+            <div class="left">
+                <div class="outer">
+                    <div class="innear">
+                        <div class="zoominscreen">
+                            <div class="zoomoutscreen">
+                            </div>
+                        </div>
+                        <!--<iframe src= "https://www.youtube.com/embed/fSPURRq2aVc?autoplay=1;&loop=1;controls=0&amp;start=4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+                        <div class="dt-data">
+                            <h1>DETAILING DEVILS</h1>
+                            <p>A BLEND OF PROTECTION & PERFECTION</p>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 grbg">
+            <div class="right">
+                
+                <div class="logo">
+                    <img src="assets/img/logo/ds-logo-wht.svg" alt="">
+                </div>
+                
+                <h1>Log <span>In</span></h1>
+                
+                <div class="form">
+                    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                        <div class="control-field">
+                            <label>USERNAME</label>
+                            <mat-form-field>
+                                <input matInput name="email" [(ngModel)] = "form.email" #email="ngModel" autocomplete="off" required>
+                                <i class="material-icons input-icon">person</i>
+                            </mat-form-field>
+                            <mat-error *ngIf="f.submitted && !email.valid" >Email is required</mat-error>
+                        </div>
+                        
+                        <div class="control-field">
+                            <label>PASSWORD</label>
+                            <mat-form-field  [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                <input matInput type="password" name="password" [(ngModel)]="form.password" #password="ngModel" autocomplete="off" required >
+                                <i class="material-icons input-icon">vpn_key</i>
+                                <!-- <i class="material-icons pass-show">remove_red_eye</i> -->
+                            </mat-form-field>
+                            <mat-error *ngIf="f.submitted && !password.valid">Password is required</mat-error>
+                        </div>
+                        <div class="ul-clear"></div>
+                      <div class="cs-btn full-width mt25 ml0 text-right" [ngClass]="{loading: sendingData}">
+                        <div class="in-btn">
+                          <button type="submit" mat-raised-button color="accent" [attr.disabled]="sendingData">Log in</button>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+                
+                <footer>
+                    <span>Powered by Abacusdesk</span>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

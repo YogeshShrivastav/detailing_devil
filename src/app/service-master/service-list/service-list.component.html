@@ -1,0 +1,114 @@
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf = "loading_list">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  <div class="master-heading" >
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+    <div class="top-search wp50 ml190">
+      <input type="text" placeholder="SEARCH. . ." [(ngModel)]="filter.search" (keyup.enter)="current_page = 1;getFranchiseService();">
+      <i class="material-icons">search</i>
+    </div>
+    <div class="top-pagination m-right-data">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getFranchiseService()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container" >
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-master-listing-tabs></app-master-listing-tabs>
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing">
+        
+        
+        
+        <div class="data-not-available" *ngIf="!loading_list && sevice.length < 1 ">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>for Product</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">error_outline</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                    <p>Tap on <a routerLink="/products/add" >ADD NEW</a> for for Product</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div class="cs-table mt15" *ngIf="sevice.length> 0">
+          <div class="header sticky-header">
+            <table>
+              <tr>
+                <th class="w150">Category</th>
+                <th >Service Name</th>
+                <th class="w80">SAC</th>
+                <th class="w80">G.S.T (%)</th>
+                <th class="w110 text-center"> Duration (&#x20B9;)</th>
+                <th class="w120 text-center"> Price</th>
+              </tr>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-body">
+              <table>
+                <tr *ngFor="let val of sevice; let i = index">
+                  <td class="w150">{{ val.category }}</td>
+                  <td >{{ val.service_name }}</td>
+                  <td class="w80">{{ val.sac }}</td>
+                  <td class="w80">{{ val.gst }}</td>
+                  <td class="w110 in-table">
+                    <ng-container *ngFor="let v of val.durations; let i = index">
+                      <table>
+                        <tr><td>{{ v.value_of_duration +' '+ v.unit_of_duration }}</td></tr>
+                      </table>
+                    </ng-container>
+                  </td>
+                  <td class="w120 in-table">
+                    <ng-container *ngFor="let x of val.durations; let i = index">
+                      <table>
+                        <tr><td>{{ x.price }}</td></tr>
+                      </table>
+                    </ng-container>
+                    
+                    <div class="action-btns">
+                      <a mat-button class="edit" routerLink="/service-edit/{{val.id}}"  routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                      <button mat-button class="delete" (click)="deleteProduct(val.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                    </div>      
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="h100"></div>
+  

@@ -1,0 +1,263 @@
+<div class="main-container">
+  <div class="master-heading">
+    <div class="heading">
+      <h1>CREATE NEW SALES ORDER</h1>
+    </div>
+  </div>
+  
+  
+  <div class="cs-spinner full-page" *ngIf = "loading_list">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  
+  <div  class="cs-container pt60">
+    <div class="row">
+      <div class="col-12">
+        <div class="right-data pl0">
+          <div class="contst h650 padding0" style="overflow: hidden;">
+            <mat-dialog-content class="convert-franchies-modle">
+              
+              <div class="m-body">
+                <div class="row">
+                  <div class="col-3 plan-list step1 h650 shadow-none">
+                    <div class="head">
+                      <div class="cs-heading">
+                        <h2>Franchise</h2>
+                      </div>
+                      
+                      <div class="search">
+                        <button mat-button><i class="material-icons">search</i></button>
+                      </div>
+                    </div>
+                    
+                    <div class="listing">
+                      
+                      <mat-radio-group class="step1" [(ngModel)]="orderData.franchise_id">
+                        
+                        <mat-radio-button *ngFor="let row of franchiseList" value="{{row.id}}">
+                          <span class="name-counter" *ngIf="row.company_name">{{row.company_name?row.company_name[0].toUpperCase():''}}</span>
+                          <span class="name-counter" *ngIf="!row.company_name">{{row.name?row.name[0].toUpperCase():''}}</span>
+                          <div class="txt-box">
+                            <p *ngIf="row.company_name">{{row.company_name}}</p>
+                            <p *ngIf="!row.company_name">{{row.name}}</p>
+                            <p>{{row.contact_no}}</p>
+                          </div>
+                          
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  
+                  
+                  <div class="col-9">
+                    
+                    <div class="row">
+                      <div class="col-120">
+                        <div class="form-field " *ngIf="orderData.franchise_id">
+                          <form name="forms" (ngSubmit)="s.form.valid ? AddItem(s) : '' " #s="ngForm">
+                            <div class="row padding15 pt0 pr30">
+                              
+                              <div class="control-field col-3">
+                                <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Category Name" name="category" [(ngModel)]="data.category" (selectionChange)="getBrandList()" required>
+                                    <mat-option *ngFor="let row of categoryList; let b = index" [value]="row.category">
+                                      <small>{{ row.category }}</small>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                              <div class="control-field col-3">
+                                <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Brand Name" name="brand_name" [(ngModel)]="data.brand_name" (selectionChange)="getProductList()" required>
+                                    <mat-option *ngFor="let row of brandList; let b = index" [value]="row.brand_name">
+                                      <small>{{row.brand_name}}</small>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                              
+                              
+                              <div class="control-field col-3">
+                                <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Product Name" name="product_id" [(ngModel)]="data.product_id" (selectionChange)="getMeasurementList()" required>
+                                    <mat-option *ngFor="let row of productList; let p = index" [value]="row.id">
+                                      <small>{{row.product_name}}</small>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                              <div class="control-field col-3">
+                                <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Measurement" name="measurement" [(ngModel)]="data.measurement" (selectionChange)="getSalePrice()" required>
+                                    <mat-option *ngFor="let row of measurementList; let r = index" [value]="row.unit_of_measurement">
+                                      <small>{{row.unit_of_measurement}}</small>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                              <div class="control-field col-3">
+                                <mat-form-field class="example-full-width cs-input">
+                                  <input matInput placeholder="QTY." name="qty" [(ngModel)]="data.qty" type="number">
+                                </mat-form-field>
+                              </div>
+                              
+                              <div class="control-field col-3">
+                                <mat-form-field class="example-full-width cs-input">
+                                  <input matInput placeholder="Rate" name="rate" [(ngModel)]="data.rate" readonly>
+                                </mat-form-field>
+                              </div>
+                              
+                              <div class="control-field col-3" style="display:none! important;">
+                                <mat-form-field class="example-full-width cs-input">
+                                  <input matInput type="number" name="discount"  placeholder="Discount (%)" [(ngModel)]="data.discount" >
+                                </mat-form-field>
+                              </div>
+                              
+                              
+                              <div class="control-field col-3" [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                                <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Attribute type" name="attribute_type" [(ngModel)]="data.attribute_type" (selectionChange)="getAttributeOptionList()">
+                                    <mat-option *ngFor="let row of attributeTypeList; let r = index" [value]="row.attr_type">
+                                      <small>{{row.attr_type}}</small>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                              
+                              <div class="control-field col-3"  [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                                <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Attribute Option" name="attribute_option" [(ngModel)]="data.attribute_option">
+                                    <mat-option *ngFor="let row of attributeOptionList; let r = index" [value]="row.attr_option">
+                                      <small>{{row.attr_option}}</small>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                              <div class="col-12">
+                                <div class="cs-btn mt32 mr12 text-right">
+                                  <div class="in-btn ">
+                                    <button type="submit"  mat-raised-button color="warn">Add</button>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    
+                    <div *ngIf="orderItemList.length" class="row">
+                      <div class="col-12">
+                        <div class="cs-table">
+                          <div class="header mr0 padding0" style="padding: 0px 30px 0px 15px !important;">
+                            <table>
+                              <tr>
+                                <th>Product Description</th>
+                                <th class="w200">Description</th>
+                                <th class="w80">HSN</th>
+                                <th class="w70">QTY</th>
+                                <th class="w100 text-center">Unit</th>
+                                <th class="w80 text-center">Rate</th>
+                                <th class="w100">Amount</th>
+                                <th class="w100 text-center">GST</th>
+                                <th class="w100 text-center">GST Amount</th>
+                                <th class="w100 text-center">Net Amount</th>
+                              </tr>
+                            </table>
+                          </div>
+                          <div class="table-container table-input" style="padding: 15px 30px 15px 15px;">
+                            <div class="table-body">
+                              <table>
+                                <tr *ngFor="let row of orderItemList; let i=index">
+                                  <td>{{ row.category }}/{{row.brand_name}} / {{row.product_name}},{{row.attribute_type}},{{row.attribute_option}}</td>
+                                  <td class="w200">{{row.description? row.description : 'N.A'}}</td>
+                                  <td class="w80">{{row.hsn_code}}</td>
+                                  <td class="w70">{{row.qty}}</td>
+                                  <td class="w100 text-center">{{row.unit_of_measurement}}</td>
+                                  <td class="w80 text-center">{{row.rate}}</td>
+                                  <td class="w100">{{row.amount.toFixed(2)}}</td>
+                                  <td class="w100 text-center">{{row.gst}}%</td>
+                                  <td class="w100 text-center">{{row.gst_amount.toFixed(2)}}</td>
+                                  <td class="w100 text-center">{{row.item_final_amount.toFixed(2)}}
+                                    <div class="action-btns">
+                                      <div class="outer">
+                                        <div class="innear">
+                                          <button mat-button (click)="RemoveItem(i)" class="delete"><i class="material-icons">delete_sweep</i> Delete</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div *ngIf="orderItemList.length" class="row">
+                      <div class="col-12">
+                        <div class="invoice-details" style="padding: 15px 30px 15px 15px;">
+                          <table class="invoice-table">
+                            <tr>
+                              <td class="td">Sub Total</td>
+                              <td class="w220 td">&#8377;  {{orderData.netSubTotal.toFixed(2)}}</td>
+                            </tr>
+                            <!-- <tr>
+                              <td class="td">Discount Amount</td>
+                              <td class="td">
+                                &#8377;  {{orderData.netDiscountAmount.toFixed(2)}}
+                              </td>
+                            </tr> -->
+                            <tr>
+                              <td class="td">Gst Amount</td>
+                              <td class="td">&#8377; {{orderData.netGstAmount.toFixed(2)}}</td>
+                            </tr>
+                            <tr>
+                              <td class="td">Net Amount</td>
+                              <td class="td">
+                                &#8377;  {{orderData.netAmount.toFixed(2)}}
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-dialog-content>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="orderItemList.length && orderData.franchise_id" class="row">
+      <div class="col-12">
+        <div class="dubble-btn">
+          <div class="cs-btn mt32 mr12 text-right" [ngClass]="{loading: savingData}">
+            <div class="in-btn " >
+              <button (click)="submit_sales_order()"  [attr.disabled]="savingData" mat-raised-button color="warn">PLACE ORDER</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="h100"></div>

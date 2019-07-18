@@ -1,0 +1,21 @@
+<div class="navigations">
+    <ul>
+        
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-dashboard/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active">Dashboard</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-detail/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >{{db.franchise_name}}</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-stock/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active">Stock</a></li>
+      <li *ngIf="(  [1,5,6].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-leads/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Leads</a></li>
+      <li *ngIf="(  [1,5,6].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-leads-appointment/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Appoinment</a></li>
+      <li *ngIf="(  [1,5,6].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-followup/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Followup</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-customers/{{ db.datauser.franchise_id |crypt}}/2" routerLinkActive="active">Consumers</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/franchise-orders/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Purchase Orders</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )">  <a routerLink="/franchise-invoice/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active">Purchase Invoices</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )">  <a routerLink="/franchise-payment/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Payments</a></li>		
+      <li *ngIf="(  [1,5,8].indexOf( db.datauser.access_level ) > -1 )">    <a routerLink="/franchise-jobcard-list/{{ db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Jobcards</a></li>
+      <li *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )" > <a routerLink="/franchise/customer_invoices/{{db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Sale Invoices</a></li>	
+      <li *ngIf="(  [1,3,5,6].indexOf( db.datauser.access_level ) > -1 )"><a  routerLink="/franchise-service-list/{{db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Service</a></li>
+      <li *ngIf="(  [1,3,5].indexOf( db.datauser.access_level ) > -1 )"><a  routerLink="/franchise-consumption-stock/{{db.datauser.franchise_id |crypt}}" routerLinkActive="active" >Consumption Stock</a></li>
+      <li *ngIf="(  [5].indexOf( db.datauser.access_level ) > -1 )"><a routerLink="/users-list" routerLinkActive="active" >Master's</a></li>
+
+    </ul>
+</div>

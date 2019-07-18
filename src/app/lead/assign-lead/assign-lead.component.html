@@ -1,0 +1,36 @@
+
+<form name="form" (ngSubmit)="f.form.valid && saveFranchise()" #f="ngForm" novalidate>
+  <mat-dialog-content class="convert-franchies-modle di-hidden">
+    <div class="header" style="padding: 0px 10px 10px 10px;">
+      <h1>Assign Franchise</h1>
+      <button mat-button color="primary" mat-dialog-close class="mr0"><i class="material-icons">clear</i></button>
+    </div>
+    <div class="m-body form-field pl15 pr30">
+      <div class="row">
+        <div class="control-field col-12">
+          <mat-form-field class="cs-multi-select">
+            <mat-select placeholder="Select Franchise" name="franchise_id" [(ngModel)]="form.franchise_id" #franchise_id="ngModel" required>
+              <mat-option [value]="0"> None</mat-option>
+              <mat-option *ngFor="let val of franchise_list; let i = index" [value]="val.id">
+                {{val.location_name}} <small>({{val.name}})</small>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error color="primary" *ngIf="f.submitted && !franchise_id.valid" >This field is required</mat-error>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  
+  <!-- ACTIONS BUTTONS -->
+  
+  <mat-dialog-actions align="end">
+    <div class="cs-btn fixedd pr10" [ngClass]="{loading: sendingData}">
+      <div class="in-btn">
+        <button type="submit" [disabled]="sendingData" mat-raised-button color="warn">Save</button>
+      </div>
+    </div>
+    <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+  </mat-dialog-actions>
+  
+</form>

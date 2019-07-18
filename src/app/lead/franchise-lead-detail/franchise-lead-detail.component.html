@@ -1,0 +1,513 @@
+<div class="main-container">
+    
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <li><p>{{ lead.name }}</p></li>
+                <!-- <li class="status-icon" *ngIf="lead.category == 'hot'"><img src="../assets/img/hot-icon.svg"></li>
+                    <li class="status-icon" *ngIf="lead.category == 'cold'"><img src="../assets/img/cold-icon.svg"></li> -->
+                    <li><p class="light">Source : <span class="{{ lead.source }} d-space">{{ lead.source | titlecase }}</span></p></li>
+                    <li>
+                        <div class="item-filter">
+                            <mat-form-field class="w100">
+                                <!-- (selectionChange)="updateFranchiseLeadStatus(status.value)"  -->
+                                <mat-select matNativeControl name="status" [(ngModel)]="lead.lead_status" #status="ngModel" (selectionChange)="openCreateFollowupDialog(status.value)" required>
+                                    <mat-option value="Already finalized">Already finalized</mat-option>
+                                    <mat-option value="new">New</mat-option>
+                                    <mat-option value="process">Process</mat-option>
+                                    <mat-option value="meeting">Meeting</mat-option>
+                                    <mat-option value="qualified">Qualified</mat-option>
+                                    <mat-option value="not_qualified">Not Qualified</mat-option>
+                                    <mat-option value="lost">Lost</mat-option>
+                                    <mat-option value="junk">Junk</mat-option>
+                                    <mat-option value="converted">Converted</mat-option>
+                                    <mat-option value="other state">Other State</mat-option>
+                                    <mat-option value="other studio">Other Studio</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </li>
+                    <li><p class="light">Created By : <span >{{ lead.created_name }} | {{ lead.created_at | date: 'dd MMM yyyy'}}</span></p></li>
+                    <li  *ngIf="lead.s_name"><p class="light">Status change By : <span >{{ lead.s_name }}-{{ lead.status_convert_date | date: 'dd MMM yy'}}</span></p></li>
+                    
+                </ul>
+            </div>
+            <!-- <div class="top-multi-btn" *ngIf="db.datauser.access_level == 1 ">
+                <button mat-raised-button (click)="openConvertFranchiseDialog()" color="warn">CONVERT TO FRANCHISE</button>
+            </div> -->
+            <!-- <div class="m-right-data action-btns-right vl-info">
+                <ul>
+                    <li class="create"><a mat-button (click)="openCreateFollowupDialog()">Create Followup</a></li>
+                    <li class="delete"><a mat-button (click)="deleteLead(lead.id)" ><i class="material-icons">delete_sweep</i> DELETE</a></li>
+                </ul>
+            </div> -->
+            <div class="m-right-data vl-info">
+                <ul>                
+                    <li class="af-none padding0">
+                        <button class="ac-btn link" mat-button  [matMenuTriggerFor]="menu">
+                            Action
+                            <i class="material-icons icon">arrow_drop_down</i>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item *ngIf="db.datauser.access_level == 1 " (click)="openConvertFranchiseDialog()">CONVERT TO FRANCHISE</button>
+                            <button mat-menu-item (click)="openCreateFollowupDialog()">Create Followup</button>
+                            <button mat-menu-item (click)="deleteLead(lead.id)" >Delete</button>
+                        </mat-menu>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="cs-container detail">
+            <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                <div class="outer">
+                    <div class="innear">
+                        <mat-spinner></mat-spinner>
+                        <P>LOADING . . .</P>
+                    </div>
+                </div>
+            </div>
+            <form name="form" (ngSubmit)="f.form.valid && updateLead()" #f="ngForm" novalidate *ngIf="loading_list">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="right-data pl0">
+                            <div class="contst">
+                                <div class="cs-heading">
+                                    <h2>Franchise Details</h2>
+                                    <p><i class="material-icons ic-watch">watch_later</i>{{ lead.created_at | date: 'dd MMM yyyy' }}</p>
+                                </div>                            
+                                <div class="form-field">
+                                    <div class="row">
+                                        
+                                        <div class="col-4 control-field  edit-input" [ngClass]="{'active': enable_name}">
+                                            <mat-form-field class="example-full-width cs-input" >
+                                                <input matInput placeholder="Name" [disabled]="!enable_name" name="name" [(ngModel)] = "lead.name" #name="ngModel" required>
+                                                
+                                                
+                                                <div class="edit-icon" [ngClass]="{'active': enable_name}">
+                                                    <button mat-button class="save"  *ngIf="enable_name" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                    <a mat-button class="edit" *ngIf="!enable_name" (click)="enable_name=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                </div>
+                                            </mat-form-field>
+                                            <mat-error color="primary" *ngIf="f.submitted && !name.valid" >This field is required</mat-error>
+                                            
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_contact}">
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="CONTACT" (keypress)="numeric_Number($event)" [readonly]="!enable_contact" name="contact_no" [(ngModel)]="lead.contact_no" #contact_no="ngModel" required>
+                                                <div class="edit-icon">
+                                                    <button mat-button type="submit" *ngIf="enable_contact" class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                    <a mat-button class="edit" *ngIf="!enable_contact" (click)="enable_contact = true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                </div>
+                                            </mat-form-field>
+                                            <mat-error color="primary" *ngIf="f.submitted && !contact_no.valid" >This field is required</mat-error>
+                                        </div>
+                                        
+                                        
+                                        <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_email}">
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="EMAIL" [readonly]="!enable_email" name="email" type="email" pattern="[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" [(ngModel)] = "lead.email_id" #email="ngModel" >
+                                                <div class="edit-icon">
+                                                    <button mat-button class="save" *ngIf="enable_email" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                    <a mat-button class="edit" *ngIf="!enable_email" (click)="enable_email=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                </div>
+                                            </mat-form-field>
+                                            <mat-error color="primary" *ngIf="f.submitted && !email_id.valid" >This field is required</mat-error>
+                                        </div>
+                                        
+                                        <div class="col-4">
+                                            
+                                            <div class="control-field col-12 edit-input" [ngClass]="{'active': enable_source}">
+                                                <mat-form-field class="cs-multi-select cs-input" >
+                                                    <mat-select placeholder="Source" [disabled]="!enable_source" name="source" [(ngModel)] = "lead.source" #source="ngModel" required>
+                                                        <mat-option value="">None</mat-option>
+                                                        <mat-option value="Email">Email</mat-option>
+                                                        <mat-option value="Facebook">Facebook</mat-option>
+                                                        <mat-option value="Facebook Form">Facebook Form</mat-option>
+                                                        <mat-option value="Inbound">Inbound</mat-option>
+                                                        <mat-option value="Instagram">Instagram</mat-option>
+                                                        <mat-option value="Missed Call">Missed Call</mat-option>
+                                                        <mat-option value="Other">Other</mat-option>
+                                                        <mat-option value="Outbound">Outbond</mat-option>
+                                                        <mat-option value="Walk In">Walk in</mat-option>
+                                                        <mat-option value="Website">Website</mat-option>
+                                                        <mat-option value="ADI">ADI</mat-option>
+                                                        <mat-option value="Website Chat">Website Chat</mat-option>
+                                                    </mat-select>
+                                                    <div class="edit-icon" [ngClass]="{'active': enable_source}">
+                                                        <button mat-button class="save" *ngIf="enable_source" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                        <a mat-button class="edit" *ngIf="!enable_source" (click)="enable_source=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                    </div>
+                                                </mat-form-field>
+                                                <mat-error color="primary" *ngIf="f.submitted && !source.valid" >This field is required</mat-error>
+                                                
+                                            </div>
+                                            <div class="col-12 control-field  edit-input" [ngClass]="{'active': enable_profile}">
+                                                <mat-form-field class="cs-multi-select cs-input" >
+                                                    <mat-select placeholder="Profile" [disabled]="!enable_profile" name="profile" [(ngModel)] = "lead.profile" #profile="ngModel" required>
+                                                        <mat-option value="Employee">Employee</mat-option>
+                                                        <mat-option value="Business Man">Business Man</mat-option>
+                                                        <mat-option value="Other">Other</mat-option>
+                                                    </mat-select>
+                                                    
+                                                    <div class="edit-icon" [ngClass]="{'active': enable_profile}">
+                                                        <button mat-button class="save"  *ngIf="enable_profile" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                        <a mat-button class="edit" *ngIf="!enable_profile" (click)="enable_profile=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                    </div>
+                                                </mat-form-field>
+                                                <mat-error color="primary" *ngIf="f.submitted && !profile.valid" >This field is required</mat-error>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                        
+                                        
+                                        <div class="col-8 pr7">
+                                            <div class="control-field col-6 edit-input addrs-input" [ngClass]="{'active': enable_address}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <textarea matInput placeholder="ADDRESS" class="h120" [readonly]="!enable_address" name="address" [(ngModel)] = "lead.address" #address="ngModel" ></textarea>
+                                                    <div class="edit-icon">
+                                                        <button mat-button class="save" *ngIf="enable_address" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                        <a mat-button class="edit" *ngIf="!enable_address" (click)="enable_address=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                    </div>
+                                                </mat-form-field>
+                                                <mat-error color="primary" *ngIf="f.submitted && !address.valid" >This field is required</mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- <div class="row">
+                                        <div class="col-4 control-field edit-input" [ngClass]="{'active': enable_user_assign}">
+                                            <mat-form-field class="cs-multi-select cs-input" >
+                                                <mat-select placeholder="Assign Sales Agent" [disabled]="!enable_user_assign" name="user_assign" [(ngModel)] = "agent_assign" #user_assign="ngModel" multiple required>
+                                                    <mat-option *ngFor="let val of user_list" [value]="val.id">{{val.first_name}}</mat-option>
+                                                </mat-select>
+                                                <div class="edit-icon right-side" [ngClass]="{'active': enable_user_assign}">
+                                                    <a mat-button class="save dark-green-bg" *ngIf="enable_user_assign" (click)="assignSalesAgent()"><i class="material-icons" title="Save">save</i></a>
+                                                    <a mat-button class="edit" *ngIf="!enable_user_assign" (click)="enable_user_assign=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                </div>
+                                            </mat-form-field>
+                                        </div>
+                                        
+                                        
+                                        <div class="col-8">
+                                            <div class="control-field edit-input addrs-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <textarea matInput placeholder="Remark" class="h200" name="remark" [(ngModel)] = "lead.remark" #remark="ngModel" ></textarea>
+                                                </mat-form-field>
+                                                
+                                                <mat-error color="primary" *ngIf="f.submitted && !user_assign.valid" >This field is required</mat-error>
+                                                <div class="edit-icon right-side" [ngClass]="{'active': enable_user_assign}">
+                                                    <a mat-button class="save dark-green-bg" *ngIf="enable_user_assign" (click)="assignSalesAgent()"><i class="material-icons" title="Save">save</i></a>
+                                                    <a mat-button class="edit" *ngIf="!enable_user_assign" (click)="enable_user_assign=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                -->
+                                
+                                <div class="cs-divider pt20 left-right-15">
+                                    <mat-divider></mat-divider>
+                                </div>
+                                <div class="cs-heading mt20">
+                                    <h2>ADDRESS INFO</h2>
+                                </div>
+                                <div class="row">
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_country}">
+                                        <mat-form-field class="cs-multi-select cs-input" >
+                                            <mat-select placeholder="Country" [disabled]="!enable_country" name="country" [(ngModel)] = "lead.country" #country="ngModel" (selectionChange)="getStateList()" required>
+                                                <mat-option *ngFor="let val of countries" [value]="val.id"> {{val.name}} </mat-option>                                               
+                                            </mat-select>
+                                            <div class="edit-icon" [ngClass]="{'active': enable_country}">
+                                                <button mat-button class="save dark-green-bg  " *ngIf="enable_country" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_country" (click)="enable_country=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>                                   
+                                    
+                                    
+                                    <div class="control-field col-4 edit-input"  [ngClass]="{'active': enable_state}" *ngIf="lead.country != 99"  >
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="State" readonly={{!enable_state}} name="state" [(ngModel)]="lead.state" #state="ngModel"  required>                                         
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_state"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_state" (click)="enable_state = true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !state.valid" >This field is required</mat-error>
+                                    </div>
+                                    
+                                    <div class="control-field col-4 edit-input" *ngIf="lead.country == 99" [ngClass]="{'active': enable_state}">
+                                        <mat-form-field class="cs-multi-select cs-input" >
+                                            <mat-select placeholder="State" [disabled]="!enable_state" name="state" [(ngModel)] = "lead.state" #state="ngModel"  (selectionChange)="getDistrictList()" required>
+                                                <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>                                              
+                                            </mat-select>
+                                            <div class="edit-icon right-side" [ngClass]="{'active': enable_state}">
+                                                <button mat-button class="save dark-green-bg  " *ngIf="enable_state" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_state" (click)="enable_state=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <!-- <mat-error color="primary" *ngIf="f.submitted && !profile.valid" >This field is required</mat-error> -->
+                                        
+                                    </div>
+                                    
+                                    
+                                    
+                                    <div class="control-field col-4 edit-input"  [ngClass]="{'active': enable_district}" *ngIf="lead.country != 99"  > 
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="District" readonly={{!enable_district}} name="district" [(ngModel)]="lead.district" #district="ngModel" required >                                        
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_district"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_district" (click)="enable_district = true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>                    
+                                    </div>
+                                    
+                                    <div class="control-field col-4 edit-input" *ngIf="lead.country == 99" [ngClass]="{'active': enable_district}">
+                                        <mat-form-field class="cs-multi-select cs-input" >
+                                            <mat-select placeholder="District" [disabled]="!enable_district" name="district" [(ngModel)] = "lead.district"   (selectionChange)="getCityList()" #district="ngModel" required>
+                                                <mat-option *ngFor="let val of districts" [value]="val.district_name"> {{val.district_name}} </mat-option>                                             
+                                            </mat-select>
+                                            
+                                            <div class="edit-icon right-side" >
+                                                <button mat-button class="save dark-green-bg  " *ngIf="enable_district" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_district" (click)="enable_district=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_city}" > 
+                                        <mat-form-field class="example-full-width cs-input" >
+                                            <input matInput placeholder="City" readonly={{!enable_city}} name="city" [(ngModel)]="lead.city" #city="ngModel" >                                        
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_city"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_city" (click)="enable_city = true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>                    
+                                    </div>
+                                    
+                                    <div class="control-field col-4 edit-input"  [ngClass]="{'active': enable_pin_code}"  *ngIf="lead.country != 99">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Pin-code"  (keypress)="numeric_Number($event)" readonly={{!enable_pin_code}} name="pin" [(ngModel)]="lead.pin" #pin="ngModel" maxlength="6">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_pin_code"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_pin_code" (click)="enable_pin_code = true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>            
+                                    </div>
+                                    
+                                    <div class="control-field col-4 edit-input" *ngIf="lead.country == 99" [ngClass]="{'active': enable_pin_code}">
+                                        <mat-form-field class="cs-multi-select cs-input" >
+                                            <mat-select placeholder="Pin-Code" [disabled]="!enable_pin_code" name="pin" [(ngModel)] = "lead.pin" #pin="ngModel" required>
+                                                <mat-option *ngFor="let val of pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>                                           
+                                            </mat-select>
+                                            <div class="edit-icon right-side" [ngClass]="{'active': enable_pin_code}">
+                                                <button mat-button class="save dark-green-bg  " *ngIf="enable_pin_code" type="submit"><i class="material-icons" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_pin_code" (click)="enable_pin_code=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="control-field col-4">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Location" [readonly]="true" name="location_name" [(ngModel)]="lead.location_name">
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                </div>
+                                <div class="cs-divider pt20 left-right-15">
+                                    <mat-divider></mat-divider>
+                                </div>
+                                <div class="cs-heading mt20">
+                                    <h2>company INFO</h2>
+                                </div>
+                                <div class="row">
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_company_name}">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="COMPANY NAME" [readonly]="!enable_company_name" name="company_name" [(ngModel)] = "lead.company_name" #company_name="ngModel">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_company_name" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_company_name" (click)="enable_company_name=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !company_name.valid" >This field is required</mat-error>
+                                    </div>
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_business_type}">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="BUSINESS TYPE" [readonly]="!enable_business_type" name="business_type" [(ngModel)] = "lead.business_type" #business_type="ngModel">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_business_type" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_business_type" (click)="enable_business_type=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !business_type.valid" >This field is required</mat-error>
+                                    </div>
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_business_loc}">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="BUSINESS LOCATION" [readonly]="!enable_business_loc" name="business_loc" [(ngModel)] = "lead.business_loc" #business_loc="ngModel">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_business_loc" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_business_loc" (click)="enable_business_loc=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !business_loc.valid" >This field is required</mat-error>
+                                    </div>
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_year_of_est}">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="YEAR OF ESTABLISHMENT" (keypress)="numeric_Number($event)" [readonly]="!enable_year_of_est" name="year_of_est" [(ngModel)] = "lead.year_of_est" #year_of_est="ngModel">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_year_of_est" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_year_of_est" (click)="enable_year_of_est=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !year_of_est.valid" >This field is required</mat-error>
+                                    </div>
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_city_apply_for}">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="CITY APPLYING FOR" [readonly]="!enable_city_apply_for" name="city_apply_for" [(ngModel)] = "lead.city_apply_for" #city_apply_for="ngModel">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_city_apply_for" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_city_apply_for" (click)="enable_city_apply_for=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !city_apply_for.valid" >This field is required</mat-error>
+                                    </div>
+                                    <div class="control-field col-4 edit-input" [ngClass]="{'active': enable_automotive_exp}">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="AUTOMOTIV EXP" (keypress)="numeric_Number($event)" [readonly]="!enable_automotive_exp" name="automotive_exp" [(ngModel)] = "lead.automotive_exp" #automotive_exp="ngModel">
+                                            <div class="edit-icon">
+                                                <button mat-button class="save" *ngIf="enable_automotive_exp" type="submit"><i class="material-icons green-text" title="Save">save</i></button>
+                                                <a mat-button class="edit" *ngIf="!enable_automotive_exp" (click)="enable_automotive_exp=true"><i class="material-icons blue-text" title="EDIT">create</i></a>
+                                            </div>
+                                        </mat-form-field>
+                                        <mat-error color="primary" *ngIf="f.submitted && !automotive_exp.valid" >This field is required</mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="col-4 pl20" >
+                    <div class="col-12" *ngIf="!db.datauser.franchise_id">
+                        <div class="right-data">
+                            <div class="contst left-calls-info white-bg save-remark" >
+                                <div class="cs-heading" >
+                                    <h2>Assign Company Agent</h2>
+                                    <a class="edit" *ngIf="!enable_user_assign && !lead.followup_id" (click)="enable_user_assign=true"><i class="material-icons">create</i></a>
+                                    <a  *ngIf="lead.followup_id">Followup Pending</a>
+                                </div>
+                                
+                                <mat-divider class="mt10 mb10 left-right-15"></mat-divider>
+                                <div class="control-field edit-input" [ngClass]="{'active': enable_user_assign}">
+                                    <mat-form-field class="cs-multi-select cs-input wp100 " >
+                                        <mat-select placeholder="Assign Sales Agent" [disabled]="!enable_user_assign" name="user_assign" [(ngModel)] = "agent_assign" #user_assign="ngModel" multiple required>
+                                            <mat-option *ngFor="let val of user_list" [value]="val.id">{{val.first_name}}</mat-option>
+                                        </mat-select>
+                                        
+                                    </mat-form-field>
+                                </div>
+                                <div class="send-remark" [ngClass]="{'active': enable_user_assign}">
+                                    <textarea matInput placeholder="Remark" class="h50" name="remark" [(ngModel)] = "lead.remark" #remark="ngModel"></textarea>
+                                    <i class="material-icons" matRipple  (click)="assignSalesAgent()" *ngIf="enable_user_assign">arrow_forward</i>
+                                </div>
+                                <!-- <div class="control-field edit-input" [ngClass]="{'active': enable_user_assign}">
+                                    <mat-form-field class="cs-multi-select cs-input wp100 " >
+                                        <textarea matInput placeholder="Remark" class="h50" name="remark" [(ngModel)] = "lead.remark" #remark="ngModel" ></textarea>
+                                        <i class="material-icons" matRipple (click)="assignSalesAgent()">arrow_forward</i>
+                                    </mat-form-field>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="right-data mt15">
+                            <div class="contst left-calls-info">
+                                <div class="head-tabs">
+                                    <a (click)="mode = '1'; "  [ngClass]="{'active': mode == '1' }">Followup's</a>
+                                    <a (click)="mode = '2'; "  [ngClass]="{'active': mode == '2' }" *ngIf="!db.datauser.franchise_id">Remarks</a>
+                                    
+                                </div>
+                                
+                                <ul *ngIf="mode == '1' ">
+                                    <li *ngFor="let val of follow_ups; let i = index">
+                                        <div class="head">
+                                            <p class="name"><strong>Created By : </strong>{{ val.first_name }}</p>
+                                            <!-- <p class="name"><strong>Created By : </strong>{{ lead.created_name }} - {{ lead.created_at |  date: 'dd MMM yyyy h:mm a' }}</p> -->
+                                            <p class="date">{{ val.created_at | date: 'dd MMM yyyy  h:mm a'  }}</p>
+                                            
+                                        </div>
+                                        
+                                        <div class="description" *ngIf="val.current_status">
+                                            <p >
+                                                <strong >Status:&nbsp;</strong>
+                                                <span style="margin: 0px 3px; font-weight: 600;">From</span>
+                                                <span style="text-decoration: underline;"> {{val.previous_status?val.previous_status:'N/A'}}</span>
+                                                <span  style="margin: 0px 3px; font-weight: 600;">To</span> 
+                                                <span style="text-decoration: underline;">  {{val.current_status}} </span>
+                                            </p>
+                                        </div>
+                                        
+                                        
+                                        <div class="description">
+                                            <p *ngIf="val.next_follow_type!='' "><strong >Next Followup Type:&nbsp;</strong>{{ val.next_follow_type }}</p>
+                                        </div>
+                                        
+                                        
+                                        
+                                        <div class="description">
+                                            <p *ngIf="val.next_follow_date!='0000-00-00' "><strong >Next Followup Date:&nbsp;</strong>{{ val.next_follow_date | date: 'dd MMM yyyy'}}</p>
+                                        </div>
+                                        
+                                        <div class="description">
+                                            <p><strong>Remark:</strong>&nbsp;{{ val.description }}</p>
+                                        </div>
+                                        
+                                        
+                                    </li>
+                                </ul>
+                                
+                                
+                                
+                                <ul *ngIf="mode == '2' && !db.datauser.franchise_id ">
+                                    <li *ngFor="let val of remarks; let i = index">
+                                        <div class="head">
+                                            <!-- <p class="name">{{ lead.first_name +' '+ lead.last_name }}</p> -->
+                                            <div>
+                                                <p class="name"><strong>Assign by : </strong>{{ val.first_name  }}</p>
+                                                <!-- assign by -->
+                                            </div>
+                                            <p class="date">{{ val.date_created | date: 'dd MMM yyyy h:mm a' }}</p>
+                                            
+                                        </div>
+                                        <div class="description">
+                                            <p><strong>Assign To :</strong>{{ val.assign_sales  }}</p>
+                                        </div>
+                                        <div class="description">
+                                            <p><strong>Remark :</strong> {{ val.remark }}</p>
+                                            
+                                        </div>
+                                    </li>
+                                </ul>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="h100"></div>

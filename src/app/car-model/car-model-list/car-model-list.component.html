@@ -1,0 +1,152 @@
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf = "!loading_page">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  <div class="master-heading" *ngIf = "loading_page">
+    <div class="heading">
+      <h1>
+        MASTER's
+      </h1>
+    </div>
+    <div class="top-search wp50 ml190">
+      <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getProductList()">
+      <i class="material-icons">search</i>
+    </div>
+    <!-- <div class="wp50 ml190">
+    </div> -->
+    <div class="top-pagination m-right-data">
+      <div class="cs-btn mr15">
+        <div class="in-btn ">
+          <button mat-raised-button (click)="openAddCompanyDialog()" color="warn" class="h30" style="line-height: 30px;">Add Company</button>
+        </div>
+      </div>
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getProductList()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container" *ngIf="loading_page">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-master-listing-tabs></app-master-listing-tabs>
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing">
+        <div class="cs-spinner half-page" *ngIf="!loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div class="data-not-available" *ngIf="loading_list && searchData && (company_list.length < 1)">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>for Company</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">error_outline</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                    <p>Tap on <a routerLink="/car-model/add" >ADD NEW</a> for Company</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="data-not-available" *ngIf="loading_list && !searchData && search">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>{{ search }}</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">search</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cs-table mt15" *ngIf="loading_list && (company_list.length > 0)">
+          <div class="header sticky-header">
+            <table>
+              <tr>
+                <th class="w30">&nbsp;</th>
+                <th class="w150">Company</th>
+                <th>Car</th>
+                <th class="w100">Action</th>
+              </tr>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-body">
+              <table>
+                <tr *ngFor="let row of company_list; let i = index">
+                  <td class="w30">{{i+1}}</td>
+                  <td class="w150">{{row.company}}</td>
+                  <td>
+                    <div class="hover-tags">
+                      <ul>
+                        <li *ngFor="let val of row.cars">
+                          <span matRipple >{{val.car}}
+                            <div class="action-item">
+                              <a class="red-bg" matTooltip="Delete" (click)="deletecar(val.id)"><i class="material-icons">delete</i></a>
+                            </div>
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                  <td class="w100 defult-hover">
+                    <ul>
+                      <li>
+                        <a class="edit" matTooltip="Add Company" (click)="openAddCarDialog(row.company)"  ><i class="material-icons green-clr">add</i></a>
+                      </li>
+                      <li>
+                        <a class="delete" matTooltip="Delete" (click)="deleteCompany(row.company)"><i class="material-icons red-clr">delete_sweep</i></a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

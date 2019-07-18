@@ -1,0 +1,99 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="back-btn">
+      <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+
+    <div class="vl-info">
+        <ul>
+            <li class="af-none"><p><span class="blue"> {{db.franchise_name}} </span> <i class="material-icons r-arrow">keyboard_arrow_right</i> <span>Orders</span> </p></li>         
+            <li (click)=orderListReverse() style="cursor:pointer;"><p class="pl30"><i class="material-icons icon">swap_vert</i><span>Sort</span></p></li>
+        </ul>
+    </div>
+
+    <!-- <div class="m-right-data vl-info">
+      <ul>
+          <li class="af-none"><p class="link"> <a mat-button routerLink="/sale-add/{{franchise_id}}" routerLinkActive="active"><i class="material-icons icon black-clr " style="right: 0px;left: inherit;">arrow_drop_down</i><span>Action</span></a></p></li>
+      </ul>
+  </div> -->  
+  <div class="top-pagination m-right-data">
+    <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getFranchiseOrderList()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+    </ul>
+</div>
+
+
+  <div class="m-right-data vl-info top5">
+      <div class="cs-btn text-right">
+          <div class="in-btn">
+            <button mat-raised-button color="warn" class="h30" style="line-height: 30px;"  (click)="addStock()">Add Consumption Stock</button>
+          </div>
+     </div>
+  </div>
+   
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <div class="cs-spinner full-page" *ngIf = "loading_list">
+            <div class="outer">
+                <div class="innear">
+                    <mat-spinner></mat-spinner>
+                    <P>LOADING . . .</P>
+                </div>
+            </div>
+      </div>
+      <!-- TABS Component -->
+      <app-stock-tab></app-stock-tab>
+   
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing" >
+          <div class="row">
+            <div class="cs-table">
+              <div class="header sticky-header">
+                <table>
+                  <tr>
+                    <th class="w50">S.No.</th>
+                    <th class="w150">Date</th>
+                    <th class="w200 text-center">Issue By</th>
+                    <th class="w200 text-center">Issue To</th>
+                    <th class="w120 text-center">Total Item</th>
+                    <th class="w120 text-center">Purpose</th>
+                  
+                    <th >Note</th>
+                  </tr>
+                </table>
+              </div>
+              <div class="table-container">
+                <div class="table-body">
+                  <table>
+                    <tr  *ngFor="let val of assumption_stock; let i = index">
+                      <td class="w50">{{i+1}}</td>
+                      <td class="w150">{{val.date_created | date: 'dd MMM yyyy'}}</td>
+                      <td class="w200 text-center">{{val.created_name}}</td>
+                      <td class="w200 text-center">{{val.issue_to}}</td>
+                      <td class="w120 text-center"><a mat-button class="link" (click)="openDetail(val.id)">{{val.itemTotal}} </a></td>
+                      <td class="w120 text-center"> {{val.purpose}}</td>
+                      <td >{{val.remark}}
+                        <div class="action-btns">
+                          <button mat-button class="delete" (click)="cancel_consumption(val.id)"> Cancel</button>
+                          </div>
+
+
+                      </td>
+                    </tr>                                            
+                  </table>
+                </div>
+              </div>
+            </div>   
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="h100"></div>

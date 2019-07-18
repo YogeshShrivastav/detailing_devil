@@ -1,0 +1,13 @@
+<div class="master-tabs">
+    <ul>
+        <li><a mat-raised-button routerLink="/products/add" routerLinkActive="active" *ngIf="(  [1,4].indexOf( db.datauser.access_level ) > -1 )">Product</a></li>
+        <li><a mat-raised-button routerLink="/accessory-add" routerLinkActive="active" *ngIf="(  [1,4].indexOf( db.datauser.access_level ) > -1 )">Accessories</a></li>
+        <li><a mat-raised-button routerLink="/service_plans/add" routerLinkActive="active" *ngIf="(  [1].indexOf( db.datauser.access_level ) > -1 )">Service Plan</a></li>
+        <li><a mat-raised-button routerLink="/franchise_plans/add" routerLinkActive="active" *ngIf="(  [1].indexOf( db.datauser.access_level ) > -1 )">Franchise Plan</a></li>
+        <li><a mat-raised-button routerLink="/service-add" routerLinkActive="active" *ngIf="(  [1].indexOf( db.datauser.access_level ) > -1 )">Franchise Service Add</a></li>
+        <li><a mat-raised-button routerLink="/users-add" routerLinkActive="active" *ngIf="(  [1,5].indexOf( db.datauser.access_level ) > -1 )">Manage Users</a></li>
+        <li><a mat-raised-button routerLink="/territory-add" routerLinkActive="active" *ngIf="(  [1].indexOf( db.datauser.access_level ) > -1 )">Territory Master</a></li>
+        <li><a mat-raised-button routerLink="/car-model" routerLinkActive="active" *ngIf="(  [1].indexOf( db.datauser.access_level ) > -1 )">Vehicle Model Master</a></li>
+        <li><a mat-raised-button routerLink="/organization-add" routerLinkActive="active" *ngIf="(  [1].indexOf( db.datauser.access_level ) > -1 )">Organizations</a></li>
+    </ul>
+</div>

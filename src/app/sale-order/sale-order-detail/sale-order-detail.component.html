@@ -1,0 +1,369 @@
+<div class="main-container">
+    <div *ngIf="loading_list && orderDetail.id" class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>  
+                <li><p class="light">Order ID : <span class="black-clr"> #{{orderDetail.id}}</span></p></li>
+                <li><p class="light">Status : <span class="yellow-clr"> {{orderDetail.order_status}}</span></p></li>
+                <li><p class="light"> Amount : <span class="black-clr"> &#8377; {{orderDetail.order_total}}</span></p></li>
+                <li class="af-none">
+                    <p class="light"> 
+                        QTY: 
+                        <!-- <span class="black-clr">{{orderDetail.id}}/</span> -->
+                        <span class="green-clr">{{orderDetail.totalQty}}</span>
+                    </p>
+                </li>                
+            </ul>
+        </div>
+
+        <div class="m-right-data vl-info" *ngIf="!db.datauser.franchise_id">
+            <ul>                
+                <li class="af-none">
+                    <button class="ac-btn link" mat-button [matMenuTriggerFor]="menu">
+                        Action
+                        <i class="material-icons icon black-clr " style="right: 0px;left: inherit;">arrow_drop_down</i>
+                    </button>
+                    <!-- <mat-menu #menu="matMenu" style="display: none;"> -->
+                            <!-- *ngIf = "orderdetail.receive_status=='Pending'"  -->
+                            
+                        <!-- <button *ngIf="orderDetail.order_status == 'Pending' " mat-button routerLink="/order-invoice-add/{{orderDetail.franchise_id}}/{{orderDetail.id}}" routerLinkActive="active" >Create Invoice</button> -->
+
+                        <!-- <button *ngIf="orderDetail.order_status == 'Pending' " mat-button  (click)="reject_order()">Rejected</button> -->
+                        <!-- <a  routerLink="/purchases/{{orderdetail.id}}/approve" routerLinkActive="active" mat-menu-item>Order Approved</a> -->
+                        <!-- <a *ngIf = "!orderreceive.length" routerLink="/purchases/{{orderdetail.id}}/regect" routerLinkActive="active" mat-menu-item>Order Reject</a>                     -->
+                    <!-- </mat-menu> -->
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item  *ngIf="orderDetail.order_status == 'Pending' "  routerLink="/order-invoice-add/{{orderDetail.franchise_id |crypt}}/{{orderDetail.id |crypt}}" routerLinkActive="active">Create Invoice</button>
+                        <button mat-menu-item  *ngIf="orderDetail.order_status == 'Pending' "   (click)="reject_order()">Rejected</button>
+                        <button mat-menu-item  *ngIf="orderDetail.order_status == 'Pending' "  routerLink="/transfer-stock/{{orderDetail.franchise_id |crypt}}/{{orderDetail.id |crypt}}" routerLinkActive="active">Transfer Stock</button>
+  
+                    </mat-menu>
+
+                   
+                </li>
+            </ul>
+        </div>
+
+<!--       
+        <div class="m-right-data vl-info">
+            <ul>
+                <li class="af-none"><p class="link"> <a mat-button routerLink="/order-invoice-add/{{orderDetail.franchise_id}}/{{orderDetail.id}}" routerLinkActive="active"><i class="material-icons icon black-clr " style="right: 0px;left: inherit;">arrow_drop_down</i><span>Action</span></a></p></li>
+            </ul>
+        </div> -->
+    </div>
+
+    <div class="cs-spinner full-page" *ngIf = "!loading_list">
+            <div class="outer">
+                <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+                </div>
+            </div>
+    </div>
+
+    <div *ngIf="loading_list && orderDetail.id" class="cs-container detail">
+        <div class="row">
+            <div class="col-8">
+                <div class="right-data pl0">
+                    <div class="contst">
+                        <div class="cs-heading">
+                            <h2>{{orderDetail.company_name}}</h2>
+                            <p><i class="material-icons ic-watch">watch_later</i>{{orderDetail.created_at}}</p>
+                        </div>
+                        <div class="cs-divider pt10">
+                            <mat-divider></mat-divider>
+                        </div>
+                        
+                        <div class="form-field">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="control-field col-12 ">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Name" readonly="" value="{{orderDetail.name}}">
+                                            
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="control-field col-12 ">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Mobile No" readonly="" value="{{orderDetail.contact_no}}">
+<!--                                             
+                                            <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="control-field col-12 ">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Email" readonly="" value="{{orderDetail.email_id}}">
+                                            
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="control-field col-12 ">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <textarea matInput placeholder="ADDRESS" readonly="" class="h125" value="{{orderDetail.address}} {{orderDetail.city}} {{orderDetail.pin_code}}"></textarea>
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-divider pt20 left-right-15">
+                                <mat-divider></mat-divider>
+                            </div>
+                            <!-- <div class="cs-heading mt20">
+                                <h2>CONTACT PERSON DETAILS</h2>
+                            </div> -->
+                            <!-- <div class="row">
+                                <div class="col-12">
+                                    <div class="cnt-person active">
+                                        <div class="row">
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Name" readonly="" value="Mohit">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="EMAIL" readonly="" value="mohitsingh@abacusdesk.co.in">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="MOBILE" readonly="" value="9560533107">
+                                                    <div class="edit-icon">
+                                                        <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                        <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="cnt-person">
+                                        <div class="row">
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Name" readonly="" value="Mohit">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="EMAIL" readonly="" value="mohitsingh@abacusdesk.co.in">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="MOBILE" readonly="" value="9560533107">
+                                                    <div class="edit-icon">
+                                                        <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                        <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-4">
+                <div class="right-data pl20">
+                    <div class="contst summary">
+                        <div class="cs-heading">
+                            <h2>ORDER LOGS</h2>
+                        </div>
+                        
+                        <ul style="display:none !important;">
+                            <li class="grey-bg">
+                                <div class="head">
+                                    <div class="name">
+                                        <p># ORDER CREATED</p>
+                                        <p>Mohit Kumar</p>
+                                    </div>
+                                    
+                                    <p class="date">
+                                        <i class="material-icons">  watch_later </i>
+                                        12 oct 2018 | 11:45am
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="cs-heading mt20 mb10">
+                    <h2>ITEM DETAIL</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="cs-table left-right-15">
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w130">Brand</th>
+                                <th>Product Desc</th>
+                                <th class="w120 text-center">Measurement</th>
+                                <th class="w80 text-center">Rate</th>
+                                <th class="w80 text-center">QTY</th>
+                                <th class="w100 text-center">Amount</th>
+                                <th class="w100 text-center">Grand Total</th>
+                                <th class="w100 text-center">GST Amount</th>
+                                <th class="w100 text-center">Item Total</th>
+                                <th class="w120 text-center">Delivery Status</th>
+                                <!-- <th class="w110 text-center">Stock Status</th> -->
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let row of orderItemDetail">
+                                    <td class="w130">{{row.brand_name}}</td>
+                                    <td class="in-table">
+                                        <table>
+                                            <tr *ngFor="let val of row.item_list"><td><p>{{val.category}}, {{val.brand_name}}, {{val.item_name}}, {{val.item_attribute_value}}, {{val.item_attribute_value}} ({{val.hsn_code}})</p></td></tr>
+                                        </table>
+                                    </td>
+                                  
+                                    <td class="w120 in-table">
+                                        <table>
+                                            <tr *ngFor="let val of row.item_list"><td class="text-center"><p>{{val.item_measurement_type}}</p></td></tr>
+                                        </table>
+                                    </td>
+                                    <td class="w80 in-table">
+                                        <table>
+                                            <tr  *ngFor="let val of row.item_list"><td class="text-center"><p>&#8377; {{val.item_rate}}</p></td></tr>
+                                        </table>
+                                    </td>
+
+                                    <td class="w80 in-table">
+                                            <table>
+                                                <tr *ngFor="let val of row.item_list"><td class="text-center red-clr"><p>{{val.item_qty}}</p></td></tr>
+                                            </table>
+                                        </td>
+
+                                    <td class="w100 in-table">
+                                        <table>
+                                            <tr *ngFor="let val of row.item_list"><td class="text-center"><p>&#8377; {{val.item_amount}}</p></td></tr>
+                                        </table>
+                                    </td>
+    
+                                  
+
+                                    <td class="w100 in-table">
+                                            <table>
+                                                <tr *ngFor="let val of row.item_list"><td class="text-center"><p>&#8377; {{val.item_amount - val.discount_amount}}</p></td></tr>
+                                            </table>
+                                    </td>
+    
+                                    <td class="w100 in-table">
+                                            <table>
+                                                <tr *ngFor="let val of row.item_list"><td class="text-center"><p>&#8377; {{val.gst_amount}}</p></td></tr>
+                                            </table>
+                                    </td>
+
+                                    <td class="w100 in-table">
+                                            <table>
+                                                <tr *ngFor="let val of row.item_list"><td class="text-center"><p>&#8377; {{val.item_total}}</p></td></tr>
+                                            </table>
+                                    </td>
+
+                                    <td class="w110 in-table">
+                                        <table>
+                                            <tr *ngFor="let val of row.item_list"><td class="text-center"><p>{{val.delivered_qty}}</p></td></tr>
+                                        </table>
+                                    </td>
+                                    <!-- <td class="w110 in-table"> -->
+                                        <!-- <table> -->
+                                            <!-- <tr *ngFor="let val of row.item_list"><td class="text-center green-clr ft-wt"><p>In Stock</p></td></tr> -->
+                                            <!-- <tr><td class="text-center red-clr ft-wt"><p>Out of Stock</p></td></tr> -->
+                                        <!-- </table> -->
+                                    <!-- </td> -->
+                                </tr>
+                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" *ngIf="orderInvoiceList.length > 0">
+            <div class="col-12">
+                <div class="cs-heading mt20 mb10">
+                    <h2>INVOICE DETAILS</h2>
+                </div>
+                
+                <div class="cs-table left-right-15">
+                    <div class="header">
+                        <table class="sno-border">
+                            <tr>
+                                <th class="w30 border-right-none"></th>
+                                <th class="w200">Date / Created By</th>
+                                <th class="w140 text-center">Invoice ID</th>
+                                <th class="w150">Total Amount</th>
+                                <th class="w150">Received</th>
+                                <th class="w150">Balance</th>
+                                <th class="w150">Payment Status</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table class="sno-border">
+                                <tr *ngFor="let row of orderInvoiceList; let i=index">
+                                    <td class="w30 text-center">{{i+1}}</td>
+                                    <td class="w200">{{row.date_created}} / {{row.created_by_type}}</td>
+                                    <td class="w140 text-center"><a mat-button routerLink="/order-invoice-detail/{{row.id}}" class="link">#{{row.invoice_id}}</a></td>
+                                    <td class="w150">&#8377; {{row.invoice_total}}</td>
+                                    <td class="w150">&#8377; {{row.received}}</td>
+                                    <td class="w150">&#8377; {{row.balance}}</td>
+                                    <td class="w150"> {{row.payment_status}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        
+    </div>
+
+
+</div>
+
+<div class="h100"></div>

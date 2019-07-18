@@ -1,0 +1,287 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="back-btn" *ngIf="db.datauser.franchise_id == 0 ">
+      <a mat-button routerLink="/franchise-customers/{{franchise_id |crypt}}/2" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li><a class="link">{{db.franchise_name}}</a></li>
+        <li><a class="link">Customers</a></li>
+        <li class="af-none"><p>{{detail.first_name}} {{detail.last_name}}</p></li>
+      </ul>
+    </div>
+    <div class="m-right-data vl-info top5">
+      <div class="cs-btn text-right">
+        <div class="in-btn">
+          <button mat-raised-button color="warn" class="h30" style="line-height: 30px;"  routerLink="/customer-edit/{{franchise_id |crypt}}/{{id |crypt}}/" routerLinkActive="active">Edit Customer</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="cs-container">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+      <div class="outer">
+        <div class="innear">
+          <mat-spinner></mat-spinner>
+          <P>LOADING . . .</P>
+        </div>
+      </div>
+    </div>
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+      
+      <!-- TABS Component -->
+      <div class="right-data" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+        <div class="row">
+          <div class="col-12 mb20">
+            <app-franchise-customer-left-tabs></app-franchise-customer-left-tabs>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="contst">
+              <div class="cs-heading">
+                <h2>BASIC DETAIL</h2>
+              </div>
+              
+              <div class="side-by-side mt10" style="display: inherit;">
+                <div class="row mr0">
+                  <div class="figure grid-three">
+                    <p>Name</p>
+                    <p>{{detail.first_name}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Last Name</p>
+                    <p>{{detail.last_name}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Contact No</p>
+                    <p>{{detail.phone}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Email</p>
+                    <p>{{detail.email}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Vehicle Model</p>
+                    <p>{{detail.vehicle_type}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Source</p>
+                    <p>{{detail.source}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Interested In</p>
+                    <p>{{detail.interested_in}}</p>
+                  </div>
+                  <div class="figure">
+                    <p>Message</p>
+                    <p>{{detail.message}}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="cs-heading mt10">
+                <h2>Address</h2>
+              </div>
+              
+              <div class="side-by-side mt10" style="display: inherit;">
+                <div class="row mr0">
+                  
+                  <div class="figure grid-three">
+                    <p>Country</p>
+                    <p>{{detail.country_name}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>State</p>
+                    <p>{{detail.state}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>District</p>
+                    <p>{{detail.district}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>City</p>
+                    <p>{{detail.city}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Pin-code</p>
+                    <p>{{detail.pincode}}</p>
+                  </div>
+                  
+                  <div class="figure">
+                    <p>Address</p>
+                    <p>{{detail.address}}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="cs-heading mt10">
+                <h2>COMPANY DETAIL</h2>
+              </div>
+              
+              
+              <div class="side-by-side mt10" style="display: inherit;">
+                <div class="row mr0">
+                  <div class="figure grid-three">
+                    <p>Company Name</p>
+                    <p>{{detail.company_name}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>Company Contact No</p>
+                    <p>{{detail.company_contact_no}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>GSTIN</p>
+                    <p>{{detail.gstin}}</p>
+                  </div>
+                  
+                </div>
+              </div>
+              
+              <div class="cs-heading mt10">
+                <h2>Company Address</h2>
+              </div>
+              
+              <div class="side-by-side mt10" style="display: inherit;">
+                <div class="row mr0">
+                  
+                  <div class="figure grid-three">
+                    <p>Country</p>
+                    <p>{{detail.company_country_name}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>State</p>
+                    <p>{{detail.company_state}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>District</p>
+                    <p>{{detail.company_district}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>City</p>
+                    <p>{{detail.company_city}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Pin-code</p>
+                    <p>{{detail.company_pincode}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Company Addrees</p>
+                    <p>{{detail.company_address}}</p>
+                  </div>
+                  
+                  
+                </div>
+              </div>
+              
+              
+              
+              <div class="cs-heading  mt15">
+                <h2>VEHICLE INFO</h2>
+              </div>
+              
+              <div class="cs-table mt10 left-right-15">
+                <div class="header">
+                  <table>
+                    <tr>
+                      <th>Type</th>
+                      <th>Brand / Car Name</th>
+                      <th>Reg No.</th>
+                      <th>Plan Name </th>
+                      <th>Valid Upto</th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container info-table">
+                  <div class="table-body">
+                    <table>
+                      <tr *ngFor="let veh of vehicle_info">
+                        <td>
+                          <mat-checkbox class="input-check"></mat-checkbox> 
+                          {{veh.vehicle_type}}</td>
+                          <td> {{veh.model_no}}</td>
+                          <td>{{veh.regn_no}}</td>
+                          <td><a>{{veh.service_name}}</a></td>
+                          <td>{{veh.plan_end_date }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>     
+                
+                
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="right-data pl20">
+                <div class="contst summary">
+                  <div class="cs-heading">
+                    <h2>SUMMARY</h2>
+                  </div>
+                  
+                  <ul style="display:none !important;">
+                    <li class="grey-bg">
+                      <div class="head">
+                        <p class="name"># JOIN US</p>
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                    </li>
+                    
+                    <li class="green-bg">
+                      <div class="head">
+                        <div class="name">
+                          <p >JOB CARD #DD25324<br><span>Mohit Kumar</span></p>
+                        </div>
+                        
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                    </li>
+                    
+                    <li class="red-bg">
+                      <div class="head">
+                        <p class="name">JOB CARD #DD25324 <br><span>Mohit Kumar</span></p>
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                    </li>
+                    <li class="blue-bg">
+                      <div class="head">
+                        <div class="name">
+                          <p>INVOICE CREATED #356587</p>
+                          <p>JOB CARD #DD25324</p>
+                          <p>Mohit Kumar</p>
+                          <p>Amount: <span class="red-clr">5000</span></p>
+                        </div>
+                        <p class="date">
+                          <i class="material-icons">  watch_later </i>
+                          12 oct 2018 | 11:45am
+                        </p>
+                      </div>
+                      
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="h100"></div>
+    </div>
+  </div>
+  

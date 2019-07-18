@@ -1,0 +1,260 @@
+<div class="main-container">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+</div>
+  <div class="cs-container">    
+    <div class="row">
+      <div class="col-12">
+        <div class="cs-heading pb10">
+          <h2>CREATE NEW PURCHASE ORDER</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="right-data pl0">
+          <div class="contst h450 padding0" style="overflow: hidden;">
+            <mat-dialog-content class="convert-franchies-modle">              
+              <div class="m-body">
+                <div class="row">
+                  <div class="col-3 plan-list step1 h650 shadow-none">
+                    <div class="head">
+                      <div class="cs-heading">
+                        <h2>VENDOR</h2>
+                      </div>                      
+                      <div class="search">
+                        <button mat-button><i class="material-icons">search</i></button>
+                      </div>
+                    </div>
+                    <!-- {{row.plan?row.name[0].toUpperCase():''}} -->
+                    <div class="listing">
+                      <mat-radio-group class="step1" (change)="clear()" [(ngModel)]="purchase_form.vendor_id">                        
+                        <mat-radio-button [value]="row.id" *ngFor="let row of vendor; let i = index;">
+                          <span class="name-counter">{{vendor.length ? row.name[0].toUpperCase():''}}</span>
+                          <div class="txt-box">
+                            <p>{{row.name}} </p>
+                            <p>{{row.phone}}</p>
+                          </div>
+                        </mat-radio-button>                        
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                
+                  
+                  <div class="col-9"> 
+                    
+                           <div class="form-field " *ngIf="purchase_form.vendor_id">
+                      <div class="row padding15 pt0 pb0 pr30">
+                  
+                        <div class="control-field col-4">   
+                          <mat-form-field class="cs-input cs-date-picker">
+                            <input  placeholder="Invoice Date" [(ngModel)]="purchase_form.date_created" name="date_created" matInput [matDatepicker]="picker1"   >
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                          </mat-form-field>
+                          
+                        </div>
+
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-120">
+                        <div class="form-field " *ngIf="purchase_form.vendor_id">
+                            <form name="forms" (ngSubmit)="s.form.valid ? AddItem(s) : '' " #s="ngForm">
+  
+                              <div class="row padding15 pt0 pr30">
+
+                                    <div class="control-field col-4">   
+                                      <mat-form-field class="cs-input cs-date-picker">
+                                        <input  placeholder="Invoice Date" [(ngModel)]="data.date_created" name="date_created" matInput [matDatepicker]="picker1"   >
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                      </mat-form-field>
+                                      
+                                    </div>
+                              </div>
+                              
+                          <div class="row padding15 pt0 pr30">
+
+                              <div class="control-field col-3">
+                                  <mat-form-field class="cs-multi-select">
+                                      <mat-select placeholder="Category Name" name="category" [(ngModel)]="data.category" (selectionChange)="GetVendorBrand()" required>
+                                        <mat-option *ngFor="let row of categoryList; let b = index" [value]="row.category">
+                                          <small>{{ row.category }}</small>
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                              </div>
+
+
+                            <div class="control-field col-3">                              
+                              <mat-form-field class="cs-multi-select">
+                                <mat-select placeholder="Brand Name" name="brand_name" [(ngModel)]="data.brand_name" (selectionChange)="GetProduct()" required>
+                                  <mat-option *ngFor="let row of brand; let b = index" [value]="row.brand_name" >
+                                    <small>{{row.brand_name}}</small>
+                                    - {{row.category}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>                              
+                            </div>                            
+                            <div class="control-field col-3">
+                              <mat-form-field class="cs-multi-select">
+                                  <mat-select placeholder="Product Name" name="product_id" [(ngModel)]="data.product_id" (selectionChange)="GetMeasurement()" required>
+                                      <mat-option *ngFor="let pro of product; let p = index" [value]="pro.id" >
+                                          <small>{{pro.product_name}}</small>
+                                        </mat-option>
+                                  </mat-select>
+                              </mat-form-field>
+                            </div>                          
+                            
+                            <div class="control-field col-3">
+                                <mat-form-field class="cs-multi-select">
+                                    <mat-select placeholder="Measurement" name="measurement" [(ngModel)]="data.measurement" (selectionChange)="GetPurchasePrice()" required>
+                                        <mat-option *ngFor="let row of measurement; let r = index" [value]="row.unit_of_measurement" >
+                                            <small>{{row.unit_of_measurement}}</small>
+                                          </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="control-field col-3" [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                                <mat-form-field class="cs-multi-select">
+                                    <mat-select placeholder="Attribute type" name="attribute_type" [(ngModel)]="data.attribute_type" (selectionChange)="getAttributeOptionList()">
+                                        <mat-option *ngFor="let row of attributeTypeList; let r = index" [value]="row.attr_type">
+                                            <small>{{row.attr_type}}</small>
+                                          </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                              </div>
+  
+  
+                              <div class="control-field col-3" [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                                <mat-form-field class="cs-multi-select">
+                                    <mat-select placeholder="Attribute Option" name="attribute_option" [(ngModel)]="data.attribute_option">
+                                        <mat-option *ngFor="let row of attributeOptionList; let r = index" [value]="row.attr_option">
+                                            <small>{{row.attr_option}}</small>
+                                          </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                              </div>
+                              
+                            
+                            <div class="control-field col-3">
+                              <mat-form-field class="example-full-width cs-input">
+                                <input matInput placeholder="QTY." (input)="GetAmount(data.qty,data.rate)" name="qty" [(ngModel)]="data.qty" required>
+                              </mat-form-field>
+                            </div>
+                            
+                            <div class="control-field col-3">
+                              <mat-form-field class="example-full-width cs-input">
+                                <input matInput placeholder="Rate" (input)="GetAmount(data.qty,data.rate)" name="rate" [(ngModel)]="data.rate" required>
+                              </mat-form-field>
+                            </div>
+                            
+                            <div class="control-field col-3">
+                              <mat-form-field class="example-full-width cs-input">
+                                <input matInput placeholder="Amount" readonly name="amount" [(ngModel)]="data.amount" required>
+                              </mat-form-field>
+                            </div>               
+                            
+                            
+                            <div class="col-12">
+                              <div class="cs-btn outline mt32 mr12 text-right">
+                                <div class="in-btn ">
+                                  <button type="submit"  mat-raised-button color="primary">Add To List</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+
+                        </div>
+                      </div>
+                    </div>             
+                    
+                    <div class="row" *ngIf="purchase_list.length">
+                      <div class="col-12">
+                        <div class="cs-table">
+                          <div class="header mr0 padding0" style="padding: 0px 30px 0px 15px !important;">
+                            <table>
+                              <tr>
+                                <th class="w150">Category</th>
+                                <th class="w150">Brand</th>
+                                <th class="w220">Product Name</th>
+                                <th class="w80 text-center">HSN</th>
+                                <th>Measurement</th>
+                                <th class="w80 text-center">QTY</th>
+                                <th class="w100 text-center">Rate</th>
+                                <th class="w100 text-center">Total</th>
+                              </tr>
+                            </table>
+                          </div>
+                          <div class="table-container" style="padding: 15px 30px 15px 15px;">
+                            <div class="table-body">
+                              <table>
+                                <tr *ngFor="let data of purchase_list; let d = index">
+                                  <td class="w150">{{data.category}}</td>
+                                  <td class="w150">{{data.brand_name}}</td>
+                                  <td class="w220">{{data.product_name}}, {{data.attribute_type}}, {{data.attribute_option}}</td>
+                                  <td class="w80 text-center">{{data.hsn_code}}</td>
+                                  <td>{{data.measurement}}</td>
+                                  <td class="w80 text-center">{{data.qty}}</td>
+                                  <td class="w100 text-center">{{data.rate}}</td>
+                                  <td class="w100 text-center">{{data.amount}}
+                                    <div class="action-btns">
+                                      <div class="outer">
+                                        <div class="innear">
+                                          <button type="submit" (click)="RemoveItem(d,data.amount)" mat-button class="delete"><i class="material-icons">delete_sweep</i> Delete</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>                    
+                    <div class="row" *ngIf="purchase_list.length">
+                      <div class="col-8 empty"></div>
+                      <div class="col-4">
+                        <div class="invoice-details" style="padding: 15px 30px 15px 15px;">
+                          <table class="invoice-table">                           
+                            <tr>
+                                <td class="w200 td">Total Amount	</td>
+                                <td class="td">&#8377; {{purchase_form.item_total}}</td>
+                            </tr>                            
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-dialog-content>
+          </div>
+        </div>
+      </div>
+    </div>    
+    <div class="row" *ngIf="purchase_list.length">
+      <div class="col-12">
+        <div class="dubble-btn">
+          <div class="cs-btn mt32 mr12 text-right" [ngClass]="{loading: sendingData}">
+            <div class="in-btn ">
+              <button [disabled]="sendingData" type="submit"  (click)="submit_po()" mat-raised-button color="warn">PLACE ORDER</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

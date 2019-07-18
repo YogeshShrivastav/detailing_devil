@@ -1,0 +1,203 @@
+<div class="main-container">
+    <div class="master-heading">
+        <div class="heading">
+            <h1>MASTER's</h1>
+        </div>
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <!-- TABS Component -->
+            <app-stock-tab></app-stock-tab>
+            <!-- TABS Component -->
+            
+            <div class="right-data">
+                    <div class="cs-spinner full-page" *ngIf = "loading_list">
+                            <div class="outer">
+                                <div class="innear">
+                                <mat-spinner></mat-spinner>
+                                <P>LOADING . . .</P>
+                                </div>
+                            </div>
+                        </div>
+
+        <form name="stockForm"  #f="ngForm" novalidate>
+
+                <div class="contst">
+
+                    <div class="cs-heading">
+                        <h2>Finish Good Informationt</h2>
+                    </div>
+                    
+                    <div class="form-field">
+                        <div class="row">
+
+                                <div class="control-field col-3">
+
+                                        <mat-form-field class="cs-multi-select">
+                                                <mat-select placeholder="Brand Name" name="brand_name" [(ngModel)]="finish_good.brand_name" (selectionChange)="getProductList()" #brand_name="ngModel" required >
+                
+                                                    <mat-option *ngFor="let row of brandList; let b = index" [value]="row.brand_name">
+                                                    <small>{{row.brand_name}}</small>
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                    
+                                </div>
+                            
+                                
+         
+                            
+                            <div class="control-field col-3">
+                                    <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="Product Name" name="product_id" [(ngModel)]="finish_good.product_id" (selectionChange)="getMeasurementList()" #product_id="ngModel" required>
+                                                <mat-option *ngFor="let row of productList; let p = index" [value]="row.id">
+                                                    <small>{{row.product_name}}</small>
+                                                  </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+            
+                            </div>
+                            <div class="control-field col-3">
+                                    <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="Measurement" name="measurement" [(ngModel)]="finish_good.measurement" (selectionChange)="getSalePrice()" #measurement="ngModel" required >
+                                                <mat-option *ngFor="let row of measurementList; let r = index" [value]="row.unit_of_measurement">
+                                                    <small>{{row.unit_of_measurement}}</small>
+                                                  </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+            
+                            </div>
+
+                            <div class="control-field col-3">
+                                    <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="QTY." [(ngModel)]="finish_good.qty" type="number" name="qty" #qty="ngModel" required >
+                                          </mat-form-field>
+                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+        <form name="invoiceForm" (ngSubmit)="m.form.valid && addRawMatrialList(m)" #m="ngForm" novalidate>
+
+                <div class="contst mt20 mb5">
+
+                    <div class="cs-heading">
+                        <h2>Raw Material Consumption </h2>
+                    </div>
+                    
+                    <div class="form-field">
+                        <div class="row">
+                            <div class="control-field col-2">
+                                    <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="Brand Name" name="raw_brand_name" [(ngModel)]="raw_material.brand_name" (selectionChange)="getRawProductList()" #rawbrand_name="ngModel" required [disabled]="f.form.invalid ? true : false">
+            
+                                                <mat-option *ngFor="let row of rawbrandList; let b = index" [value]="row.brand_name">
+                                                <small>{{row.brand_name}}</small>
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+        
+                                </div>
+                            
+                            <div class="control-field col-2">
+                                    <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="Product Name" name="raw_product_id" [(ngModel)]="raw_material.product_id" (selectionChange)="getRawMeasurementList()" #rawproduct_id="ngModel" required [disabled]="f.form.invalid ? true : false">
+                                                <mat-option *ngFor="let row of rawproductList; let p = index" [value]="row.id">
+                                                    <small>{{row.product_name}}</small>
+                                                  </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+            
+                            </div>
+                            <div class="control-field col-1">
+                                    <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="Measurement" name="raw_measurement" [(ngModel)]="raw_material.measurement" (selectionChange)="getRawSalePrice()" #rawmeasurement="ngModel" required readonly [disabled]="f.form.invalid ? true : false">
+                                                <mat-option *ngFor="let row of rawmeasurementList; let r = index" [value]="row.unit_of_measurement" >
+                                                    <small>{{row.unit_of_measurement | strRplce}}</small>
+                                                  </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+            
+                            </div>
+
+                            <div class="control-field col-1">
+                                    <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Stock Qty." [(ngModel)]="raw_material.stock_total"  name="raw_stock_total" #raw_stock_total="ngModel"  readonly [disabled]="f.form.invalid ? true : false">
+                                          </mat-form-field>
+                
+                            </div>
+                            <div class="control-field col-1 ">
+                                    <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Required QTY." type="number" [(ngModel)]="raw_material.qty" type="number" name="raw_qty" #rawqty="ngModel" required [disabled]="f.form.invalid ? true : false">
+                                          </mat-form-field>
+                
+                                            <!-- <mat-error color="primary" *ngIf="f.submitted && !rawmeasurement.valid" >This field is required</mat-error> -->
+
+                               
+                            </div>
+
+                            <div class="control-field col-1 pr50">
+                                    <mat-form-field class="cs-multi-select cs-input">
+                                            <mat-select placeholder="Required Measurement" name="raw_required_Measurement" [(ngModel)]="raw_material.raw_required_Measurement" #rawmeasurement="ngModel" required [disabled]="disabled == true ? true: false">
+                                            <mat-option *ngFor="let list of measurementTypes" [value]="list.name">
+                                                    <small>{{list.name}}</small>
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <div class="plus-btn">
+                                                <button type="submit" mat-raised-button color="warn" class="mt2" [disabled]="f.form.invalid ? true : false">
+                                                    <i class="material-icons">add</i>
+                                                </button>
+                                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+
+
+                <div class="cs-table" >
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w140">Brand</th>
+                                <th>Product </th>
+                                <!-- <th class="w120 text-center">UOM</th> -->
+                                <th class="w220">Raw Material QTY</th>
+                                <th class="w220">Action</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let raw of rawMatrialList; let p = index">
+                                    <td class="w140">{{ raw.brand_name }}</td>
+                                    <td>{{ raw.product_name }}</td>
+                                    <!-- <td class="w120 text-center">{{ raw.measurement }}</td> -->
+                                    <td class="w220 text-center">{{raw.qty + ' ' + raw.raw_required_Measurement}} </td>
+                                    <td class="w220 text-center"><a (click)="remove(p)"> Remove </a></td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>Brand 2</td>
+                                    <td>Product 2</td>
+                                    <td class="text-center">25 ml</td>
+                                    <td class="text-center">25 </td>
+                                </tr> -->
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: savingData}" *ngIf="rawMatrialList.length > 0">
+                    <div class="in-btn">
+                        <button mat-raised-button color="warn" [attr.disabled]="(f.form.invalid ? true : false ) && savingData" (click)="f.form.valid && saveRawProductList()">save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

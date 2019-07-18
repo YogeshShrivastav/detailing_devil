@@ -1,0 +1,200 @@
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf="loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+<div class="master-heading">
+<div class="heading">
+  <h1>MASTER's</h1>
+</div>
+</div>
+<div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <app-master-add-tabs></app-master-add-tabs>
+        <div class="right-data">
+          <form name="form" (ngSubmit)="f.form.valid ? updateUser(f): '' " #f="ngForm" novalidate autocomplete="off" >
+            <div class="contst">
+                <div class="cs-heading">
+                    <h2>Edit ORGANIZATION</h2>
+                </div>
+                
+                <div class="form-field">
+                    <div class="row">
+
+ 
+
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Company Name" name="company_name" [(ngModel)]="organization.company_name" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Bank Name" name="bank_name" [(ngModel)]="organization.bank_name" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Email" name="Email" [(ngModel)]="organization.Email" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Company Name In Bank	" name="company_name_in_bank" [(ngModel)]="organization.company_name_in_bank	" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Account no" name="account_no" [(ngModel)]="organization.account_no" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Account Type" name="account_type" [(ngModel)]="organization.account_type" >
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Ifsc code" name="ifsc_code" [(ngModel)]="organization.ifsc_code" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Branch name" name="branch_name" [(ngModel)]="organization.branch_name" >
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Bank Address" name="bank_address" [(ngModel)]="organization.bank_address" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Company gstin" name="company_gstin" [(ngModel)]="organization.company_gstin" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Company PAN No" name="company_pan_no" [(ngModel)]="organization.company_pan_no" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Aadhaar No" name="aadhaar_no" [(ngModel)]="organization.aadhaar_no" >
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Address" name="address" [(ngModel)]="organization.address" required>
+                          </mat-form-field>
+                        </div>
+                        <!-- <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Country id" name="country_id" [(ngModel)]="organization.country_id" required>
+                          </mat-form-field>
+                        </div> -->
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Invoice prefix" name="invoice_prefix" [(ngModel)]="organization.invoice_prefix" required>
+                          </mat-form-field>
+                        </div>
+
+
+                        <div class="col-4 control-field" >
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Service prefix" name="service_prefix" [(ngModel)]="organization.service_prefix" required>
+                          </mat-form-field>
+                        </div>
+
+                        
+                        <div class="control-field col-4 edit-input">
+                          <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Select Country" name="country_id" [(ngModel)]="organization.country_id" #country_id="ngModel" (selectionChange)="getStateList()" required>
+                                  <mat-option *ngFor="let val of countries" [value]="val.id"> {{val.name}} </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="control-field col-4 edit-input" >
+                        <div *ngIf="organization.country_id != 99">
+                            <mat-form-field class="example-full-width cs-input">
+                                <input matInput placeholder="State" name = "state"   [(ngModel)] = "organization.state" #state = "ngModel" required>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="organization.country_id == 99">
+                            <mat-form-field class="cs-multi-select">
+                                <mat-select placeholder="Select State" name="state"  (selectionChange)="getDistrictList()" [(ngModel)]="organization.state" #state="ngModel" required>
+                                    <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="control-field col-4 edit-input">
+                      <div *ngIf="organization.country_id != 99">
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder = "District" name = "district"  [(ngModel)] = "organization.district" #district = "ngModel" required>                                               
+                          </mat-form-field>
+                      </div>
+                      <div *ngIf="organization.country_id == 99">
+                          <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Select District" name="district"  (selectionChange)="getCityList()"  [(ngModel)]="organization.district" #district="ngModel" required>
+                                  <mat-option *ngFor="let val of districts" [value]="val.district_name"> {{val.district_name}} </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </div>                                          
+                  </div>
+
+
+                  <div class="control-field col-4 edit-input">
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder = "City" name = "city"  [(ngModel)] = "organization.city" #city = "ngModel" required>                                               
+                          </mat-form-field>
+                          
+                  </div>
+                  <div class="control-field col-4 edit-input">
+                      <div *ngIf="organization.country_id != 99">
+                          <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder = "Pincode" name = "pincode"  [(ngModel)] = "organization.pincode" #pincode = "ngModel" required>                                               
+                          </mat-form-field>
+                      </div>
+                      <div *ngIf="organization.country_id == 99">
+                          <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Select Pincode" name="pincode"  [(ngModel)]="organization.pincode" #pincode="ngModel" required>
+                                  <mat-option *ngFor="let val of pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </div>                                          
+                  </div>
+
+                  <div class="control-field col-4 edit-input"  width="324px"  style="vertical-align: bottom;" *ngIf="organization.org_logo"> 
+                    <img style="width: 150px;border: solid 1px #000; padding: 10px;margin-top: 12px;" [src]="this.db.myurl + 'app/uploads/' + organization.org_logo">
+                </div>
+
+
+                <input type="file" (change)="profilefileChange($event)" name="file" placeholder="Upload file" accept=".png,.jpg,.jpeg" />
+
+
+                        
+                            
+                         
+
+                    </div>
+        
+                  
+                </div>
+            </div>
+            <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: sendingData}">
+              <div class="in-btn">
+                <button mat-raised-button color="primary" type="submit" [attr.disabled]="sendingData">save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="h100"></div>

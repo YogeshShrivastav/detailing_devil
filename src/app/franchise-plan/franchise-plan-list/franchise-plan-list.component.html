@@ -1,0 +1,161 @@
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf="!loading_page">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  <div class="master-heading" *ngIf = "loading_page && loading_list">
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+    <div class="top-search wp50 ml190">
+      <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search" (keyup.enter)="current_page = 1;getFranchisePlanList()">
+      <i class="material-icons">search</i>
+    </div>
+    <div class="top-pagination m-right-data">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getFranchisePlanList()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container" *ngIf="loading_page">
+        <div class="cs-row cs-tabs-space">
+            
+            <!-- TABS Component -->
+            <app-master-listing-tabs></app-master-listing-tabs>
+            <!-- TABS Component -->
+            
+            <div class="right-data tabs-listing">
+              <div class="cs-spinner half-page" *ngIf = "!loading_list">
+                <div class="outer">
+                  <div class="innear">
+                    <mat-spinner></mat-spinner>
+                    <P>LOADING . . .</P>
+                  </div>
+                </div>
+              </div>
+              <div class="data-not-available" *ngIf="loading_list && searchData && (franchise_plans.length < 1)">
+                <div class="outer">
+                  <div class="iinear">
+                    <div class="figure" matRipple>
+                      <div class="header">
+                        <img src="assets/img/data-not-available-header.svg" alt="">
+                      </div>
+
+                      <div class="description">
+                        <div class="cs-heading">
+                          <h2>Franchise Plans</h2>
+                        </div>
+                        <div class="img">
+                          <i class="material-icons">error_outline</i>
+                        </div>
+                        <div class="psc">
+                          <p>data not available</p>
+                          <p>Tap on <a routerLink="/franchise_plans/add" >ADD NEW</a> for Franchise Plans</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="data-not-available" *ngIf="loading_list && !searchData && search">
+                <div class="outer">
+                  <div class="iinear">
+                    <div class="figure" matRipple>
+                      <div class="header">
+                        <img src="assets/img/data-not-available-header.svg" alt="">
+                      </div>
+
+                      <div class="description">
+                        <div class="cs-heading">
+                          <h2>{{ search }}</h2>
+                        </div>
+                        <div class="img">
+                          <i class="material-icons">search</i>
+                        </div>
+                        <div class="psc">
+                          <p>data not available</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-table  mt15" *ngIf="loading_list && (franchise_plans.length > 0)">
+                  <div class="header sticky-header">
+                      <table>
+                          <tr>
+                              <th class="w120">Plan Name</th>
+                              <th class="w150">Description</th>
+                              <th class="w100">Price (&#x20B9;)</th>
+                              <!-- <th class="">Accessories</th> -->
+                              <th class="">Initial Stock</th>
+                              <th class="w100">Action</th>
+                          </tr>
+                      </table>
+                  </div>
+                  <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let franchise_plan of franchise_plans; let i = index">
+                                    <td class="w120">{{ franchise_plan.franchise_plan }}</td>
+                                    <td class="w150">{{ franchise_plan.description }}</td>
+                                    <td class="w100 text-right"><p>{{ franchise_plan.price }}</p></td>
+                                    <!-- <td>
+                                        <div class="tags" *ngIf="accessories.length > 0">
+                                          <ng-container *ngFor="let accessory of accessories; let i = index">
+                                            <ng-container *ngFor="let val of accessory; let i = index">
+                                              <span *ngIf="val.franchise_plan_id == franchise_plan.id">{{ val.accessories_name }}</span>
+                                            </ng-container>
+                                          </ng-container>
+                                        </div>
+                                    </td> -->
+                                    <td class="in-table">
+                                        <table *ngIf="initial_stocks.length > 0">
+                                          <ng-container *ngFor="let stock of initial_stocks; let i = index">
+                                            <ng-container *ngFor="let val of stock; let i = index">
+                                              <tr *ngIf="val.franchise_plan_id == franchise_plan.id">
+                                                  <td>{{val.category}}</td>
+                                                  <td>{{val.brand}}</td>
+                                                  <td>{{ val.product }} {{ val.attribute_type }} {{ val.attribute_option }}</td>
+                                                  <td>{{ val.hsn_code }}</td>
+                                                  <td>{{ val.quantity }}</td>
+                                                  <td>{{ val.unit_measurement }}</td>
+                                              </tr>
+                                            </ng-container>
+                                          </ng-container>
+                                        </table>
+                                        <!--<p *ngIf="initial_stocks.length < 1">-</p>-->
+                                    
+                                    </td>
+
+                                    <td class="w100 text-center defult-hover">
+                                        <ul>
+                                          <li>
+                                             <a class="edit" matTooltip="Edit" routerLink="/franchise-plan-edit/{{franchise_plan.id}}"  routerLinkActive="active"><i class="material-icons green-clr">edit</i></a>
+                                          </li>
+                                          <li>
+                                         <a class="delete" matTooltip="Delete"(click) = "deleteFranchisePlan(franchise_plan.id)" ><i class="material-icons red-clr">delete_sweep</i></a>
+ 
+                                          </li>
+                                        </ul>
+                                       
+                                     </td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

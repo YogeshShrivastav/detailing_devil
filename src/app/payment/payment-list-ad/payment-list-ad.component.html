@@ -1,0 +1,121 @@
+<div class="main-container"> 
+    <div class="master-heading">
+        <div class="vl-info">
+            <ul>
+                    <!-- : <span>0</span> -->
+                <li><p class="pointer" [ngClass]="{'light':invoice}" (click)="get_payments('invoice')">Invoice Payment </p></li>
+                <li><p class="pointer" [ngClass]="{'light':payment}" (click)="get_payments('payment')">Service Payment</p></li>
+            </ul>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <!-- <li><p class="light">Pending Invoice : <span class="red-clr">35</span></p></li>-->
+                <!-- <li><p class="light">Outstanding Payment : <span class="red-clr"> &#8377; 595,000.00</span></p></li> -->
+                <li><p class="light">Collection : <span class="red-clr"> &#8377;&nbsp; {{sum}} &nbsp;&nbsp;</span></p></li> 
+            </ul>
+        </div>
+        <div class="top-search wp30 ml30">
+            <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;get_payments(active_tab)">
+            <i class="material-icons">search</i>
+        </div>
+        <div class="top-pagination m-right-data">
+            <ul>
+                <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                <li><button mat-button class="left-btn"  (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="get_payments(active_tab)"></li>
+                <li><button mat-button class="right-btn"  (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div>
+    </div>
+    <div class="all-container">
+        <div class="cs-row">
+            <div class="right-data">
+                
+                <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                
+                <div *ngIf="loading_list && (invoicePaymentList.length > 0  || filtering ) " class="cs-table header-fixed">
+                    <div class="header">
+                        <table class="sno-border">
+                            <tr>
+                                <th class="w30 border-right-none"></th>
+                                <th class="w220">
+                                    <div class="filter">
+                                        <mat-form-field class="cs-input cs-date-picker">
+                                            <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="get_payments(active_tab)" [matDatepicker]="picker" >
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th class="w220" *ngIf="active_tab == 'invoice'">
+                                    <div class="filter">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Type" [(ngModel)]="filter.type" (selectionChange)="get_payments(active_tab)">
+                                                <mat-option value="">All</mat-option>
+                                                <mat-option value="Franchise">Franchise</mat-option>
+                                                <mat-option value="Customer">Customer</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th>Franchise</th>
+                                <th class="w170">Contact No</th>
+                                <th class="w170">Invoice ID</th>
+                                <th class="w170">
+                                    <div class="filter">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Mode" [(ngModel)]="filter.mode" (selectionChange)="get_payments(active_tab)">
+                                                <mat-option value="">All</mat-option>
+                                                <mat-option value="Cash">Cash</mat-option>
+                                                <mat-option value="Cheque">Cheque</mat-option>
+                                                <mat-option value="Bank Transfer">Bank Transfer</mat-option>
+                                                <mat-option value="Payment Gateway">Payment Gateway</mat-option>
+                                                <mat-option value="NEFT">NEFT</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th class="w150">Amount</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table class="sno-border">
+                                <tr *ngFor="let row of invoicePaymentList; let i=index">
+                                    <td class="w30 text-center">{{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }}</td>
+                                    <td class="w220">{{row.date_created | date: 'dd MMM yyyy'}} / {{row.first_name}}</td>
+                                    <td class="w220"  *ngIf="active_tab == 'invoice'" >{{row.type}}</td>
+                                    
+                                    <td ><a mat-button class="link" routerLink="/franchise-detail/{{row.franchise_id |crypt}}" routerLinkActive="active">{{row.company_name}}</a></td>
+
+                                    <td class="w170">{{row.contact_no}}</td>
+
+                                    <td *ngIf="!payment" class="w170"><a mat-button routerLink="/service-detail/{{row.invoice_id |crypt}}" routerLinkActive="active" class="link">{{row.prefix_invoice_id}}</a></td>
+                                    <td *ngIf="payment" class="w170"><a mat-button routerLink="/order-invoice-detail/{{row.invoice_id |crypt}}" routerLinkActive="active" class="link">{{row.prefix_invoice_id}}</a></td>
+
+                                    <td class="w170">{{row.mode}}</td>
+                                    <td class="w150">
+                                        &#8377; {{row.amount}}    
+                                        <div class="action-btns">
+                                            <a mat-button class="view" routerLink="/order-invoice-detail/{{row.invoice_id |crypt}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                                        </div>                                    
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

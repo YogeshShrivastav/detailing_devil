@@ -1,0 +1,90 @@
+<div class="main-container">
+	<div class="master-heading bcspace">
+		<div class="back-btn">
+			<a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+		</div>
+		<div class="vl-info">
+			<ul>
+				<li class="af-none"><p><span class="blue">{{franchise_name}}</span> <i class="material-icons r-arrow">keyboard_arrow_right</i> <span>Customers</span> </p></li>
+			</ul>
+		</div>
+	</div>
+	<div class="cs-container">
+		<div class="cs-row cs-tabs-space">
+			<!-- TABS Component -->
+			<!-- <app-franchise-left-tabs></app-franchise-left-tabs> -->
+			<div class="master-tabs">
+				<ul>
+					<li><a mat-raised-button routerLink="/franchise-detail/{{lead_id}}" routerLinkActive="active">{{franchise_name}}</a></li>
+					<li><a mat-raised-button routerLink="/franchise-stock/{{lead_id}}" routerLinkActive="active">Stock</a></li>
+					<li><a mat-raised-button routerLink="/franchise-consumers/{{lead_id}}" routerLinkActive="active">Leads</a></li>
+					<li><a mat-raised-button routerLink="/franchise-followup/{{lead_id}}" routerLinkActive="active">Followup</a></li>
+					
+					<!-- pooja code start-->
+					<li><a mat-raised-button routerLink="/customers" routerLinkActive="active">Customers</a></li>
+					<!-- pooja code end-->
+					
+					<!-- <li><a mat-raised-button routerLink="/franchise-orders/{{lead_id}}" routerLinkActive="active">Orders</a></li> -->
+					<!-- <li><a mat-raised-button routerLink="/franchise-invoice/{{lead_id}}" routerLinkActive="active">Invoice</a></li> -->
+					<!-- <li><a mat-raised-button routerLink="/franchise-jobcard/{{lead_id}}" routerLinkActive="active">JobCard</a></li> -->
+					
+				</ul>
+			</div>
+			
+			<!-- TABS Component -->
+			<div class="right-data tabs-listing">
+				<div class="row">
+					<div class="col-12 cs-table">
+						<div class="header">
+							<table class="sno-border">
+								<tr>
+									<th class="w30 border-right-none"></th>
+									<!-- <th class="w150">Date</th> -->
+									<th class="w150">Name </th>
+									<th class="w150">Phone</th>
+									<th class="w100">Vehicle Type</th>
+									<th class="w100">Car Model</th>
+									<th class="w100">Interested In</th>
+									<th class="w100">Source</th>
+									<th class="w80">Status</th>
+									<th class="w100" class="hv-actions">City</th>
+								</tr>
+							</table>
+						</div>
+						<div class="table-container">
+							<div class="table-body">
+								<table class="sno-border">
+									<tr *ngFor="let val of consumers; let i = index">
+										<td class="w30 text-center">{{i+1}}</td>
+										<!-- <td class="w150">{{val.created_at | date: 'dd MMM yyyy'}}</td> -->
+										<td class="w150"><a mat-button class="link" routerLink="/franchise/customer_details/{{lead_id}}/{{val.id}}" routerLinkActive="active">{{val.first_name}} {{val.last_name}}</a></td>
+										<td class="w150">{{val.phone}}</td>
+										<td class="w100">{{ val.vehicle_type }}</td>
+										<td class="w100">{{ val.car_model }}</td>
+										<td class="w100">{{ val.interested_in }}</td>
+										<td class="w100 {{ val.source }}">{{ val.source | titlecase }}</td>
+										<td class="w80">{{val.category}}</td>
+										
+										<td class="w100">{{ val.city | titlecase}}
+											<div class="action-btns">
+												<div class="outer">
+													<div class="innear">
+														<a mat-button class="view" routerLink="/leads/details/{{val.id}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+														<a mat-button class="delete" (click)="deleteLead(val.id)"><i class="material-icons">delete_sweep</i> Delete</a>
+													</div>
+												</div>
+											</div>
+										</td>
+										
+									</tr>
+									
+								</table>
+							</div>
+						</div>
+					</div>   
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>

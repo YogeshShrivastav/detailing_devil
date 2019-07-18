@@ -1,0 +1,180 @@
+<div class="main-container">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+    <div class="cs-container">
+        
+        <div class="cs-row">
+            <form autocomplete="off" #f="ngForm" (ngSubmit)="update_detail()">
+                <div class="right-data left-right-space">
+                    <div class="contst">
+                        <div class="cs-heading">
+                            <h2>Customer Details1</h2>
+                        </div>
+                        <div class="form-field">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <ng-container *ngIf="!detail.isCompany">
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="NAME" type="text" name="first_name" [(ngModel)]="detail.first_name" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Email" name="email" [(ngModel)]="detail.email" readonly>
+                                                </mat-form-field>
+                                                
+                                            </div>
+                                            
+                                            <div class="control-field col-4" >
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput type="tel" placeholder="Contact No. *" name="phone" [(ngModel)]="detail.phone"  readonly>
+                                                </mat-form-field>
+                                                
+                                            </div>
+                                            
+                                            <div class="col-8">
+                                                <div class="control-field col-12" >
+                                                    <mat-form-field class="example-full-width cs-input">
+                                                        <textarea matInput placeholder="Address" class="h100" name="address" [(ngModel)]="detail.address" readonly></textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="detail.isCompany">
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Company Name" name="company_name" [(ngModel)]="detail.company_name" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Company Contact No" name="company_contact_no" [(ngModel)]="detail.company_contact_no" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" >
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput  placeholder="GSTN" name="gstin" [(ngModel)]="detail.gstin" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            
+                                            <div class="col-8">
+                                                <div class="control-field col-12" >
+                                                    <mat-form-field class="example-full-width cs-input">
+                                                        <textarea matInput placeholder="Company Address" name="company_address" [(ngModel)]="detail.company_address" class="h100" readonly></textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <!-- <div class="col-4 control-field" >
+                                            <mat-checkbox name="isCompany" [(ngModel)]="isCompany" (click)="is_company_check(isCompany)"><p>Attach Company Address </p></mat-checkbox> 
+                                        </div> -->
+                                        
+                                        <div class="col-4 control-field" >
+                                            <mat-form-field class="cs-multi-select">
+                                                <mat-select placeholder="Choose Registration No." name="regn_no" [(ngModel)]="detail.regn_no" (selectionChange)="change_vehicle()">
+                                                    <mat-option *ngFor="let val of vehicle_info; let i = index" [value]="val.regn_no">{{val.regn_no}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        
+                                        <div class="control-field col-4" >
+                                            <mat-form-field class="cs-multi-select">
+                                                <mat-select placeholder="Make " name="make" [(ngModel)]="detail.make" (selectionChange)="get_car_model()">
+                                                    <mat-option *ngFor="let val of company_list" [value]="val.company">{{val.company}} </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        
+                                        <div class="control-field col-4" >
+                                            <mat-form-field class="cs-multi-select">
+                                                <mat-select placeholder="Make Modal No " name="model_no" [(ngModel)]="detail.model_no" >
+                                                    <mat-option *ngFor="let val of car_model_list" [value]="val.car">{{val.car}} </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        
+                                        <div class="control-field col-4" >
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="Color" name="color" [(ngModel)]="detail.color">
+                                            </mat-form-field>
+                                            
+                                        </div>
+                                        
+                                        <div class="control-field col-4" >
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="Make Year" name="year" [(ngModel)]="detail.year">
+                                            </mat-form-field>
+                                            
+                                        </div>
+                                        
+                                        <div class="control-field col-4" >
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="Registration No *" name="regn_no" [(ngModel)]="detail.regn_no">
+                                            </mat-form-field>
+                                            
+                                        </div>
+                                        
+                                        <div class="control-field col-4" >
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="Chassis No" name="chasis_no" [(ngModel)]="detail.chasis_no">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            <div class="cs-divider pt20 left-right-15">
+                                <mat-divider></mat-divider>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 control-field" >
+                                    <mat-form-field class="cs-multi-select">
+                                        <mat-select placeholder="SRS (required) *" name="vehicle_condition" [(ngModel)]="detail.vehicle_condition">
+                                            <mat-option value="1 (Brand New)">1 (Brand New)</mat-option>
+                                            <mat-option value="2 (Good Condition)">2 (Good Condition)</mat-option>
+                                            <mat-option value="3 (Fair Condition)">3 (Fair Condition)</mat-option>
+                                            <mat-option value="4 (Poor Condition)">4 (Poor Condition)</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                
+                                <div class="col-4 control-field" >
+                                    <mat-form-field class="cs-multi-select">
+                                        <mat-select placeholder="Technician" name="technician" [(ngModel)]="detail.technician" multiple>
+                                            <mat-option *ngFor="let val of technician_arr"  [value]="val.id">{{val.first_name}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-divider pt20 left-right-15">
+                                <mat-divider></mat-divider>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cs-btn fixedd mt32  text-right" >
+                        <div class="in-btn">
+                            <button mat-raised-button color="primary" type="submit">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+        
+    </div>
+</div>
+<div class="h80"></div>

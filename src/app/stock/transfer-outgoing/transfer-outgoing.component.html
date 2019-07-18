@@ -1,0 +1,111 @@
+<div class="main-container">
+  <div class="master-heading">
+      <div class="heading">
+          <h1>MASTER's</h1>
+      </div>
+  </div>
+  <div class="cs-container">
+      <div class="cs-row cs-tabs-space">
+          <!-- TABS Component -->
+          <app-stock-tab ></app-stock-tab>
+          <!-- TABS Component -->
+          
+          <div class="right-data">
+              <div class="cs-spinner full-page" *ngIf = "loading_list">
+                  <div class="outer">
+                      <div class="innear">
+                          <mat-spinner></mat-spinner>
+                          <P>LOADING . . .</P>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="contst">
+                          <div class="cs-heading">
+                              <h2>Product DETAIL</h2>
+                          </div>
+                          <div class="side-by-side mt10" style="display: inherit;">
+                              <div class="row mr0">
+                                  <div class="figure grid-five">
+                                      <p>Category</p>
+                                      <p>{{product.category}}</p>
+                                  </div>
+                                  <div class="figure grid-five">
+                                      <p>Brand</p>
+                                      <p>{{product.brand_name}}</p>
+                                  </div>
+                                  <div class="figure grid-five">
+                                      <p>Product</p>
+                                      <p>{{product.product_name}}</p>
+                                  </div>
+                                  <div class="figure grid-five">
+                                      <p>UOM</p>
+                                      <p>{{ unit.unit_of_measurement }}</p>
+                                  </div>
+                                  
+                                  
+                                  <div class="figure grid-five">
+                                    <p>Purchase Qty</p>
+                                    <p>{{ unit.stock_qty }}</p>
+                                </div>
+
+                                <div class="figure grid-five">
+                                    <p>Purchase Total Qty </p>
+                                    <p>{{ unit.stock_total }}</p>
+                                </div>
+
+                                <div class="figure grid-five">
+                                    <p>Sale Qty </p>
+                                    <p>{{ unit.sale_qty }}</p>
+                                </div>
+
+                                
+                              </div>
+                          </div>
+                          
+                          
+                          <app-finish-tab></app-finish-tab>
+                          
+                          <div class="cs-table left-right-15 mt20">
+                              <div class="header">
+                                  <table class="sno-border">
+                                      <tr>
+                                          <th class="w30 border-right-none"></th>
+                                          <th>Invoice Id</th>
+                                          <th>Franchise</th>
+                                          <th>Date / Created By</th>
+                                          <th class="w140 text-center">Item</th>
+                                          <th class="w160 text-center">HSN Code </th>
+                                          <th class="w100 text-center">UOM</th>
+                                          <th class="w160 text-center">QTY</th>
+                                      </tr>
+                                  </table>
+                              </div>
+                              <div class="table-container">
+                                  <div class="table-body">
+                                      <table class="sno-border">
+                                          <tr  *ngFor="let unit of raw_data">
+                                              <td class="w30 text-center"></td>
+                                              <td> <a mat-button routerLink="/transfer-stock-detail/{{unit.transfer_id}}" routerLinkActive="active" class="link">#{{unit.transfer_id}}</a></td>
+                                              <td>{{unit.location_name}} ({{unit.company_name }})</td>
+                                              <td>{{unit.date_created | date: 'dd MMM yyyy'}} / {{ unit.first_name }}</td>
+                                              <td class="w140 text-center">{{ unit.item_name }}</td>
+                                              <td class="w160 text-center">{{ unit.hsn_code }}</td>
+                                              <td class="w100 text-center">{{ unit.item_measurement_type }}</td>
+                                              <td class="w160 text-center">{{ unit.delivered_qty }}</td>
+                                          </tr>
+                                          
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>   
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="h100"></div>

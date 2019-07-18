@@ -1,0 +1,132 @@
+
+  <div class="main-container">
+    
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+      <div class="outer">
+        <div class="innear">
+          <mat-spinner></mat-spinner>
+          <P>LOADING . . .</P>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="master-heading bcspace">
+      <div class="back-btn">
+        <a mat-button routerLink="/franchise-customers/{{franchise_id}}/2" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>  
+      </div>
+      <div class="vl-info">
+        <ul>
+          <li><a class="link">{{db.franchise_name}}</a></li>
+          <li><a class="link">Customers</a></li>
+          <li class="af-none"><p>{{db.customer_name}}</p></li>
+        </ul>
+      </div>
+      
+      <div class="top-search wp30 ml30">
+        <input type="text" placeholder="SEARCH. . ." [(ngModel)]="filter.search"  (keyup.enter)="current_page = 1;getCustomerService()">
+        <i class="material-icons">search</i>
+      </div>
+      
+      <div class="top-pagination m-right-data">
+        <ul>
+          <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+          <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+          <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getCustomerService()"></li>
+          <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+        </ul>
+      </div>
+      
+      
+    </div>
+    <div class="cs-container">
+      <div class="cs-row cs-tabs-space">
+        <!-- TABS Component -->
+        <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+        
+        <!-- TABS Component -->
+        <div class="right-data" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+          <div class="row">
+            <div class="col-12">
+              <app-franchise-customer-left-tabs></app-franchise-customer-left-tabs>
+            </div>
+          </div>
+          <div class="row mt15">
+            <div class="col-12 cs-table" *ngIf="!loading_list && (preventive_servicelist.length > 0  || filtering ) ">
+              <div class="header">
+                <table class="sno-border">
+                  <tr>
+                    <th class="w30 border-right-none"></th>
+                    <th  class="w100">
+                      <div class="filter">
+                        <mat-form-field class="cs-input cs-date-picker">
+                          <input placeholder="Date" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getCustomerService()"  [matDatepicker]="picker1" >
+                          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      
+                    </th>                   
+                    <th class="">Created By</th>
+                    <th class="">Regn No.</th>
+                    <th class="w80">Vehicle</th>
+                    <th class="w80">Plan Name</th>
+                    <th class="w80">Visit No.</th>
+                    <!-- <th class="w70">Total Visit</th> -->
+                    <th class="w80">Due Date</th>
+                    <th class="">Closing Date</th>
+                    <th class="">
+                      
+                      <div class="filter">
+                        <mat-form-field>
+                          <mat-select placeholder="status" [(ngModel)]="filter.status" (selectionChange)="getCustomerService()">
+                            <mat-option value="">All</mat-option>
+                            <mat-option value="Done">Done</mat-option>
+                            <mat-option value="Pending">Pending</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      
+                    </th>  
+                    <th class="w70">JC No.</th>
+                    <th>Invoice No.</th>
+                  </tr>
+                </table>
+              </div>
+              <div class="table-container">
+                <div class="table-body">
+                  <table class="sno-border">
+                    <tr *ngFor="let servce of preventive_servicelist;let i = index;">
+                      <td class="w30 text-center">{{i+1}}</td>
+                      <td class="w100">{{servce.date_created | date: 'dd MMM yyyy'}}</td>
+                      <td class="">{{servce.created_name}}</td>
+                      <td class="">{{servce.regn_no}}</td>
+                      <td class="w80">{{servce.vehicle_type}}-{{servce.model}}</td>
+                      <td class="w80">{{servce.plan_name}}</td>
+                      <td class="w80">{{servce.visit_no}}</td>
+                      <!-- <td class="w70">{{servce.total_visit}}</td> -->
+                      <td class="w80">{{servce.due_date | date: 'dd MMM yyyy'}}</td>
+                      <td class="">{{ servce.closing_date != '0000-00-00' ? (servce.closing_date | date: 'dd MMM yyyy' ) : '' }}</td>
+                      <td class="">{{ ( servce.jc_id != '0' && servce.invoice_id != '0' ) ? 'Done' :  ( servce.jc_id != '0' ? 'Open' : 'Pending' )  }}</td>
+                      <td class="w70"><a mat-button class="link" routerLink="/franchise/customer_jobcard-detail/{{franchise_id |crypt}}/{{id |crypt}}/{{servce.jc_id |crypt}}" routerLinkActive="active">{{servce.jc_id ? '#JC'+servce.jc_id : ''}}</a></td>
+                      <td>
+                        <a *ngIf="servce.invoice_id != '' " class="link" routerLink="/franchise/customer_invoice_detail/{{franchise_id |crypt}}/{{id |crypt}}/{{servce.invoice_id |crypt}}" routerLinkActive="active">{{servce.prfx_invoice_id}}</a>                      
+                        <a *ngIf="servce.invoice_id == '' && servce.jc_id == '' "  class="view green-clr"  routerLink="/addjobcard/{{id |crypt}}/{{servce.id |crypt}}/{{franchise_id |crypt}}" routerLinkActive="active" style="cursor:pointer;"> Create Job Card</a>
+                        <!-- <div class="action-btns" *ngIf="servce.invoice_id == '' && servce.jc_id == '' ">
+                          <div class="outer">
+                            <div class="innear">
+                            </button>                               
+                          </div>
+                        </div>
+                      </div> -->
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>      
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>

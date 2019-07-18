@@ -1,0 +1,192 @@
+<form name="form" (ngSubmit)="f.form.valid && saveDirectCustomer(f)" #f="ngForm" novalidate>
+  <mat-dialog-content class="convert-franchies-modle" style="overflow-x: hidden;">
+    <div class="header" style="padding: 0px 10px 10px 10px;">
+      <h1>Direct Customer</h1>
+      <button mat-button color="primary" mat-dialog-close class="mr0"><i class="material-icons">clear</i></button>
+    </div>
+    
+    <div class="form-field" style="padding: 0px 15px;">
+      <div class="row">
+
+          <div class="col-12">
+              <div class="row">
+                <div class="control-field col-3">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="NAME" name="name" [(ngModel)]="cust_data.name" required>
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-3">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="CONTACT NO." name="contact_no" [(ngModel)]="cust_data.contact_no"  required>
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-3">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="EMAIL"  name="email_id" [(ngModel)]="cust_data.email_id" >
+                  </mat-form-field>
+                </div>
+                
+                
+                
+              </div>
+            </div>
+
+            
+        <div class="col-12">
+          <div class="row">
+            <div class="control-field col-3">
+              <mat-form-field class="example-full-width cs-input">
+                <input matInput placeholder="COMPANY NAME" name="company_name" [(ngModel)]="cust_data.company_name" required>
+              </mat-form-field>
+            </div>
+            <div class="control-field col-3">
+              <mat-form-field class="example-full-width cs-input">
+                <input matInput placeholder="Company Contact No." name="company_contact_no" [(ngModel)]="cust_data.company_contact_no"  required>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="example-full-width cs-input">
+                <input matInput placeholder="Company EMAIL"  name="company_email_id" [(ngModel)]="cust_data.company_email_id" >
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="example-full-width cs-input">
+                <input matInput placeholder="Company GSTIN"  name="company_gstin" [(ngModel)]="cust_data.company_gstin">
+              </mat-form-field>
+            </div>
+            
+          </div>
+        </div>
+
+ 
+
+        
+        <div class="col-12">
+          <div class="row">
+            
+            <div class="control-field col-3">
+              <mat-form-field class="cs-multi-select">
+                <mat-select placeholder="Country"  name="country_id" [(ngModel)]="cust_data.country_id" (selectionChange)="getStateList()" required>
+                    <mat-option *ngFor="let val of countries" [value]="val.id"> {{val.name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="cs-multi-select"  >
+                <mat-select placeholder="STATE" name="state" [(ngModel)]="cust_data.state" (selectionChange)="getDistrictList()" required>
+                    <mat-option *ngFor = "let val of states" [value]="val.state_name"> {{val.state_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="cs-multi-select"  >
+                <mat-select placeholder="DISTRICT" name="district" [(ngModel)]="cust_data.district" (selectionChange)="getCityList()" required>
+                    <mat-option *ngFor="let val of districts" [value]="val.district_name"> {{val.district_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="example-full-width cs-input">
+                <input matInput placeholder="CITY"  name="city" [(ngModel)]="cust_data.city">
+              </mat-form-field>
+
+            </div>
+          </div>
+        </div>
+
+       
+
+
+        <div class="col-12">
+          <div class="row">
+            
+            <div class="control-field col-3">
+              <mat-form-field class="cs-multi-select">
+                <mat-select placeholder="Shipping Country"  name="ship_country_id" [(ngModel)]="cust_data.ship_country_id" (selectionChange)="ship_getStateList()" required>
+                    <mat-option *ngFor="let val of ship_countries" [value]="val.id"> {{val.name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="cs-multi-select"  >
+                <mat-select placeholder="Shipping STATE" name="ship_state" [(ngModel)]="cust_data.ship_state" (selectionChange)="ship_getDistrictList()" required>
+                    <mat-option *ngFor = "let val of ship_states" [value]="val.state_name"> {{val.state_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="cs-multi-select"  >
+                <mat-select placeholder="Shipping DISTRICT" name="ship_district" [(ngModel)]="cust_data.ship_district" (selectionChange)="ship_getCityList()" required>
+                    <mat-option *ngFor="let val of ship_districts" [value]="val.district_name"> {{val.district_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="control-field col-3">
+              <mat-form-field class="example-full-width cs-input">
+                <input matInput placeholder="Shipping CITY"  name="ship_city" [(ngModel)]="cust_data.ship_city">
+              </mat-form-field>
+
+            </div>
+          </div>
+        </div>
+
+
+  
+        <div class="col-12">
+            <div class="row">
+              <div class="control-field col-3">
+                  <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Pincode" name="pincode"  [(ngModel)]="cust_data.pincode" #pincode="ngModel" required>
+                          <mat-option *ngFor="let val of pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              
+              
+              <div class="control-field col-9">
+                <mat-form-field class="example-full-width cs-input">
+                  <textarea matInput placeholder="ADDRESS" class="h" name="address" [(ngModel)]="cust_data.address"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+         
+          <div class="row">
+            <div class="control-field col-3">
+                <mat-form-field class="cs-multi-select">
+                    <mat-select placeholder="Shipping Pincode" name="ship_pincode"  [(ngModel)]="cust_data.ship_pincode" #ship_pincode="ngModel" required>
+                        <mat-option *ngFor="let val of ship_pincodes" [value]="val.pincode"> {{val.pincode}} </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
+            
+            <div class="control-field col-9">
+              <mat-form-field class="example-full-width cs-input">
+                <textarea matInput placeholder="Shipping ADDRESS" class="h" name="ship_address" [(ngModel)]="cust_data.ship_address"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions  align="end">
+    <div class="cs-btn fixedd pr10">
+      <div class="in-btn">
+        <button type="submit" mat-raised-button color="warn">Save</button>
+      </div>
+    </div>
+  </mat-dialog-actions>
+</form>

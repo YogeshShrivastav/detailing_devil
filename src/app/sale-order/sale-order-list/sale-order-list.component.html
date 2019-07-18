@@ -1,0 +1,103 @@
+<div class="main-container"> 
+    <div class="master-heading">
+        <div class="vl-info">
+            <ul>
+                <li><p class="light" (click)="salesOrderList()" style="cursor:pointer;">Total Order : <span class="black-clr">{{totalorder}}</span></p></li>
+                <li><p class="light" (click)="salesOrderList('Approved')" style="cursor:pointer;">Approved Order : <span class="red-clr">{{approved_order}}</span></p></li>
+                <li><p class="light" (click)="salesOrderList('Pending')" style="cursor:pointer;" > Pending Order : <span class="red-clr">{{pendingorder}}</span></p></li>
+            </ul>
+        </div>
+        <div class="top-search wp30 ml30">    
+            <input type="text" placeholder="SEARCH. . ." [(ngModel)]="filter.search"  (keyup.enter)="current_page = 1;salesOrderList()">
+            <i class="material-icons">search</i>
+        </div>
+        <div class="top-pagination m-right-data">
+            <ul>
+                <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO"  [(ngModel)]="current_page"  (keyup.enter)="salesOrderList()"></li>
+                <li><button mat-button class="right-btn"  (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div>
+    </div>
+    <div class="all-container">
+        <div class="cs-row">
+            <div class="right-data">
+                <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                        <mat-spinner></mat-spinner>
+                        <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="loading_list && (orderList.length > 0 || filtering)" class="cs-table header-fixed">
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w30 border-right-none"></th>
+                                <th class="w220">
+                                    <div class="filter">
+                                
+                                            <mat-form-field class="cs-input cs-date-picker">
+                                            <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="salesOrderList()" [matDatepicker]="picker" >
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+    
+                                </th>
+                                <th>Franchise</th>
+                                <th class="w140 text-center">Contact No</th>
+                                <th class="w150 text-center">Order ID </th>
+                                <th class="w140 text-center">Total Item</th>
+                                <th class="w140 text-center">Order Value</th>
+                                <th class="w140">
+                                    <div class="filter">
+                                        <mat-form-field class="w80">
+                                            <mat-select placeholder="Status">
+                                                <mat-option value="option0" (click)="salesOrderList()">All</mat-option>
+                                                <mat-option value="option1" (click)="salesOrderList('Pending')">PENDING</mat-option>
+                                                <mat-option value="option2" (click)="salesOrderList('Approved')">APPROVED</mat-option>
+                                                <mat-option value="option3" (click)="salesOrderList('Rejected')">REJECT</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                              
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let row of orderList;let i = index">
+                                    <td class="w30 text-center">{{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }}</td>
+                                    <td class="w220">{{row.date_created}}/ {{row.created_name}}</td>
+    
+                                    <td><a mat-button class="link" routerLink="/franchise-detail/{{row.franchise_id |crypt}}" routerLinkActive="active"> {{row.company_name }}  </a></td>
+                                    <td class="w140 text-center">{{row.contact_no}}</td>
+                                    <td class="w150 text-center">
+                                        <a mat-button class="link" routerLink="/sale-order-detail/{{row.id |crypt}}" routerLinkActive="active">#{{row.id}}</a>
+                                    </td>
+                                    <td class="w140 text-center">{{row.totalItem}}</td>
+                                    <td class="w140 text-center">&#8377; {{row.order_total}}</td>
+                                    <td class="w140 ft-wt yellow-clr">
+                                        {{row.order_status}} 
+                                        <div class="action-btns">
+                                            <a mat-button class="view" routerLink="/sale-order-detail/{{row.id |crypt}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                                        </div>     
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

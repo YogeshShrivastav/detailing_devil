@@ -1,0 +1,90 @@
+<div class="main-container"> 
+    <div class="master-heading">
+        <div class="vl-info">
+            <ul>
+                <li>
+                    <p class="light">
+                        Jobcard : 
+                        <!-- <span class="black-clr">25/</span> -->
+                        <span class="green-clr">{{job_card.length}}</span>
+                    </p>
+                </li>
+                
+                <!-- <li>
+                    <p class="light"> Total Amount : 
+                        <span class="black-clr">&#8377; 2,56,420 /</span>
+                        <span class="green-clr">10</span>
+                    </p>
+                </li> -->
+            </ul>
+        </div>
+        
+        <!-- <div class="top-pagination m-right-data">
+            <ul>
+                <li><p>Pages 2 of 6</p></li>
+                <li><button mat-button class="left-btn"><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO"></li>
+                <li><button mat-button class="right-btn"><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div> -->
+    </div>
+    <div class="all-container">
+        <div class="cs-row">
+            <div class="right-data">
+                <div class="cs-table header-fixed">
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w120">JobCard ID</th>
+                                <th class="w170">Name</th>
+                                <th >Email</th>
+                                <th class="w120">Contact No</th>
+                                <th class="w180">Vehicle type</th>
+                                <th class="w100">Registration</th>
+                                <th class="w140">Year</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                        <div class="outer">
+                            <div class="innear">
+                                <mat-spinner></mat-spinner>
+                                <P>LOADING . . .</P>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-container" *ngIf = "loading_list">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let val of job_card">
+                                    <td class="w120"><a mat-button class="link" routerLink="/franchise/customer_jobcard-detail/{{val.franchise_id |crypt}}/{{val.customer_id |crypt}}/{{val.id |crypt}}" routerLinkActive="active" >#{{val.id}}</a></td>
+                                    <td class="w170">
+                                        {{val.first_name}} {{val.last_name}}
+                                    </td>
+                                    <td>{{val.email}}</td>
+                                    <td class="w120">{{val.phone}}</td>
+                                    <td class="w180">{{val.vehicle_type}}</td>
+                                    <td class="w100">{{val.regn_no}}</td>
+                                    <td class="w140">
+                                            {{val.year}}
+                                        <div class="action-btns">
+                                            <div class="outer">
+                                                <div class="innear">
+                                                    <a mat-button class="view" routerLink="/franchise/customer_jobcard-detail/{{val.franchise_id |crypt}}/{{val.customer_id |crypt}}/{{val.id |crypt}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                                                    <a mat-button class="edit" routerLink="/editjobcard/{{val.id |crypt}}" routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                                                    <!-- <button mat-button class="delete" (click)="jc_delete(val.id)"><i class="material-icons">delete_sweep</i> Delete</button> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

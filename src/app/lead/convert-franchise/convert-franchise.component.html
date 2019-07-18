@@ -1,0 +1,109 @@
+<mat-dialog-content class="full-width-modal convert-franchies-modle" style="min-width:1024px; min-height: 300px; max-height: auto;">
+    <div class="header">
+        <h1>FRANCHISE CONVERT</h1>
+        <button mat-button color="primary" mat-dialog-close><i class="material-icons">clear</i></button>
+    </div>
+    <div class="cs-spinner full-page" *ngIf = "!loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+    <div class="m-body">
+        <div class="row">
+            <div class="col-3 plan-list">
+                <div class="head">
+                    <div class="cs-heading">
+                        <h2>Franchise Plan</h2>
+                    </div>                    
+                    <div class="search">
+                        <button mat-button><i class="material-icons">search</i></button>
+                    </div>
+                </div>                
+                <div class="listing">
+                    <mat-radio-group [(ngModel)]="franch_stock.plan_id" (change)="get_stock()" name="plan_id">
+                        <mat-radio-button [value]="row.id" *ngFor="let row of service_plans; let i = index;" >{{row.plan.toUpperCase()}}</mat-radio-button>                        
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="col-9 plan-data" *ngIf="!plan_data.plan">
+                <div class="cs-heading">
+                    <h2>Select a Plan</h2>
+                </div>
+            </div>
+            <div class="col-9 plan-data" *ngIf="plan_data.plan">
+                <div class="cs-heading">
+                    <h2>Franchise Plan</h2>
+                </div>
+                
+                <div class="side-by-side">
+                    <div class="figure">
+                        <p>Plan Name</p>
+                        <p>{{plan_data.plan}}</p>
+                    </div>
+                    <div class="figure">
+                        <p>Description</p>
+                        <p>{{plan_data.description}}</p>
+                    </div>
+                    <div class="figure">
+                        <p>Price</p>
+                        <p>{{plan_data.price}}</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cs-table left-right-15">
+                            <div class="header pt0 pb0 wp100">
+                                <table>
+                                    <tr>
+                                        <th class="w150">Category</th>
+                                        <th class="w150">Brand Name</th>
+                                        <th>Product Name</th>
+                                        <th class="w120">HSN</th>
+                                        <th class="w150">Initial Stock</th>
+                                        <th class="w90">QTY. </th>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="table-container">
+                                <div class="table-body">
+                                    <table >                                
+                                        <tr *ngFor="let val of stock;let i = index">
+                                            <td class="w150">{{val[1].category}}</td>
+                                            <td class="w150">{{val[1].brand}}</td>
+                                            <td>{{val[1].product}} {{val[1].attribute_type}} {{val[1].attribute_option}}</td>
+                                            <td class="w120">{{val[1].hsn_code}}</td>
+                                            <td class="w240" colspan="2">
+                                                <table>
+                                                    <tr  *ngFor="let m of val[0];let x = index">
+                                                        <td>{{m.unit_measurement}}</td>
+                                                        <td [ngClass]="{'active':a == i && b == x }">
+                                                            {{m.quantity}}                                   
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>     
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end"   [ngClass]="{loading: savingData}">
+    <div class="cs-btn fixedd pr10">
+        <button  mat-raised-button color="primary" [attr.disabled]="savingData"  (click)="convert_lead_to_franchise()">SAVE</button>
+    </div>
+</mat-dialog-actions> 
+

@@ -1,0 +1,59 @@
+
+<form name="form" (ngSubmit)="f.form.valid && saveFollowUp()" #f="ngForm" novalidate>
+  <mat-dialog-content class="convert-franchies-modle di-hidden">
+      <div class="header" style="padding: 0px 10px 10px 10px;">
+          <h1>CREATE FOLLOWUP</h1>
+          <button mat-button color="primary" mat-dialog-close class="mr0"><i class="material-icons">clear</i></button>
+      </div>
+      <div class="m-body form-field pl15 pr30">
+          <div class="row">
+              <div class="control-field col-12">
+                  <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Followup Type" name="follow_type" [(ngModel)] = "form.follow_type" #follow_type="ngModel" required>
+                        <mat-option *ngFor="let type of followUpTypes; let i = index" [value]="type">
+                          <small>{{ type }}</small>
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !follow_type.valid" >This field is required</mat-error>
+              </div>
+              <div class="control-field col-12">
+                  <mat-form-field class="example-full-width cs-input">
+                      <textarea matInput placeholder="Remark" name="description" [(ngModel)] = "form.description" #description="ngModel" required></textarea>
+                  </mat-form-field>
+                  <mat-error color="primary" *ngIf="f.submitted && !description.valid" >This field is required</mat-error>
+              </div>
+              <div class="control-field col-12">
+              <mat-form-field class="cs-multi-select">
+                <mat-select placeholder="Next Followup Type" name="next_follow_type" [(ngModel)] = "form.next_follow_type" #next_follow_type="ngModel">
+                  <mat-option *ngFor="let type of nextFollowUpTypes; let i = index" [value]="type">
+                    <small>{{ type }}</small>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error color="primary" *ngIf="f.submitted && !follow_type.valid" >This field is required</mat-error>
+            </div>
+              <div class="control-field col-12">
+                  <mat-form-field class="cs-input cs-date-picker">
+                      <input matInput [matDatepicker]="picker" placeholder="Next Followup Date" readonly name="next_follow_date" [(ngModel)] = "form.next_follow_date" #next_follow_date="ngModel">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                <mat-error color="primary" *ngIf="f.submitted && !next_follow_date.valid" >This field is required</mat-error>
+              </div>
+          </div>
+      </div>
+  </mat-dialog-content>
+
+  <!-- ACTIONS BUTTONS -->
+
+  <mat-dialog-actions align="end">
+    <div class="cs-btn fixedd pr10" [ngClass]="{loading: sendingData}">
+      <div class="in-btn">
+        <button type="submit" [disabled]="sendingData" mat-raised-button color="warn">Save</button>
+      </div>
+    </div>
+      <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+  </mat-dialog-actions>
+
+</form>

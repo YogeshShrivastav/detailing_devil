@@ -1,0 +1,147 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="top-search wp30 ml30">
+            <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="getProductList()">
+            <i class="material-icons">search</i>
+        </div>
+        
+        <div class="m-right-data action-btns-right vl-info" >
+            <ul>
+                <li class="create"><a routerLink="/add-finish-good" routerLinkActive="active"   mat-button>Add Finish Good</a></li>
+            </ul>
+        </div> 
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <app-stock-tab></app-stock-tab>
+            <div class="right-data tabs-listing">
+                <div class="cs-spinner full-page" *ngIf = "loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                <div class="cs-table mt15">
+                    <div class="header sticky-header">
+                        <table class="sno-border">
+                            <tr>
+                                <th class="w150">Brand</th>
+                                <th class="w250">Product</th>
+                                <th class="w120 text-center">UOM</th>
+                                <th class="w150 text-center">QTY.</th>
+                                <th>Description</th> 
+                                <th class="w200 text-center">Action</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let product of products; let i = index">
+                                    <td class="w150">{{ product.brand_name }}</td>
+                                    <td class="w250">{{ product.product_name }}</td>
+                                    <td class="w120 text-center in-table">
+                                        
+                                        <ng-container *ngFor="let units of unit_prices">
+                                            <table>
+                                                <ng-container *ngFor="let val of units; let i = index">
+                                                    <ng-container *ngIf="val.product_id == product.id">
+                                                        <tr>
+                                                            <td class="text-center">{{ val.unit_of_measurement }}</td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </table>
+                                        </ng-container>
+                                    </td>
+                                    
+                                    <td class="w150 text-center in-table">
+                                        <ng-container *ngFor="let units of stock_qty; let u = index">
+                                            <table>
+                                                <ng-container *ngFor="let val of units; let i = index">
+                                                    <ng-container *ngIf="val.product_id == product.id; let v = index">
+                                                        <tr *ngIf="val.product_id == product.id">
+                                                            <td class="text-center">
+                                                                
+                                                                <div class="edit-td-input" >
+                                                                    {{val.sale_qty}}
+                                                                    <i class="material-icons td-icon edit-icon" (click)="val.updated_at = '' " *ngIf="val.updated_at">library_add</i>
+                                                                    
+                                                                    
+                                                                </div>
+                                                                
+                                                            </td>
+                                                            
+                                                            
+                                                            
+                                                            <td class="text-center">
+                                                                
+                                                                <div class="edit-td-input" [ngClass]="{'active' : val.updated_at == '' }">
+                                                                    
+                                                                    
+                                                                    <input  placeholder="Qty." [(ngModel)]="val.add_qty" type="number" [name]="'add_qty'+i+v" #add_qty="ngModel" required [readonly]="val.updated_at">
+                                                                    
+                                                                    
+                                                                    <i class="material-icons td-icon save-icon" (click)="update_stock()" *ngIf="val.updated_at == ''">save</i>
+                                                                    
+                                                                </div>
+                                                                
+                                                            </td>
+                                                            
+                                                            
+                                                            
+                                                            
+                                                        </tr>
+                                                        
+                                                    </ng-container>
+                                                </ng-container>
+                                            </table>
+                                        </ng-container>
+                                    </td> 
+                                    
+                                    <td>
+                                        <ng-container *ngFor="let units of stock_qty">
+                                            <table>
+                                                <ng-container *ngFor="let val of units; let i = index">
+                                                    <ng-container *ngIf="val.product_id == product.id">
+                                                        <tr >
+                                                            <td>{{ val.description  }}</td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </table>
+                                        </ng-container>
+                                    </td>
+                                    
+                                    <td class="w200 text-center in-table">
+                                        <ng-container *ngFor="let units of stock_qty">
+                                            <table>
+                                                <ng-container *ngFor="let val of units; let i = index">
+                                                    <ng-container *ngIf="val.product_id == product.id">
+                                                        <tr>
+                                                            <td class="text-center">
+                                                                <a mat-button  class="link"  (click)="val.updated_at = '1'; add(0) " *ngIf="val.updated_at == '' ">Cancel</a>
+                                                                <a mat-button  routerLink="/finish-material-detail/{{val.product_id}}/{{val.id}}" routerLinkActive="active"  class="link">Transaction</a>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </table>
+                                        </ng-container>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

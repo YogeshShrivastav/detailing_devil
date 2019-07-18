@@ -1,0 +1,135 @@
+<div class="main-container"> 
+    
+    
+    <div class="master-heading">
+        <div class="vl-info">
+            <ul>
+                <li>
+                    <p>
+                        From 
+                        <mat-form-field class="master-head-date">
+                            <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="search.date_from" name="date_from" #date_form="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </p> 
+                </li>
+                <li>
+                    <p>
+                        To
+                        <mat-form-field class="master-head-date">
+                            <input matInput [matDatepicker]="date" placeholder="Choose a date" [(ngModel)]="search.date_to" name="date_to" #date_to="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                            <mat-datepicker #date></mat-datepicker>
+                        </mat-form-field>
+                    </p>
+                </li>
+                <li class="af-none">
+                    <div class="cs-btn">
+                        <div class="in-btn ">
+                            <button (click)="OrderList();" mat-raised-button color="warn" class="h30-btn">Search</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="top-pagination m-right-data">
+            <ul>
+                    <li class="refresh-area">
+                            <a class="refresh-btn" mat-raised-button  matTooltip="Refresh" (click)="OrderList('refresh');" ><i class="material-icons"> refresh</i></a>
+                        </li>
+                <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO"  [(ngModel)]="current_page"  (keyup.enter)="OrderList('refresh')"></li>
+                <li><button mat-button class="right-btn"  (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+                <app-report-tab></app-report-tab>
+            <div class="right-data tabs-listing">
+                <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                
+                <div *ngIf="loading_list && (orderList.length > 0)" class="cs-table header-fixed" #exportData>
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w150">Date</th>
+                                <th class="w150">Created By</th>
+                                <th class="w150 text-center">Order ID </th>
+                                <th>
+                                    <div class="filter">
+                                        <mat-form-field class="w80">
+                                            <mat-select placeholder="Franchise">
+                                                <mat-option *ngFor="let f of franchiseList"  value="{{f.id}}" (click)="GetFranchiseName(f.name); OrderList();">{{f.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th class="w140 text-center">Total Item</th>
+                                <th class="w140 text-center">Order Value</th>
+                                <th class="w140">
+                                    <div class="filter">
+                                        <mat-form-field class="w80">
+                                            <mat-select placeholder="Status">
+                                                <mat-option value="option0" (click)="GetStatus('All'); OrderList();">All</mat-option>
+                                                <mat-option value="option1" (click)="GetStatus('Pending'); OrderList();">PENDING</mat-option>
+                                                <mat-option value="option2" (click)="GetStatus('Approved'); OrderList();">APPROVED</mat-option>
+                                                <mat-option value="option3" (click)="GetStatus('Rejected'); OrderList();">REJECT</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let row of orderList">
+                                    <td class="w150">{{row.date_created | date: 'd-MMM-y'}}</td>
+                                    <td class="w150">{{row.created_by_type}}</td>
+                                    <td class="w150 text-center">
+                                        <a mat-button class="link" routerLink="/sale-order-detail/{{row.id}}" routerLinkActive="active">#{{row.id}}</a>
+                                    </td>
+                                    <td><a mat-button class="link" routerLink="/franchise-detail/{{row.franchise_id}}" routerLinkActive="active"> {{row.name}} </a></td>
+                                    <td class="w140 text-center">{{row.totalItem}}</td>
+                                    <td class="w140 text-center">&#8377; {{row.order_total}}</td>
+                                    <td class="w140 ft-wt yellow-clr">
+                                        {{row.order_status}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+
+
+        <div class="fix-btn-group">
+            <ul>
+                <li>
+                    <a class="botm-btn" matRipple  matTooltipPosition="before" matTooltip="Export Excel" (click)="exportToExcel();">
+                        <i class="material-icons">file_download</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

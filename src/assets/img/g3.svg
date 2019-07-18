@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="478" height="380.5" viewBox="0 0 478 380.5">
+  <defs>
+    <filter id="Rectangle_805" x="0" y="0" width="478" height="380.5" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_767" x="310.949" y="54.209" width="33" height="33" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_767-2" x="310.949" y="105.105" width="33" height="33" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-3"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_767-3" x="310.949" y="156" width="33" height="33" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-4"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-4"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_767-4" x="310.949" y="206.896" width="33" height="33" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-5"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-5"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_767-5" x="310.949" y="257.791" width="33" height="33" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-6"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-6"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_766" x="40" y="73" width="198" height="198" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-7"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-7"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_1006" data-name="Group 1006" transform="translate(-876 -530)">
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_805)">
+      <rect id="Rectangle_805-2" data-name="Rectangle 805" width="460" height="362.5" transform="translate(9 6)" fill="#fff"/>
+    </g>
+    <rect id="Rectangle_806" data-name="Rectangle 806" width="186" height="20" rx="4" transform="translate(1154 541)" fill="#ccc"/>
+    <rect id="Rectangle_811" data-name="Rectangle 811" width="57" height="20" rx="4" transform="translate(1130.559 541)"/>
+    <text id="WEEK" transform="translate(1143.098 555)" fill="#fff" font-size="10" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600" letter-spacing="0.16em"><tspan x="0" y="0">WEEK</tspan></text>
+    <text id="MONTH" transform="translate(1212.191 555)" font-size="10" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600" letter-spacing="0.16em"><tspan x="0" y="0">MONTH</tspan></text>
+    <line id="Line_446" data-name="Line 446" y2="10" transform="translate(1284.5 546.5)" fill="none" stroke="rgba(0,0,0,0.19)" stroke-width="1"/>
+    <text id="Franchise_wise_customer_top_5_" data-name="Franchise wise customer &quot; top 5 &quot;" transform="translate(890 557)" font-size="14" font-family="SegoeUI-Light, Segoe UI" font-weight="300" opacity="0.49"><tspan x="0" y="0">Franchise wise customer &quot; top 5 &quot;</tspan></text>
+    <text id="Franchise_1" data-name="Franchise  1" transform="translate(1226 603)" font-size="14" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0" xml:space="preserve">Franchise  1</tspan></text>
+    <text id="Franchise_2" data-name="Franchise  2" transform="translate(1226 653.979)" font-size="14" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0" xml:space="preserve">Franchise  2</tspan></text>
+    <text id="Franchise_3" data-name="Franchise  3" transform="translate(1226 704.958)" font-size="14" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0" xml:space="preserve">Franchise  3</tspan></text>
+    <text id="Franchise_4" data-name="Franchise  4" transform="translate(1226 755.937)" font-size="14" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0" xml:space="preserve">Franchise  4</tspan></text>
+    <text id="Franchise_5" data-name="Franchise  5" transform="translate(1226 806.915)" font-size="14" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0" xml:space="preserve">Franchise  5</tspan></text>
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_767)">
+      <rect id="Rectangle_767-6" data-name="Rectangle 767" width="15" height="15" transform="translate(319.95 60.21)" fill="#00a784"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_767-2)">
+      <rect id="Rectangle_767-7" data-name="Rectangle 767" width="15" height="15" transform="translate(319.95 111.1)" fill="#fc3702"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_767-3)">
+      <rect id="Rectangle_767-8" data-name="Rectangle 767" width="15" height="15" transform="translate(319.95 162)" fill="#fd8d14"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_767-4)">
+      <rect id="Rectangle_767-9" data-name="Rectangle 767" width="15" height="15" transform="translate(319.95 212.9)" fill="#d60236"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_767-5)">
+      <rect id="Rectangle_767-10" data-name="Rectangle 767" width="15" height="15" transform="translate(319.95 263.79)" fill="#4ad95a"/>
+    </g>
+    <g id="Rectangle_816" data-name="Rectangle 816" transform="translate(885 828.5)" fill="#ccc" stroke="#000" stroke-width="1" opacity="0.4">
+      <rect width="92" height="70" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="69" fill="none"/>
+    </g>
+    <g id="Rectangle_817" data-name="Rectangle 817" transform="translate(885 828.5)" fill="#a8a8a8" stroke="#707070" stroke-width="1">
+      <rect width="92" height="20" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="19" fill="none"/>
+    </g>
+    <g id="Rectangle_814" data-name="Rectangle 814" transform="translate(976 828.5)" fill="#ccc" stroke="#000" stroke-width="1" opacity="0.4">
+      <rect width="92" height="70" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="69" fill="none"/>
+    </g>
+    <g id="Rectangle_815" data-name="Rectangle 815" transform="translate(976 828.5)" fill="#a8a8a8" stroke="#707070" stroke-width="1">
+      <rect width="92" height="20" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="19" fill="none"/>
+    </g>
+    <g id="Rectangle_812" data-name="Rectangle 812" transform="translate(1067 828.5)" fill="#ccc" stroke="#000" stroke-width="1" opacity="0.4">
+      <rect width="92" height="70" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="69" fill="none"/>
+    </g>
+    <g id="Rectangle_813" data-name="Rectangle 813" transform="translate(1067 828.5)" fill="#a8a8a8" stroke="#707070" stroke-width="1">
+      <rect width="92" height="20" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="19" fill="none"/>
+    </g>
+    <g id="Rectangle_809" data-name="Rectangle 809" transform="translate(1158 828.5)" fill="#ccc" stroke="#000" stroke-width="1" opacity="0.4">
+      <rect width="92" height="70" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="69" fill="none"/>
+    </g>
+    <g id="Rectangle_810" data-name="Rectangle 810" transform="translate(1158 828.5)" fill="#a8a8a8" stroke="#707070" stroke-width="1">
+      <rect width="92" height="20" stroke="none"/>
+      <rect x="0.5" y="0.5" width="91" height="19" fill="none"/>
+    </g>
+    <g id="Rectangle_807" data-name="Rectangle 807" transform="translate(1249 828.5)" fill="#ccc" stroke="#000" stroke-width="1" opacity="0.4">
+      <rect width="96" height="70" stroke="none"/>
+      <rect x="0.5" y="0.5" width="95" height="69" fill="none"/>
+    </g>
+    <g id="Rectangle_808" data-name="Rectangle 808" transform="translate(1249 828.5)" fill="#a8a8a8" stroke="#707070" stroke-width="1">
+      <rect width="96" height="20" stroke="none"/>
+      <rect x="0.5" y="0.5" width="95" height="19" fill="none"/>
+    </g>
+    <text id="_142" data-name="142" transform="translate(919 880)" font-size="16" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0">142</tspan></text>
+    <text id="_108" data-name="108" transform="translate(1010 880)" font-size="16" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0">108</tspan></text>
+    <text id="_68" data-name="68" transform="translate(1104 880)" font-size="16" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0">68</tspan></text>
+    <text id="_45" data-name="45" transform="translate(1195 880)" font-size="16" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0">45</tspan></text>
+    <text id="_24" data-name="24" transform="translate(1288 880)" font-size="16" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0">24</tspan></text>
+    <text id="Franchise_1-2" data-name="Franchise  1" transform="translate(900 843.5)" fill="#fff" font-size="12" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0" xml:space="preserve">Franchise  1</tspan></text>
+    <text id="Franchise_2-2" data-name="Franchise  2" transform="translate(990 843.5)" fill="#fff" font-size="12" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0" xml:space="preserve">Franchise  2</tspan></text>
+    <text id="Franchise_3-2" data-name="Franchise  3" transform="translate(1081 843.5)" fill="#fff" font-size="12" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0" xml:space="preserve">Franchise  3</tspan></text>
+    <text id="Franchise_4-2" data-name="Franchise  4" transform="translate(1172 843.5)" fill="#fff" font-size="12" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0" xml:space="preserve">Franchise  4</tspan></text>
+    <text id="Franchise_5-2" data-name="Franchise  5" transform="translate(1265 843.5)" fill="#fff" font-size="12" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0" xml:space="preserve">Franchise  5</tspan></text>
+    <g transform="matrix(1, 0, 0, 1, 876, 530)" filter="url(#Rectangle_766)">
+      <rect id="Rectangle_766-2" data-name="Rectangle 766" width="180" height="180" rx="90" transform="translate(49 79)" fill="#00a784"/>
+    </g>
+    <path id="Path_280" data-name="Path 280" d="M-12858,4331l-2.083-89.917a92.368,92.368,0,0,1,38.75,7.833,91.777,91.777,0,0,1,31.666,23.583Z" transform="translate(13873 -3632)" fill="#fc3702"/>
+    <path id="Path_281" data-name="Path 281" d="M-12789.75,4272.667l-68.5,57.833,88-18.75s-2.583-13.083-7.583-22.083A115.962,115.962,0,0,0-12789.75,4272.667Z" transform="translate(13873 -3632)" fill="#fd8d14"/>
+    <path id="Path_282" data-name="Path 282" d="M-12770.75,4311.75l-87.75,19,37.667,82.083s28.916-8.667,44.166-43.167S-12770.75,4311.75-12770.75,4311.75Z" transform="translate(13873 -3632)" fill="#d60236"/>
+    <path id="Path_283" data-name="Path 283" d="M-12820.583,4412.833-12858.25,4330l20.417,88.833a73.63,73.63,0,0,0,9.833-2.583A47.654,47.654,0,0,0-12820.583,4412.833Z" transform="translate(13873 -3632)" fill="#4ad95a"/>
+    <text id="YEAR" transform="translate(1299 555)" font-size="10" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600" letter-spacing="0.16em"><tspan x="0" y="0">YEAR</tspan></text>
+  </g>
+</svg>

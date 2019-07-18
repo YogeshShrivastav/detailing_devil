@@ -1,0 +1,233 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button routerLink="/products" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="heading">
+            <h1>MASTER's</h1>
+        </div>
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <!-- TABS Component -->
+            <app-master-listing-tabs></app-master-listing-tabs>
+            <!-- TABS Component -->
+            <div class="right-data">
+              <div class="cs-spinner full-page" *ngIf = "!loading_data">
+                <div class="outer">
+                  <div class="innear">
+                    <mat-spinner></mat-spinner>
+                    <P>LOADING . . .</P>
+                  </div>
+                </div>
+              </div>
+              <form name="form" (ngSubmit)="f.form.valid && updateProduct()" #f="ngForm" novalidate *ngIf="loading_data">
+                <div class="contst">
+                    <div class="cs-heading">
+                        <h2>Edit Product - <span>{{ form.product }}</span></h2>
+                    </div>
+                    
+                    <div class="form-field">
+                        <div class="row">
+                          <div class="control-field col-3">
+                            <mat-form-field class="example-full-width cs-input select-input">
+                              <input matInput placeholder="Brand" [matAutocomplete]="brand" name="brand" [(ngModel)] = "form.brand" #brand="ngModel" required>
+                              <mat-autocomplete #brand="matAutocomplete">
+                                <mat-option *ngFor="let brand of filteredBrands | async" [value]="brand.name">
+                                  <small>{{ brand.name }}</small>
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="control-field col-3">
+                            <mat-form-field class="example-full-width cs-input select-input">
+                              <input matInput placeholder="Product Name" [matAutocomplete]="product" name="product" [(ngModel)] = "form.product" #product="ngModel" required>
+                              <mat-autocomplete #product="matAutocomplete">
+                                <mat-option *ngFor="let product of filteredProducts | async">
+                                  <small>{{ product.name }}</small>
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="control-field col-2">
+                            <mat-form-field class="example-full-width cs-input">
+                              <input matInput #gst name="gst" placeholder="GST" [(ngModel)]="form.gst">
+                            </mat-form-field>
+                          </div>
+
+                          <div class="control-field col-2">
+                              <mat-form-field class="example-full-width cs-input">
+                                <input matInput type="number" #hsn_code name="hsn_code" placeholder="HSN Code" [(ngModel)]="form.hsn_code" max="50" min="0" value="0" step="0.01">
+                              </mat-form-field>
+                            </div>
+
+                            <div class="control-field col-2">
+                              <mat-form-field class="example-full-width cs-input">
+                                <input matInput type="number" #stock_alert name="stock_alert" placeholder="Stock Alert" [(ngModel)]="form.stock_alert" max="50" min="0" value="0" step="0.01">
+                              </mat-form-field>
+                            </div>
+
+                        </div>
+                        
+                        <div class="sprate-box">
+                            <div class="row">
+
+                              <div class="control-field col-1">
+
+                                <!-- <mat-form-field class="example-full-width cs-input">
+                                  <input matInput #unit name="unit" placeholder="Unit of Measurement" [matAutocomplete]="measurement" [(ngModel)]="form.unit">
+                                  <mat-autocomplete #measurement="matAutocomplete">
+                                    <mat-option *ngFor="let measurement of filteredMeasurements | async" [value]="measurement.name">
+                                      <small>{{ measurement.name }}</small>
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                </mat-form-field> -->
+
+                                <mat-form-field class="cs-multi-select">
+                                    <mat-select placeholder="Measurement Type" name="unit" [(ngModel)]="data.measurement"  #unit="ngModel" >
+
+                                        <mat-option *ngFor="let list of measurementTypes" [value]="list.name">
+                                            <small>{{list.name}}</small>
+                                        </mat-option>
+
+                                    </mat-select>
+                                </mat-form-field>
+
+                              </div>
+
+                              <div class="control-field col-1">
+                                  <mat-form-field class="example-full-width cs-input">
+                                    <input matInput placeholder="{{(data.measurement=='box' || data.measurement=='pc') ? 'No of Pcs' : 'Measurement Qty'}}" [(ngModel)]="form.measurement_value" type="number" name="measurement_value" #measurement_value="ngModel">
+                                  </mat-form-field>
+                              </div>
+
+
+                              <div class="control-field col-2">
+                                <mat-form-field class="example-full-width cs-input inr-input">
+                                  <input matInput placeholder="Sale Price" #sale_price name="sale_price" [(ngModel)]="form.sale_price" type="number" name="sale_price" OnlyNumber="true" >
+                                </mat-form-field>
+                              </div>
+
+                              <div class="control-field col-2 pr70">
+                                <mat-form-field class="example-full-width cs-input inr-input">
+                                  <input matInput placeholder="Purchase Price" #purchase_price name="purchase_price" [(ngModel)]="form.purchase_price" type="number" name="purchase_price" OnlyNumber="true" >
+                                </mat-form-field>
+
+                              </div>
+
+                              
+                                  <div class="control-field col-3 pr70">
+
+                                      <mat-form-field class="example-full-width cs-input">
+                                              <textarea matInput placeholder="Description" class="h100" name="description" [(ngModel)] = "form.description" #description="ngModel"></textarea>
+                                              </mat-form-field>
+                                <div class="plus-btn">
+                                  <a mat-raised-button color="warn" (click)="storeUnitData(unit.value, measurement_value.value,sale_price.value, purchase_price.value,description.value)">
+                                    <i class="material-icons">add</i>
+                                  </a>
+                                </div>
+                              </div>
+
+                              <div class="cs-table" *ngIf="!!unitData?.length">
+                                <div class="header">
+                                  <table>
+                                    <tr>
+                                      <th>Measurement Type</th>
+                                      <th>Measurement Value</th>
+                                      <th>Sales Price</th>
+                                      <th>Purchase Price</th>
+                                      <th>Description</th>
+                                      <th class="w100">&nbsp;</th>
+                                    </tr>
+                                  </table>
+                                </div>
+                                <div class="table-container">
+                                  <div class="table-body">
+                                    <table>
+                                      <tr *ngFor="let data of unitData;  let i = index">
+                                        <td>{{ data.measurement }}</td>
+                                        <td>{{ data.measurement_value }}</td>
+                                        <td><span *ngIf="data.sale_price">{{ data.sale_price }} RS</span><span *ngIf="!data.sale_price">-</span></td>
+                                        <td><span *ngIf="data.purchase_price">{{ data.purchase_price }} RS</span><span *ngIf="!data.purchase_price">-</span></td>
+                                        <td>{{ data.description }}</td>
+                                        <td class="delete-icon text-center w100">
+                                          <a mat-button color="primary" (click)="removeUnitData(i, data.unit_id)">
+                                            <i class="material-icons">delete_sweep</i>
+                                          </a>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+
+                      <div class="row sprate-box">
+                        <div class="control-field col-4">
+                          <mat-form-field class="example-full-width cs-input select-input">
+                            <input #attr_type [name]="attr_type" matInput placeholder="Attribute Type" [matAutocomplete]="attrtype" [(ngModel)]="form.attr_type">
+                            <mat-autocomplete #attrtype="matAutocomplete">
+                              <mat-option *ngFor="let attrtype of filteredAttrTypes | async" [value]="attrtype.name">
+                                <small>{{ attrtype.name }}</small>
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                        <div class="control-field col-8 pr70">
+                          <mat-form-field class="example-full-width  cs-input">
+                            <input matInput placeholder="Attribute Options" #attr_options [name]="attr_options" [(ngModel)]="form.attr_options">
+                          </mat-form-field>
+                          <div class="plus-btn">
+                            <a mat-raised-button color="warn" (click)="storeAttrData(attr_type.value, attr_options.value)">
+                              <i class="material-icons">add</i>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="cs-table"  *ngIf="!!attrData?.length">
+                          <div class="header">
+                            <table>
+                              <tr>
+                                <th>Attribute Type</th>
+                                <th>Attribute Options</th>
+                                <th class="w100">&nbsp;</th>
+                              </tr>
+                            </table>
+                          </div>
+                          <div class="table-container">
+                            <div class="table-body">
+                              <table>
+                                <tr *ngFor="let data of attrData;  let i = index">
+                                  <td>{{ data.attr_type }}</td>
+                                  <td>
+                                    <div class="tags">
+                                      <span *ngFor="let option of data.attr_options;  let i = index ">{{ option }}</span>
+                                    </div>
+                                  </td>
+                                  <td class="delete-icon text-center w100">
+                                    <a mat-button color="primary"  (click)="removeAttrData(i, data.attr_id)">
+                                      <i class="material-icons">delete_sweep</i>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: sendingData}">
+                  <div class="in-btn">
+                    <button mat-raised-button color="primary" [attr.disabled]="sendingData">save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

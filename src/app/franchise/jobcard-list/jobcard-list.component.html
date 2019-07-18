@@ -1,0 +1,98 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="back-btn">
+      <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li class="af-none"><p><span class="blue"> {{db.franchise_name}} </span> <i class="material-icons r-arrow">keyboard_arrow_right</i> <span>JobCard</span> </p></li>
+      </ul>
+    </div>
+    
+    
+    <div class="top-search wp30 ml30">
+      <input type="text" placeholder="SEARCH Name or Mobile. . ." [(ngModel)]="filter.search"  (keyup.enter)="current_page = 1;jobcards()">
+      <i class="material-icons">search</i>
+    </div>
+    
+    <div class="top-pagination m-right-data">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="jobcards()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+    
+    
+    <a class="ryt-btn" mat-button color="warn" (click)="openValidatecustomerDialog()" style="right: 250px;">Create Job Card</a>
+    
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+      
+      <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+        <div class="cs-spinner full-page" *ngIf = "loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cs-table" *ngIf="!loading_list && (jobcardslist.length > 0  || filtering ) ">                
+            <div class="header sticky-header">                  
+              <table class="sno-border">                    
+                <tr>
+                  <th class="w40 border-right-none">S.no.</th>
+                  <th  class="w150">
+                    <div class="filter">
+                      <mat-form-field class="cs-input cs-date-picker">
+                        <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="jobcards()"  [matDatepicker]="picker1" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </th>
+                  <th class="w180">Name</th>
+                  <th>Vehicle</th>
+                  <th class="w160">Reg No.</th>
+                  <th class="w70">JC No.</th>
+                  <th class="w80">Status</th>
+                  <th class="w150">Invoice</th>
+                </tr>
+              </table>
+            </div>
+            <div class="table-container">
+              <div class="table-body">
+                <table class="sno-border">
+                  <tr *ngFor="let jbs of jobcardslist;let i = index">
+                    <td class="w40 text-center">{{i+1}}</td>
+                    <td class="w150">{{jbs.date_created | date: 'dd MMM yyyy' }}/{{jbs.created_name}}</td>
+                    <td class="w180"><a mat-button class="link" routerLink="/franchise/customer_details/{{franchise_id | crypt}}/{{jbs.customer_id | crypt}}" routerLinkActive="active">{{jbs.customer_name}}</a></td>
+                    <td>{{jbs.vehicle_type}}</td>
+                    <td class="w160">{{jbs.regn_no}}</td>
+                    <td class="w70"><a mat-button class="link" routerLink="/franchise/customer_jobcard-detail/{{franchise_id | crypt}}/{{jbs.customer_id | crypt}}/{{jbs.id | crypt}}" routerLinkActive="active">#{{jbs.id}}</a></td>
+                    <td class="w80">{{jbs.status}}</td>
+                    <td class="w150"><a *ngIf="jbs.invoice_id"  mat-button class="link" routerLink="/franchise/customer_invoice_detail/{{franchise_id | crypt}}/{{jbs.customer_id | crypt}}/{{jbs.invoice_id | crypt}}" routerLinkActive="active" > #{{jbs.prfx_invoice_id}} </a>
+                      <div class="action-btns" *ngIf="jbs.status !=  'Cancel' ">
+                        <button mat-button class="delete" *ngIf="!jbs.invoice_id  " (click)="CancelJobCard(jbs.id)"><i class="material-icons">delete_sweep</i> Cancel</button>
+                        <a mat-button class="edit"  routerLink="/editjobcard/{{jbs.id |crypt}}" routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                      </div>     
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>   
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="h100"></div>

@@ -1,0 +1,112 @@
+<div class="main-container">
+  <div class="master-heading">
+      <div class="heading">
+          <h1>MASTER's</h1>
+      </div>
+
+      <!-- <div class="top-search wp30 ml30">
+              <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="getProductDetail()">
+              <i class="material-icons">search</i>
+            </div> -->
+
+  </div>
+  <div class="cs-container">
+      <div class="cs-row cs-tabs-space">
+          <!-- TABS Component -->
+          <app-stock-tab ></app-stock-tab>
+          <!-- TABS Component -->
+          
+          <div class="right-data">
+                  <div class="cs-spinner full-page" *ngIf = "loading_list">
+                          <div class="outer">
+                              <div class="innear">
+                              <mat-spinner></mat-spinner>
+                              <P>LOADING . . .</P>
+                              </div>
+                          </div>
+                      </div>
+             <div class="row">
+                <div class="col-12">
+                    <div class="contst">
+                      <div class="cs-heading">
+                        <h2>Product DETAIL</h2>
+                      </div>
+                      
+                      <div class="side-by-side mt10" style="display: inherit;">
+                        <div class="row mr0">
+                          <div class="figure grid-five">
+                              <p>Category</p>
+                              <p>{{product.category}}</p>
+                            </div>
+                          <div class="figure grid-five">
+                            <p>Brand</p>
+                            <p>{{product.brand_name}}</p>
+                          </div>
+                          <div class="figure grid-five">
+                            <p>Product</p>
+                            <p>{{product.product_name}}</p>
+                          </div>
+                          <div class="figure grid-five">
+                            <p>UOM</p>
+                            <p>{{ unit.unit_of_measurement }}</p>
+                          </div>
+                         
+                          <div class="figure grid-five">
+                            <p>Purchase Qty</p>
+                            <p>{{ unit.stock_qty }}</p>
+                        </div>
+
+                        <div class="figure grid-five">
+                            <p>Purchase Total Qty </p>
+                            <p>{{ unit.stock_total }}</p>
+                        </div>
+
+                        <div class="figure grid-five">
+                            <p>Sale Qty </p>
+                            <p>{{ unit.sale_qty }}</p>
+                        </div>
+
+                        
+                        </div>
+                      </div>
+                      <!-- *ngIf="product.category == 'Product' " -->
+                      <app-stock-list-tab *ngIf="product.category == 'Product' "></app-stock-list-tab>
+
+                      <app-item-tab *ngIf="product.category == 'Accessory' "></app-item-tab>
+
+                      <div class="cs-table left-right-15 mt20">
+                          <div class="header">
+                              <table class="sno-border">
+                                  <tr>
+                                      <th class="w30 border-right-none"></th>
+                                      <th class="w200">Date</th>
+                                      <th class="w200">Stock Updated By </th>
+                                      <th class="w120 text-center">UOM</th>
+                                      <th class="w120 text-center">QTY.</th>
+                                  </tr>
+                              </table>
+                          </div>
+                          <div class="table-container">
+                              <div class="table-body">
+                                  <table class="sno-border">
+                                      <tr *ngFor="let val of vendor_item_data; let i = index">
+                                          <td class="w30 text-center">{{i+1}}</td>
+                                          <td class="w200">{{val.created_at  | date: 'dd MMM yyyy'}}</td>
+                                          <td class="w200">{{val.created_name}}</td>
+                                          <td class="w120 text-center">{{val.uom}}</td>
+                                          <td class="w120 text-center">{{val.qty}}</td>
+                                      </tr>
+                                    
+                                  </table>
+                              </div>
+                          </div>
+                      </div>   
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="h100"></div>

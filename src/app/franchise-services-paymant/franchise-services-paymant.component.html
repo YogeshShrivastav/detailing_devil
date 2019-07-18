@@ -1,0 +1,97 @@
+
+<form name="form" (ngSubmit)="f.form.valid && receive_payments()" #f="ngForm" novalidate>
+    <mat-dialog-content class="convert-franchies-modle di-hidden">
+      <div class="header" style="padding: 0px 10px 10px 10px;">
+        <h1>Receive Pending Payments</h1>
+        <button mat-button color="primary" mat-dialog-close class="mr0"><i class="material-icons">clear</i></button>
+      </div>
+      <div class="m-body form-field pl15 pr30">
+        <div class="row">
+          <div class="control-field col-4">
+            
+            <mat-form-field class="example-full-width cs-input">
+              <input matInput placeholder="Invoice Total Amount" name="invoice_total" [(ngModel)] = "formData.invoice_total" #invoice_total="ngModel" readonly>
+            </mat-form-field>
+          </div>
+          <div class="control-field col-4">
+            <mat-form-field class="example-full-width cs-input">
+              <input matInput placeholder="Received Amount" name="received" [(ngModel)] = "formData.received" #received="ngModel" readonly>
+            </mat-form-field>
+          </div>
+          
+          <div class="control-field col-4" >
+            <mat-form-field class="example-full-width cs-input">
+              <input matInput placeholder="Due Amount" name="balance" [(ngModel)] = "formData.balance" #balance="ngModel"  readonly>
+            </mat-form-field>
+            
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="control-field col-6">
+            <mat-form-field class="cs-multi-select">
+              <mat-select placeholder="Payment Mode" name="payment_mode" [(ngModel)] = "formData.payment_mode" #payment_mode="ngModel" required>
+                <!-- <mat-option value="None"><small>None</small></mat-option> -->
+                <mat-option value="Cash"><small>Cash</small></mat-option>
+                <mat-option value="Cheque"><small>Cheque</small></mat-option>
+                <mat-option value="Bank Transfer"><small>Bank Transfer</small></mat-option>
+                <mat-option value="Payment Gateway"><small>Payment Gateway</small></mat-option>
+                <mat-option value="NEFT"><small>NEFT</small></mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div class="control-field col-6">
+            <mat-form-field class="example-full-width cs-input">
+              <input matInput placeholder="Receive Payment" name="receive_payment" (keyup)="payment_cal()" [(ngModel)] = "formData.receive_payment" #receive_payment="ngModel" required >
+            </mat-form-field>
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="control-field col-6" *ngIf="formData.balance_amount">
+            <mat-form-field class="example-full-width cs-input">
+              <input matInput placeholder="Balance Amount" name="balance_amount" [(ngModel)] = "formData.balance_amount" #balance_amount="ngModel" readonly>
+            </mat-form-field>
+          </div>
+          
+          <div class="control-field col-6" >
+            <mat-form-field class="cs-input cs-date-picker">
+              <input matInput [matDatepicker]="picker2" placeholder="Payment Date"  name="payment_date" [(ngModel)]="formData.payment_date">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+          
+          <div class="control-field col-6" *ngIf="formData.balance_amount">
+              <!---->
+            <mat-form-field class="cs-input cs-date-picker" >
+              <input matInput [matDatepicker]="picker" placeholder="Due Terms" name="due_terms" [(ngModel)] = "formData.due_terms" #due_terms="ngModel">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          
+          <div class="control-field col-6" >
+            <mat-form-field class="example-full-width cs-input">
+              <textarea matInput placeholder="Enter Note" class="h100" name="note" [(ngModel)] = "formData.note" #note="ngModel"></textarea>
+            </mat-form-field>
+          </div>    
+          
+        </div>
+      </div>
+    </mat-dialog-content>
+    
+    <!-- ACTIONS BUTTONS -->
+    
+    <mat-dialog-actions align="end">
+      <div class="cs-btn fixedd pr10" [ngClass]="{loading: sendingData}">
+        <div class="in-btn">
+          <button type="submit" [disabled]="sendingData" mat-raised-button color="warn">Save</button>
+        </div>
+      </div>
+      <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+    </mat-dialog-actions>
+    
+  </form>
+  

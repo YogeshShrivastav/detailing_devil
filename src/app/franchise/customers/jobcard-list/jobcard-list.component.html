@@ -1,0 +1,107 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+      <div class="outer">
+        <div class="innear">
+          <mat-spinner></mat-spinner>
+          <P>LOADING . . .</P>
+        </div>
+      </div>
+    </div>
+    <div class="back-btn">
+      <a mat-button routerLink="/franchise-customers/{{franchise_id}}/2" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li><a class="link">{{db.franchise_name}}</a></li>
+        <li><a class="link">Customers</a></li>
+        <li class="af-none"><p>{{db.customer_name}}</p></li>
+      </ul>
+    </div>
+    
+    <div class="top-search wp30 ml30">
+      <input type="text" placeholder="SEARCH. . ." [(ngModel)]="filter.search"  (keyup.enter)="current_page = 1;getCustomerJobcards()">
+      <i class="material-icons">search</i>
+    </div>
+    
+    <a class="ryt-btn" style="right: 210px;" color="warn" mat-button  routerLink="/addjobcard/{{id |crypt}}/0/{{franchise_id |crypt}}" routerLinkActive="active" >Create Job Card</a>
+    <div class="top-pagination m-right-data">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getCustomerJobcards()"></li>
+        <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+    
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+      
+      <div class="right-data" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+        <div class="row">
+          <div class="col-12 mb20">
+            <app-franchise-customer-left-tabs></app-franchise-customer-left-tabs>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 cs-table" *ngIf="!loading_list && (card_list.length > 0  || filtering ) ">
+            <div class="header">
+              <table class="sno-border">
+                <tr>
+                  <th class="w30 border-right-none"></th>
+                  <th  class="w100">
+                    <div class="filter">
+                      <mat-form-field class="cs-input cs-date-picker">
+                        <input placeholder="Date" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getCustomerJobcards()"  [matDatepicker]="picker1" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </th>                   
+                  <th class="w120">Created By</th>
+                  <th>Vehicle</th>
+                  <th class="w156">Reg No.</th>
+                  <th class="w140">JC No.</th>
+                  <th class="w120">
+                    <div class="filter">
+                      <mat-form-field>
+                        <mat-select placeholder="Status" [(ngModel)]="filter.status" (selectionChange)="getCustomerJobcards()">
+                          <mat-option value="">All</mat-option>
+                          <mat-option value="Open">Open</mat-option>
+                          <mat-option value="Close">Close</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </th>  
+                </tr>
+              </table>
+            </div>
+            <div class="table-container">
+              <div class="table-body">
+                <table class="sno-border">
+                  <tr *ngFor="let card of card_list;let i = index;">
+                    <td class="w30 text-center">{{i+1}}</td>
+                    <td class="w120">{{card.date_created | date: 'dd MMM yyyy'}}</td>
+                    <td class="w120">{{card.created_name}}</td>
+                    <td>{{card.vehicle_type}}-{{card.model_no}}</td>
+                    <td class="w160">{{card.regn_no}}</td>
+                    <td class="w140"><a mat-button class="link" routerLink="/franchise/customer_jobcard-detail/{{franchise_id | crypt}}/{{card.customer_id | crypt}}/{{card.id | crypt}}" routerLinkActive="active">#{{card.id}}</a></td>
+                    <td class="w120">{{card.status}}
+                      <div class="action-btns">
+                        <button mat-button class="delete" (click)="CancelJobCard(card.id)"><i class="material-icons">delete_sweep</i> Cancel</button>
+                      </div>     
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>   
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

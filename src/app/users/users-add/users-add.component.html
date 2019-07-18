@@ -1,0 +1,77 @@
+<div class="main-container">
+        <div class="cs-spinner full-page" *ngIf="loading_list">
+                <div class="outer">
+                  <div class="innear">
+                    <mat-spinner></mat-spinner>
+                    <P>LOADING . . .</P>
+                  </div>
+                </div>
+              </div>
+  <div class="master-heading">
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+  </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+          <app-master-add-tabs></app-master-add-tabs>
+            <div class="right-data">
+              <form name="form" (ngSubmit)="f.form.valid && saveUser(f)" #f="ngForm" novalidate>
+                <div class="contst">
+                    <div class="cs-heading">
+                        <h2>Add User</h2>
+                    </div>
+                    
+                    <div class="form-field">
+                        <div class="row">
+
+                            <div class="col-4 control-field" [ngClass]="{'hss-error' : role.invalid && f.submitted }">
+                                <mat-form-field class="cs-multi-select">
+                                    <mat-select placeholder="Role" name="role"  #role="ngModel" [(ngModel)]="user.role" required>
+                                        <mat-option *ngFor="let val of roles" [value]="val.id">{{val.role_name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 control-field" [ngClass]="{'hss-error' : first_name.invalid && f.submitted  }">
+                              <mat-form-field class="example-full-width cs-input">
+                                  <input matInput placeholder="Name" name="first_name" #first_name="ngModel" [(ngModel)]="user.first_name" required>
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-4 control-field" [ngClass]="{'hss-error' : email.invalid && f.submitted }">
+                                <mat-form-field class="example-full-width cs-input">
+                                    <input matInput placeholder="Email/Username" name="email" #email="ngModel"  [(ngModel)]="user.email" required>
+                                </mat-form-field>
+                              </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4 control-field" [ngClass]="{'hss-error' : phone.invalid && f.submitted }">
+                                <mat-form-field class="example-full-width cs-input">
+                                    <input matInput placeholder="Mobile" name="phone" #phone="ngModel"  [(ngModel)]="user.phone" required>
+                                </mat-form-field>
+                              </div>
+
+                              <div class="col-4 control-field" [ngClass]="{'hss-error' : address.invalid && f.submitted }">
+                                  <mat-form-field class="example-full-width cs-input">
+                                      <input matInput placeholder="Address" name="address" #address="ngModel"  [(ngModel)]="user.address">
+                                  </mat-form-field>
+                                </div>
+
+                      </div>
+                      
+                    </div>
+                </div>
+                <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: sendingData}">
+                  <div class="in-btn">
+                    <button mat-raised-button color="primary" type="submit" [attr.disabled]="sendingData">save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

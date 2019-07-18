@@ -1,0 +1,615 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <li class="af-none">
+                    <p>
+                        <span class="blue">{{db.franchise_name}} </span> 
+                        <i class="material-icons r-arrow">keyboard_arrow_right</i>
+                        <span>Dashboard</span> 
+                    </p>
+                </li>
+                
+            </ul>
+        </div>
+        <div class="top-pagination m-right-data">
+            <ul>
+                <li class="refresh-area af-none" (click)="dashboard_data()">
+                    <a class="refresh-btn" mat-raised-button  matTooltip="Refresh"><i class="material-icons"> refresh</i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+            <div class="right-data"  [ngClass]="{'pl0' : db.datauser.franchise_id}">
+                <div class="ds-dashboard pt0" >
+                    <div class="dashboard-content">
+                        <div class="cs-spinner full-page" *ngIf = "loading_list">
+                            <div class="outer">
+                                <div class="innear">
+                                    <mat-spinner></mat-spinner>
+                                    <P>LOADING . . .</P>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <div class="row mb10">
+                                <div class="col-3 control-field" routerLink="/franchise-orders/{{franchise_id |crypt}}" routerLinkActive="active">
+                                    <div class="top-counter"  style="background: url(assets/img/dashboard-img/counter-bg-o.png) no-repeat; background-size: cover;">
+                                        <span>Total PO (Pending)</span>
+                                        <p>{{dashboard.count_order}}</p>
+                                        <div class="bottom--overlay">
+                                            RS. {{dashboard.count_order_amount | currency:'INR'}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3 control-field" routerLink="/franchise-invoice/{{franchise_id |crypt}}" routerLinkActive="active">
+                                    <div class="top-counter" style="background: url(assets/img/dashboard-img/counter-bg-g.png) no-repeat; background-size: cover;">
+                                        <span>Monthly PI (Paid)</span>
+                                        <p>  {{ dashboard.count_inoice_amount_no }}  </p>
+                                        <div class="bottom--overlay">
+                                            {{dashboard.count_inoice_amount | currency:'INR'}}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-3 control-field" routerLink="/franchise-invoice/{{franchise_id |crypt}}" routerLinkActive="active">
+                                    <div class="top-counter" style="background: url(assets/img/dashboard-img/counter-bg-g.png) no-repeat; background-size: cover;">
+                                        <span> PI Balance</span>
+                                        <p>  {{dashboard.count_invoice_balance_no}}</p>
+                                        <div class="bottom--overlay">
+                                            {{dashboard.count_invoice_balance | currency:'INR'}}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-3 control-field" routerLink="/franchise/customer_invoices/{{franchise_id |crypt}}" routerLinkActive="active">
+                                    <div class="top-counter" style="background: url(assets/img/dashboard-img/counter-bg-g.png) no-repeat; background-size: cover;">
+                                        <span> Monthly Income</span>
+                                        <p>  {{dashboard.count_sales_inoice_amount_no}}</p>
+                                        <div class="bottom--overlay">
+                                            {{dashboard.count_sales_inoice_amount | currency:'INR'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb15">
+                            
+                            <div class="col-12">
+                                <div class="lg-grapgh">
+                                    <div class="top-sprate">
+                                        <div class="sm-tab tab-left clr-tab sm-pd" style="margin-left: 0px;">
+                                            <ul>
+                                                <li (click)="filter.graphType = 'Lead'; dashboard_data() ">
+                                                    <a [ngClass]="{'active': filter.graphType === 'Lead' || !filter.graphType }"  >Consumers</a>
+                                                </li>
+                                                <li (click)="filter.graphType = 'Invoice'; dashboard_data() ">
+                                                    <a [ngClass]="{'active': filter.graphType === 'Invoice' }" >Purchase Order & Invoice</a>
+                                                </li>
+                                                
+                                                <li (click)="barChartType = 'line'; " *ngIf="barChartType == 'bar' ">
+                                                    <a >Line</a>
+                                                </li>
+                                                
+                                                <li (click)="barChartType = 'bar'; " *ngIf="barChartType == 'line' ">
+                                                    <a >Bar</a>
+                                                </li>
+                                                
+                                            </ul>
+                                        </div>
+                                        <p><span class="red-clr"  >{{filter.graphType  == 'Invoice' ? 'Purchase Order & Invoice' : ( filter.graphType  == 'Lead' ? 'Consumers' : ''  ) }}  {{!filter.graphType ? 'Consumers' : ''}}</span> </p>
+                                        <div class="sm-tab sm-pd" style="margin-left: 0px;">
+                                            <ul>
+                                                <li (click)="filter.leadfilter = 'WEEK'; dashboard_data() ">
+                                                    <a [ngClass]="{'active': filter.leadfilter === 'WEEK' || !filter.leadfilter }"  >WEEK</a>
+                                                </li>
+                                                <li (click)="filter.leadfilter = 'MONTH' ;  dashboard_data()">
+                                                    <a [ngClass]="{'active': filter.leadfilter === 'MONTH' }" >MONTH</a>
+                                                </li>
+                                                <li (click)="filter.leadfilter = 'YEAR' ;  dashboard_data()">
+                                                    <a [ngClass]="{'active': filter.leadfilter === 'YEAR' }" >YEAR</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <canvas  baseChart width="70" height="23"
+                                    [datasets]="barChartData"
+                                    [labels]="barChartLabels"
+                                    [options]="barChartOptions"
+                                    [legend]="barChartLegend"
+                                    [chartType]="barChartType">
+                                </canvas>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    <div class="row mb30">
+                        <div class="col-4 pr15">
+                            <div class="ds-figure-list">
+                                <ul>
+                                    <li  matRipple routerLink="/franchise-orders/{{franchise_id |crypt}}" routerLinkActive="active">
+                                        <div class="ds-figure">
+                                            <div class="figure-icon blue-bg">
+                                                <div class="outer">
+                                                    <div class="innear">
+                                                        <span class="ds-icon"><img src="assets/img/dashboard-img/ds-order.svg"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="figure-description">
+                                                <p>{{dashboard.count_purchase_order}}</p>
+                                                <span>Total PO</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li  matRipple routerLink="/franchise-orders/{{franchise_id |crypt}}" routerLinkActive="active">
+                                        <div class="ds-figure">
+                                            <div class="figure-icon green-bg">
+                                                <div class="outer">
+                                                    <div class="innear">
+                                                        <span class="ds-icon">{{dashboard.count_consumer_lead + dashboard.count_franchise_lead }}</span>
+                                                        <!-- <img src="assets/img/dashboard-img/delar.svg"> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="figure-description">
+                                                <p>
+                                                    <span>C-{{dashboard.count_franchise_lead }}</span>
+                                                    <span class="sprater">|</span>
+                                                    <span>L-{{dashboard.count_consumer_lead }}</span>
+                                                </p>
+                                                <span>Total Client</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li  matRipple  routerLink="/franchise-followup/{{franchise_id |crypt}}" routerLinkActive="active">
+                                        <div class="ds-figure">
+                                            <div class="figure-icon yellow-bg">
+                                                <div class="outer">
+                                                    <div class="innear">
+                                                        <span class="ds-icon"><img src="assets/img/dashboard-img/ds-followup.svg" style="height:40px; margin-top: 15px;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="figure-description">
+                                                <p>{{dashboard.count_follow_ups}}</p>
+                                                <span>Today Follow Up</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li  matRipple routerLink="/franchise/customer_invoices/{{franchise_id |crypt}}" routerLinkActive="active">
+                                        <div class="ds-figure">
+                                            <div class="figure-icon sky-bg">
+                                                <div class="outer">
+                                                    <div class="innear">
+                                                        <span class="ds-icon"><img src="assets/img/dashboard-img/ds-franchise.svg"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="figure-description">
+                                                <p>{{dashboard.count_sales_invoice}}</p>
+                                                <span>Total Sales Invoice</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li >
+                                        <div class="ds-figure">
+                                            <div class="figure-icon purple-bg">
+                                                <div class="outer">
+                                                    <div class="innear">
+                                                        <span class="ds-icon"><img src="assets/img/dashboard-img/ds-branch.svg"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="figure-description">
+                                                <p>{{dashboard.count_regn_no}}</p>
+                                                <span>Registered Vehicles</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-8 pr15" *ngIf="true">
+                            
+                            
+                            <div class="cs-calender">
+                                <div class="cal-header">
+                                    <div class="daily-date">
+                                        <p>2019</p>
+                                        <h1>Tue, Apr 16</h1>
+                                    </div>
+                                    <div class="month-nav">
+                                        <button (click)="attendancePrevMonth()" class="chevron">
+                                            <i class="material-icons">chevron_left</i>
+                                        </button>
+                                        <p>{{ attendaceDate.format('MMMM') }} {{ attendaceDate.format('YYYY') }}</p>
+                                        <button (click)="atendanceNextMonth()" class="chevron">
+                                            <i class="material-icons">chevron_right</i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="month-grid">
+                                    <div class="day-names">
+                                        <div *ngFor="let name of dayNames">
+                                            {{ name }}
+                                        </div>
+                                    </div>
+                                    <div class="weeks">
+                                        <div *ngFor="let week of attendanceWeek" class="week">
+                                            <ng-container *ngFor="let day of week ; let a = index">
+                                                <div class="week-date disabled" *ngIf="!isSelectedMonth(day.mDate,attendaceDate)">
+                                                    <span class="date-text">{{ day.mDate.date() }}</span>
+                                                </div>
+                                                <div class="week-date enabled" (click)="selectDate(day)" *ngIf="isSelectedMonth(day.mDate,attendaceDate)" [ngClass]="{ 'today': day.today, 'selected': day.selected , 'workday': day.worked , 'click-data': ( day.cal_date && select_date.cal_date == day.cal_date )}">
+                                                    <p class="date-text">{{ day.mDate.date() }}</p>
+                                                    <p class="count" *ngIf="day.appoint">{{ day.appoint }}</p>
+                                                    
+                                                    <div class="persent" *ngIf="day.worked">
+                                                        
+                                                        <!-- <img src="assets/img/attendance.svg"> -->
+                                                    </div> 
+                                                </div>
+                                                
+                                            </ng-container>
+                                          
+                                            
+                                        </div>
+                                        <div class="calender-data">
+                                                <div class="cs-table">
+                                                    <div class="header">
+                                                        <table>
+                                                            <tr>
+                                                                <th class="w160">Name</th>
+                                                                <th class="w110">Mobile No</th>
+                                                                <th class="w110">Vehicle Type</th>
+                                                                <th class="w110">Car Model</th>
+                                                                <th class="w110">Interested In</th>
+                                                                <th class="w110">City</th>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="table-container scroll-limit">
+                                                        <div class="table-body">
+                                                            <table>
+                                                                    <tr *ngFor="let val of appointments">
+                                                                            <td class="w160" *ngIf="val.type == '1' "><a mat-button class="link" routerLink="/consumer_leads/details/{{val.consumer_id |crypt}}" routerLinkActive="active"> {{val.first_name + ' ' + val.last_name}} </a></td>
+                                                                            <td class="w160" *ngIf="val.type == '2' "><a mat-button class="link" routerLink="/franchise/customer_details/{{val.franchise_id | crypt }}/{{val.consumer_id | crypt }}" routerLinkActive="active"> {{val.first_name + ' ' + val.last_name}} </a></td>
+                                                                            <td class="w110">{{val.phone}}</td>
+                                                                            <td class="w110">{{val.vehicle_type}}</td>
+                                                                            <td class="w110">{{val.car_model}}</td>
+                                                                            <td class="w110">{{val.interested_in}}</td>
+                                                                            <td class="w110">{{val.city}}</td>
+                                                                        </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="col-4"  *ngIf="false">
+                            <div class="cs-graph">
+                                <div class="sm-tab">
+                                    <ul>
+                                        <li (click)="filter.chart_franhcise_profit_filter = 'TODAY'; dashboard_data() ">
+                                            <a  [ngClass]="{'active': filter.chart_franhcise_profit_filter == 'TODAY' }"  > TODAY</a>
+                                        </li>
+                                        <li (click)="filter.chart_franhcise_profit_filter = 'WEEK'; dashboard_data() ">
+                                            <a  [ngClass]="{'active': filter.chart_franhcise_profit_filter == 'WEEK' || !filter.chart_franhcise_profit_filter }"  > WEEK</a>
+                                        </li>
+                                        
+                                        <li (click)="filter.chart_franhcise_profit_filter = 'MONTH'; dashboard_data() ">
+                                            <a  [ngClass]="{'active': filter.chart_franhcise_profit_filter == 'MONTH' }"  > MONTH</a>
+                                        </li>
+                                        
+                                        <li (click)="filter.chart_franhcise_profit_filter = 'YEAR'; dashboard_data() ">
+                                            <a  [ngClass]="{'active': filter.chart_franhcise_profit_filter == 'YEAR' }"  > YEAR</a>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                                <canvas baseChart
+                                [data]="pieChartData2"
+                                [labels]="pieChartLabels2"
+                                [chartType]="pieChartType2"
+                                [options]="pieChartOptions2"
+                                [legend]="pieChartLegend2">
+                            </canvas>
+                            
+                            <div class="graph-table">
+                                <table>
+                                    <tr >
+                                        <th *ngFor="let val of dashboard.chart_franhcise_profit_arr1">{{val}}</th>
+                                    </tr>
+                                    
+                                    <tr >
+                                        <td *ngFor="let val of dashboard.chart_franhcise_profit_arr2">{{val}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+                <div class="row mb30">
+                    <div class="col-4 pr15">
+                        <div class="ds-detail">
+                            <div class="ds-table">
+                                <div class="ds-table-header">
+                                    <div class="cs-left">
+                                        <p>Stock List</p>
+                                        <span>{{filter.category ? filter.category : 'Product'}}</span>
+                                        <button class="vert-btn" [matMenuTriggerFor]="menu"><i class="material-icons">more_horiz</i></button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item (click)='filter.category = "Accessory";dashboard_data();'>Accessory</button>
+                                            <button mat-menu-item (click)='filter.category = "Product";dashboard_data();'>Product</button>
+                                        </mat-menu>
+                                    </div>
+                                    <div class="cs-right">
+                                        <span class="red-clr" (click)='filter.stock_alert = "low-stock";dashboard_data();'>Low Stock</span>
+                                        <span class="blue-clr" (click)='filter.stock_alert = "adequate";dashboard_data();'>Adequate</span>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="ds-table-content pt0">
+                                    <div class="ds-body  bdr-left">
+                                        <table>
+                                            <tr *ngFor="let val of dashboard.list_stock;let i = index;" routerLink="/franchise-stock/{{franchise_id | crypt}}" routerLinkActive="active">
+                                                <td>
+                                                    <span>{{val.brand}}</span>
+                                                    <p>{{val.product +' - '+ val.hsn_code}} ({{val.unit_measurement}})</p>
+                                                </td>
+                                                <td class="w200">
+                                                    <!-- [ngClass]="{'low-stock':val.stock_qty <= val.stock_alert,'adequate':val.stock_qty > val.stock_alert }" -->
+                                                    <div class="stock-box {{filter.stock_alert?filter.stock_alert:'low-stock'}}" >
+                                                        {{val.current_stock}} / {{val.stock_limit}} 
+                                                    </div>
+                                                </td>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 pr15">
+                            <div class="ds-detail">
+                                <div class="ds-table">
+                                    <div class="ds-table-header">
+                                        <div class="cs-left" (click)='filter.job_card_status = "";dashboard_data();'>
+                                            <p>Job Cards</p>
+                                        </div>
+                                        <div class="cs-right">
+                                            <span class="red-clr" (click)='filter.job_card_status = "Open";dashboard_data();' >Open</span>
+                                            <span class="green-clr" (click)='filter.job_card_status = "Close";dashboard_data();' >Close</span>
+                                        </div>
+                                    </div>
+                                    <div class="ds-table-content pt0">
+                                        <div class="ds-body  bdr-left">
+                                            <table>
+                                                <tr *ngFor="let val of dashboard.consumer_job_card;let i = index;" routerLink="/franchise/customer_jobcard-detail/{{franchise_id |crypt}}/{{val.customer_id |crypt}}/{{val.id |crypt}}"  routerLinkActive="active">
+                                                    <td>
+                                                        <p>{{val.vehicle_type}}({{val.regn_no}}) JD#{{val.id}} / <a>{{val.first_name +' '+ val.last_name}}</a></p>
+                                                    </td>
+                                                    <td class="w20">
+                                                        <span class="status {{val.status == 'Open' ? 'open' : 'close' }}">&nbsp;</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-4">
+                            <div class="ds-detail">
+                                <div class="ds-table">
+                                    <div class="ds-table-header">
+                                        <div class="cs-left" (click)="filter.order_status = '';dashboard_data(); ">
+                                            <p>Purchase Orders</p>
+                                        </div>
+                                        <div class="cs-right">
+                                            <span class="red-clr" (click)="filter.order_status = 'Pending';dashboard_data(); ">Pending</span>
+                                            <span class="green-clr" (click)="filter.order_status = 'Approved';dashboard_data(); ">Approved</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="ds-table-content pt0" style="min-height: 450px; max-height: 450px;">
+                                        <div class="ds-body  bdr-left">
+                                            <table>
+                                                <tr *ngFor="let val of dashboard.list_sales_order;let i = index;" routerLink="/sale-order-detail/{{val.id |crypt}}" routerLinkActive="active">
+                                                    
+                                                    <td>
+                                                        <div class="ds-flex">
+                                                            <!-- <span>Invoice #{{val.invoice_id}} </span> -->
+                                                            <span>Order #{{val.id}}</span>
+                                                        </div>
+                                                        
+                                                        <p>{{val.date_created | date: 'dd MMM yyyy'}} (QTY: {{val.totalQty }} ) (Item: {{val.totalItem }} ) </p>
+                                                    </td>
+                                                    <td class="w100">
+                                                        <div class="flex-content">
+                                                            <p>{{val.order_total}}</p>
+                                                            <span class="status {{val.status}}">&nbsp;</span>
+                                                        </div>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fix-content">
+                                        <div class="ds-table-content">
+                                            <div class="ds-body  bdr-left">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            Total
+                                                        </td>
+                                                        <td class="w100 text-right">
+                                                            {{dashboard.total_sales_order | currency:'INR'}}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-4 pr15">
+                            <div class="ds-detail">
+                                <div class="ds-table">
+                                    <div class="ds-table-header">
+                                        <div class="cs-left" (click)="filter.payment_status = '';dashboard_data(); ">
+                                            <p>Purchase Invoices</p>
+                                        </div>
+                                        <div class="cs-right">
+                                            <span class="red-clr" (click)="filter.payment_status = 'Pending';dashboard_data(); ">Pending</span>
+                                            <span class="green-clr" (click)="filter.payment_status = 'Paid';dashboard_data(); ">Paid</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="ds-table-content pt0" style="min-height: 380px; max-height: 380px;">
+                                        <div class="ds-body  bdr-left">
+                                            <table>
+                                                <tr *ngFor="let val of dashboard.list_sales_invoice;let i = index;" routerLink="/order-invoice-detail/{{val.id |crypt}}" routerLinkActive="active">
+                                                    
+                                                    <td>
+                                                        <div class="ds-flex">
+                                                            <span *ngIf="val.due_terms != '0000-00-00' "> Due Date: {{val.due_terms | date: 'dd MMM yyyy' }}</span>
+                                                            <span>Order #{{val.order_id}}</span>
+                                                        </div>
+                                                        
+                                                        <p> Invoice #{{val.invoice_id}} {{val.date_created | date: 'dd MMM yyyy'}}  </p>
+                                                    </td>
+                                                    <td class="w100">
+                                                        <div class="flex-content">
+                                                            <p>&#8377; {{val.invoice_total}}</p>
+                                                            <span class="status {{val.status}}">&nbsp;</span>
+                                                        </div>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fix-content">
+                                        <div class="ds-table-content">
+                                            <div class="ds-body  bdr-left">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            Total
+                                                        </td>
+                                                        <td class="w100 text-right">
+                                                            {{dashboard.total_sales_invoice | currency:'INR'}}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-4 pr15">
+                            <div class="ds-detail">
+                                <div class="ds-table flat-table">
+                                    <div class="ds-table-header">
+                                        <div class="cs-left">
+                                            <p>Sales Agent</p>
+                                        </div>
+                                        <div class="cs-right">
+                                            <span class="blue-clr">Consumer</span>
+                                            <span class="green-clr">Followup's</span>
+                                        </div>
+                                    </div>
+                                    <div class="ds-table-content pt0" style="min-height: 430px; max-height: 430px;">
+                                        <div class="ds-body">
+                                            <table>
+                                                <tr *ngFor="let val of dashboard.sales_list; let i = index; " >
+                                                    <td> {{val.first_name}}</td>
+                                                    <td class="w100 text-center blue-clr">{{val.consumer}}</td>
+                                                    <td class="w80 text-center green-clr">{{val.count_follow_ups}}</td>
+                                                </tr>
+                                                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-4">
+                            <div class="ds-detail">
+                                <div class="ds-table flat-table">
+                                    <div class="ds-table-header">
+                                        <div class="cs-left">
+                                            <p>Service's</p>
+                                        </div>
+                                        <div class="cs-right">
+                                            <span>Duration</span>
+                                            <span>Valid Upto</span>
+                                        </div>
+                                    </div>
+                                    <div class="ds-table-content pt0" style="min-height: 430px; max-height: 430px;">
+                                        <div class="ds-body">
+                                            <table>
+                                                <tr *ngFor="let val of dashboard.franchise_service; let i = index; "  routerLink="/service-detail/{{val.franchise_service_id |crypt}}" routerLinkActive="active">
+                                                    <td> {{val.service_name}}</td>
+                                                    <td class="w70 text-right">{{val.duration }}</td>
+                                                    <td class="w100 text-right " [ngClass]="{'green-clr' : val.status === 'Active','red-clr' : val.status === 'Deactive'  }" >{{val.end_date | date: 'dd MMM yyyy' }}</td>
+                                                </tr>
+                                                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h20"></div>

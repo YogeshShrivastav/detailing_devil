@@ -1,0 +1,99 @@
+<div class="main-container"> 
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <li>
+                    <p>
+                        <span class="blue"> {{db.franchise_name}} </span> 
+                        <i class="material-icons r-arrow">keyboard_arrow_right</i> 
+                        <span>Followup</span> 
+                    </p>
+                </li>
+                <!-- <li><p class="light">Customer Lead  : <span class="black-clr">35</span></p></li> -->
+                <!-- <li><p class="light">Service : <span class="black-clr">5</span></p></li> -->
+                <li><p class="pl30"><i class="material-icons icon">swap_vert</i><span>Sort</span></p></li>
+            </ul>
+        </div>        
+        <div class="top-search wp20 ml30">
+            <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search" (keyup.enter)="getFollowUpList(status)">
+            <i class="material-icons">search</i>
+        </div>
+        <div class="top-tabs m-right-data">
+            <button mat-button [ngClass]="{active: followup_type == 'pending'}" (click)="showPendingFollowUps()">Pending <span class="counter">{{ total_pending_follow_ups }}</span></button>
+            <button mat-button [ngClass]="{active: followup_type == 'appointment'}" (click)="showAppointmentFollowUps()">Appointment <span class="counter">{{ frachise_total_appointment_follow_ups }}</span></button>
+            <button mat-button [ngClass]="{active: followup_type == 'done'}" (click)="showDoneFollowUps()">Done <span class="counter">{{ total_done_follow_ups }}</span></button>
+            <button mat-button [ngClass]="{active: followup_type == 'upcoming'}" (click)="showUpcomingFollowUps()">Upcoming <span class="counter">{{ total_upcoming_follow_ups }}</span></button>
+        </div>        
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <!-- TABS Component -->
+            <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+            
+            
+            
+            <!-- TABS Component -->
+            <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+                <div class="cs-spinner full-page" *ngIf = "loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="cs-table">
+                        <div class="header sticky-header">
+                            <table class="sno-border">
+                                <tr>
+                                    <th class="w30 border-right-none"></th>
+                                    <th class="w160">Company</th>
+                                    <th class="w100">Mobile</th>
+                                    <th class="w80">Type </th>
+                                    <th class="w140">Intrested In</th>
+                                    <th class="w150">F/U Type & Date</th>
+                                    <th class="w200">Next F/U Type & Date</th>
+                                    <th>Remark</th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-body">
+                                <table class="sno-border">
+                                    <tr *ngFor="let val of follow_ups; let i = index">
+                                        <td class="w30 text-center">{{ i+1}}</td>
+                                        <td class="w160">  
+                                            <a routerLink="/consumer_leads/details/{{val.consumer_id |crypt}}"  routerLinkActive="active" *ngIf="val.consumer_id " mat-button class="link"> {{val.first_name }} {{val.last_name }} </a>
+                                        </td>
+                                        <td class="w100">{{ val.phone || '' }} {{ val.contact_no || ''}}</td>
+                                        <td class="w80">{{ val.type == '1'? 'Lead': 'Consumer' }}</td>
+                                        <td class="w140">{{ val.interested_in}}</td>
+                                        <td class="w150">{{ val.follow_type }} & {{ val.created_at  | date: 'dd MMM yyyy' }}</td>
+                                        <td class="w200">{{ val.next_follow_type }} & {{ val.next_follow_date != '0000-00-00' ? ( val.next_follow_date | date: 'dd MMM yyyy' ): '' }}</td>
+                                        <td class="hv-actions">{{ val.description }}
+                                            <div class="action-btns" >
+                                                <div class="outer">
+                                                    <div class="innear">
+                                                        <a mat-button class="edit" (click)="openCreateFollowupDialog( val.franchise_id ?  val.franchise_id :  val.consumer_id , val.franchise_id ? 'franchise' : 'consumer')"><i class="material-icons">add</i> Create Followup</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

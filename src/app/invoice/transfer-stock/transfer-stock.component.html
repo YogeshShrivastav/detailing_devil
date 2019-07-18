@@ -1,0 +1,404 @@
+<div class="main-container">
+  <div class="master-heading">
+    <div class="heading">
+      <h1>CREATE INVOICE</h1>
+    </div>
+  </div>
+  
+  <div class="cs-spinner full-page" *ngIf = "loading_list">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  
+  <div  class="cs-container pt60">
+    <div class="row">
+      <div class="col-12">
+        <div class="right-data pl0">
+          <div class="contst h450 padding0">
+            <mat-dialog-content class="convert-franchies-modle">
+              
+              <div class="m-body">
+                <div class="row">
+                  <div class="col-3 plan-list step1 shadow-none">
+                    <div class="head">
+                      <div class="cs-heading">
+                        <ul class="side-tab">
+                          <li class="active">
+                            <a>Franchise</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="listing" *ngIf="mode == '1' ">
+                        <!-- clear(); -->
+                      <mat-radio-group class="step1" (change)="invoiceData.customer_id = 0" [(ngModel)]="invoiceData.franchise_id">
+                        <mat-radio-button *ngFor="let row of franchiseList" [value]="row.id">
+                          <span class="name-counter" *ngIf="row.company_name">{{row.company_name?row.company_name[0].toUpperCase():''}}</span>
+                          <span class="name-counter"*ngIf="!row.company_name">{{row.name?row.name[0].toUpperCase():''}}</span>
+                          <div class="txt-box">
+                            <p *ngIf="row.company_name">{{row.company_name}}</p>
+                            <p *ngIf="!row.company_name">{{row.name}}</p>
+                            <p>{{row.contact_no}}</p>
+                          </div>
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="col-9" *ngIf="invoiceData.franchise_id || invoiceData.customer_id">
+                    <div class="form-field ">
+                      <div class="row padding15 pt0 pb0 pr30">
+                        
+                        <div class="control-field col-4">
+                          <mat-form-field class="cs-multi-select">
+                            <mat-select placeholder="Organization" name="organization_id" (selectionChange)="change_org()" [(ngModel)]="invoiceData.organization_id"  required>
+                              <mat-option *ngFor="let row of organization; let b = index"  [value]="row.id">
+                                <small>{{ row.company_name }}</small>
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        
+                        <div class="control-field col-4">   
+                          <mat-form-field class="cs-input cs-date-picker">
+                            <input  placeholder="Invoice Date" [(ngModel)]="invoiceData.date_created" name="date_created" matInput [matDatepicker]="picker6"   >
+                            <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                            <mat-datepicker #picker6></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <form name="invoiceForm" (ngSubmit)="f.form.valid && AddItem(f)" #f="ngForm" novalidate>
+                      <div class="form-field " *ngIf="invoiceData.organization_id">
+                        <div class="row padding15 pt0 pb0 pr30">
+                          <div class="control-field col-12 cs-heading">
+                            <h2>SELECT PRODUCT</h2>
+                          </div>
+                        </div>
+                        <div class="row padding15 pt0 pr30">
+                          <div class="control-field col-3">
+                            <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Category Name" name="category" [(ngModel)]="data.category" (selectionChange)="getBrandList()" required>
+                                <mat-option *ngFor="let row of categoryList; let b = index" [value]="row.category">
+                                  <small>{{ row.category }}</small>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          
+                          <div class="control-field col-3">
+                            <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Brand Name" name="brand_name" [(ngModel)]="data.brand_name" (selectionChange)="getProductList()" #brand_name="ngModel" required>
+                                <mat-option *ngFor="let row of brandList; let b = index" [value]="row.brand_name">
+                                  <small>{{row.brand_name}}</small>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-error color="primary" *ngIf="f.submitted && !brand_name.valid" >This field is required</mat-error>
+                          </div>
+                          
+                          <div class="control-field col-3">
+                            <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Product Name" name="product_id" [(ngModel)]="data.product_id" (selectionChange)="getMeasurementList()" #product_id="ngModel" required>
+                                <mat-option *ngFor="let row of productList; let p = index" [value]="row.id">
+                                  <small>{{row.product_name}}</small>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-error color="primary" *ngIf="f.submitted && !product_id.valid" >This field is required</mat-error>
+                          </div>
+                          
+                          <div class="control-field col-3">
+                            <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Measurement" name="measurement" [(ngModel)]="data.measurement" (selectionChange)="getSalePrice()" #measurement="ngModel" required>
+                                <mat-option *ngFor="let row of measurementList; let r = index" [value]="row.unit_of_measurement">
+                                  <small>{{row.unit_of_measurement}}</small>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-error color="primary" *ngIf="f.submitted && !measurement.valid" >This field is required</mat-error>
+                          </div>
+                          
+                          <div class="control-field col-2">
+                            <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Stock Total" [(ngModel)]="data.sale_qty" name="sale_qty" readonly>
+                            </mat-form-field>
+                          </div>
+                          
+                          
+                          <div class="control-field col-2" *ngIf="data.sale_qty > 0">
+                            <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="QTY." [(ngModel)]="data.qty" type="number" name="qty" #qty="ngModel" required>
+                            </mat-form-field>
+                            <mat-error color="primary" *ngIf="f.submitted && !qty.valid" >This field is required</mat-error>
+                          </div>
+                          
+                          <div class="control-field col-3" *ngIf="data.sale_qty > 0">
+                            <mat-form-field class="example-full-width cs-input">
+                              <input matInput placeholder="Rate" [(ngModel)]="data.rate" name="rate" #rate="ngModel"  required>
+                            </mat-form-field>
+                            <mat-error color="primary" *ngIf="f.submitted && !rate.valid" >This field is required</mat-error>
+                          </div>
+                          
+                          <div class="control-field col-4" *ngIf="data.sale_qty > 0 && attributeTypeList.length > 0">
+                            <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Attribute type" name="attribute_type" [(ngModel)]="data.attribute_type" (selectionChange)="getAttributeOptionList()" #attribute_type="ngModel">
+                                <mat-option *ngFor="let row of attributeTypeList; let r = index" [value]="row.attr_type">
+                                  <small>{{row.attr_type}}</small>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          
+                          <div class="control-field col-4" *ngIf="data.sale_qty > 0 && attributeTypeList.length > 0">
+                            <mat-form-field class="cs-multi-select">
+                              <mat-select placeholder="Attribute Option" name="attribute_option" [(ngModel)]="data.attribute_option" #attribute_option="ngModel">
+                                <mat-option *ngFor="let row of attributeOptionList; let r = index" [value]="row.attr_option">
+                                  <small>{{row.attr_option}}</small>
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          
+                          <div class="col-12" *ngIf="data.sale_qty > 0">
+                            <div class="cs-btn outline mt32 mr12 text-right">
+                              <div class="in-btn ">
+                                <button type="submit" mat-raised-button color="primary" [disabled]="(data.qty <= 0 && data.sale_qty < data.qty )?true:false">Add To List</button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </mat-dialog-content>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    
+    <div  class="row"  *ngIf="invoiceItemList.length && invoiceData.organization_id" >
+      
+      <div class="col-12">
+        <div class="cs-table mt20 left-right-15">
+          <div class="header">
+            <table>
+              <tr>
+                <th>Product Description</th>
+                <th class="w200">Description</th>
+                <th class="w80">HSN</th>
+                <th class="w100">Measurement</th>
+                <th class="w80 text-center">Rate</th>
+                <th class="w100" *ngIf="invoiceData.order_id">Order QTY</th>
+                <th class="w100">Current Stock</th>
+                <th class="w100">Transfer QTY</th>
+              </tr>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-body">
+              <table>
+                <tr *ngFor="let row of invoiceItemList; let i=index">
+                  <td>{{row.category}}, {{row.brand_name}}, {{row.product_name}}, {{row.attribute_type}}, {{row.attribute_option}}</td>
+                  
+                  <td class="w200">{{row.description? row.description: 'N.A'}}</td>                  
+                  <td class="w80">{{row.hsn_code}}</td>                  
+                  <td class="w100">{{row.measurement}}</td>
+                  <td class="w80 text-center">{{row.rate}}</td>
+                  <td class="w100" *ngIf="invoiceData.order_id">
+                    <div class="edit-td-input active">
+                      <input  placeholder="QTY." [(ngModel)]="row.qty" type="number"  [name]="'qty'+i" #qty1="ngModel"  class="wp100 pr0" readonly>
+                    </div>
+                  </td>
+                  <td class="w100">{{row.sale_qty}}</td>
+                  <td class="w100">
+                    <div class="edit-td-input active">
+                      <input  placeholder="TRANSFER QTY." [ngClass]="{'alert' :  ( ( row.sale_qty < row.transfer_qty )  || ( row.transfer_qty > row.qty && row.id ) ) }" [(ngModel)]="row.transfer_qty" type="number"  (input)="update_qty()" [name]="'transfer_qty'+i" #qty1="ngModel"  class="wp100 pr0">
+                      <div class="action-btns">
+                        <a class="pointer" (click)="RemoveItem(i)"> <i class="material-icons red-clr">delete_sweep</i></a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="invoiceItemList.length && invoiceData.organization_id && false" class="row" >
+      <div class="col-8">&nbsp;</div>
+      <div class="col-4">
+        <div class="invoice-details">
+          
+          <table class="invoice-table">
+            <tr>
+              <td class="td">Item Total</td>
+              <td class="w150 td">&#8377;  {{invoiceData.itemTotal.toFixed(2)}}
+              </td>
+            </tr>
+            <tr >
+              <td class="td">
+                
+                <div class="add-disc">
+                  Discount({{invoiceData.netDiscountPer}}%)
+                  <div class="basic-select">
+                    <div class="basic-select">
+                      <select  (change)="allItemDiscount()"  [(ngModel)]="invoiceData.extra_discount" name="extra_discount" #extra_discount="ngModel" style="background: transparent; border: 0px;" >
+                        <option value="0">More</option>
+                        <option value="1">1 %</option>
+                        <option value="2">2 %</option>
+                        <option value="3">3 %</option>
+                        <option value="4">4 %</option>
+                        <option value="5">5 %</option>
+                        <option value="6">6 %</option>
+                        <option value="7">7 %</option>
+                        <option value="8">8 %</option>
+                        <option value="9">9 %</option>
+                        <option value="10">10 %</option>
+                        <option value="11">11 %</option>
+                        <option value="11">11 %</option>
+                        <option value="12">12 %</option>
+                        <option value="13">13 %</option>
+                        <option value="14">14 %</option>
+                        <option value="15">15 %</option>
+                        <option value="16">16 %</option>
+                        <option value="17">17 %</option>
+                        <option value="18">18 %</option>
+                        <option value="19">19 %</option>
+                        <option value="20">20 %</option>
+                        <option value="21">21 %</option>
+                        <option value="22">22 %</option>
+                        <option value="23">23 %</option>
+                        <option value="24">24 %</option>
+                        <option value="25">25 %</option>
+                        <option value="26">26 %</option>
+                        <option value="27">27 %</option>
+                        <option value="28">28 %</option>
+                        <option value="29">29 %</option>
+                        <option value="30">30 %</option>
+                      </select>
+                    </div>
+                    
+                  </div>
+                </div>
+              </td>
+              <td class="td">
+                &#8377;  {{invoiceData.netDiscountAmount}}
+              </td>
+            </tr>
+            <!-- *ngIf="invoiceData.netDiscountAmount" -->
+            <tr >
+              <td class="td">Sub Total</td>
+              <td class="w150 td">&#8377;  {{invoiceData.netGrossAmount.toFixed(2)}}</td>
+            </tr>
+            
+            <tr>
+              <td class="td">Shipping Charges({{ (this.invoiceData.shipping_charges > 0 )?invoiceData.shiping_gst_per : 0}}%)</td>
+              <td class="td">   
+                
+                <input class="simple-input w70" [(ngModel)]="invoiceData.shipping_charges" type="number" min="0" (input)="calculateNetInvoiceTotal()" name="shipping_charges" #shipping_charges="ngModel"  style="text-align: right;">
+                
+              </td>
+            </tr>
+            
+            <tr *ngIf="invoiceData.cgst_amt > 0 && invoiceData.sgst_amt > 0" >
+              <td class="td">
+                <div class="gst-box">
+                  <ul>
+                    <li >
+                      <p>CGST ({{invoiceData.cgst_amt}}) </p>
+                    </li>
+                    <li class="w30"  >
+                      <i class="material-icons">add</i>
+                    </li>
+                    <li >
+                      <p>SGST ({{invoiceData.sgst_amt}})</p>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td class="td">{{invoiceData.netGstAmount}}</td>
+            </tr>
+            
+            <tr *ngIf="invoiceData.igst_amt > 0">
+              <td class="td">IGST({{invoiceData.igst_per}}%)</td>
+              <td class="td">&#8377; {{invoiceData.igst_amt}}</td>
+            </tr>
+            <tr>
+              <td class="td">Grand Amount</td>
+              <td class="td">
+                &#8377;  {{invoiceData.netAmount.toFixed(2)}}
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="td">Received Amount</td>
+              <td class="td">  
+                <input  class="simple-input w70" type="number" [(ngModel)]="invoiceData.receivedAmount" name="receivedAmount" #receivedAmount="ngModel"  (input)="onReceivedChangeHandler()" style="text-align: right;">                  
+              </td>
+            </tr>
+            
+            <tr *ngIf="invoiceData.receivedAmount && invoiceData.receivedAmount>0">
+              <td class="td">Mode</td>
+              <td class="td">
+                
+                <select name="mode" [(ngModel)]="invoiceData.mode" required>
+                  <option value="None">None</option>
+                  <option value="Cash">Cash</option>
+                  <option value="Cheque">Cheque</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                  <option value="Payment Gateway">Payment Gateway</option>
+                  <option value="NEFT">NEFT</option>
+                </select>
+                <p class="red-clr" *ngIf="!invoiceData.mode">This field is required</p>
+                
+                
+              </td>
+            </tr>
+            
+            <tr *ngIf="invoiceData.balance">
+              <td class="td">Balance</td>
+              <td class="td">&#8377; {{invoiceData.balance.toFixed(2)}}</td>
+            </tr>
+            <tr *ngIf="invoiceData.balance">
+              <td class="td">Due Date</td>
+              <td class="td">
+                <mat-form-field class="cs-input cs-date-picker w100">
+                  <input placeholder="DATE" [(ngModel)]="invoiceData.due_terms" name="due_terms" required matInput [matDatepicker]="picker" required="invoiceData.balance?true:false">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </td>
+            </tr>
+            
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="invoiceItemList.length && invoiceData.organization_id && !grater_stock  && !required_qty" class="row">
+      <div class="col-12">
+        <div class="dubble-btn">
+          <div class="cs-btn mt32 mr12 text-right" [ngClass]="{loading: savingData}">
+            <div class="in-btn ">
+              <button (click)="(invoiceData.receivedAmount>0 &&  !invoiceData.mode && invoiceData.organization_id == '') ? '' : submit_sales_invoice()"   mat-raised-button color="warn">CREATE INVOICE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

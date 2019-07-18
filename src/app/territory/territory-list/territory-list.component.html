@@ -1,0 +1,109 @@
+<div class="main-container">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+    <div class="master-heading">
+        <div class="heading">
+            <h1>MASTER's</h1>
+        </div>
+        <div class="top-search wp50 ml190">
+                <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getLocationList()">
+                <i class="material-icons">search</i>
+        </div>
+        <div class="top-pagination m-right-data">
+                <ul>
+                    <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                    <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                    <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getLocationList()"></li>
+                    <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+                </ul>
+        </div>
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <!-- TABS Component -->
+            <app-master-listing-tabs></app-master-listing-tabs>
+            <!-- TABS Component -->
+            
+            <div class="right-data tabs-listing">
+                
+                <div class="data-not-available" *ngIf="!loading_list && locations.length == 0" >
+                    <div class="outer">
+                        <div class="iinear">
+                            <div class="figure" matRipple>
+                                <div class="header">
+                                    <img src="assets/img/data-not-available-header.svg" alt="">
+                                </div>
+                                
+                                <div class="description">
+                                    <div class="cs-heading">
+                                        <h2>Service Plan</h2>
+                                    </div>
+                                    <div class="img">
+                                            <i class="material-icons">error_outline</i>
+                                    </div>
+                                    <div class="psc">
+                                        <p>data not available</p>
+                                        <p>Tap on <a href="">ADD NEW</a> for Service Plan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cs-table mt15">
+                    <div class="header sticky-header">
+                        <table>
+                            <tr>
+                                <th class="w200">Territory </th>
+                                <th class="w100">Franchise</th>
+                                <th class="w80">Country </th>
+                                <th class="w150">State</th>
+                                <th class="w200">Districts</th>
+                                <th class="w200">City</th>
+                                <th class="w200">Area Pincode</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let loc of locations; let i = index">
+                                    <td class="w200 no-wrap"><a mat-button class="edit link" routerLink="/territory/territory-detail/{{loc.id}}" routerLinkActive="active"> {{loc.location_name}}</a></td>
+                                    <td class="w100">                          
+                                        <table>  
+                                            <ng-container *ngFor="let frc of franchises">                                            
+                                                <ng-container *ngIf="frc.id == loc.assign_to_franchise">
+                                                    <tr><td>{{ frc.name }}</td></tr>
+                                                </ng-container>
+                                            </ng-container>                                                
+                                        </table>                                                                           
+                                    </td>
+                                    <td class="w80">{{loc.country_name}}</td>
+                                    <td class="w150"  style="word-break: break-all">{{loc.state}}</td>
+                                    <td class="w200"  style="word-break: break-all">{{loc.district.length > 50 ? loc.district.slice(0, 50) + '...       ' : loc.district }}</td>
+                                    <td class="w200"  style="word-break: break-all;">{{loc.city.length > 100 ? loc.city.slice(0, 100) + '...        ' : loc.city }}</td>
+                                    <td class="w200"  style="word-break: break-all;">{{loc.pincode.length > 100 ? loc.pincode.slice(0, 100) + '...       ' : loc.pincode }}
+                                        <div class="action-btns">
+                                            <a mat-button class="edit" routerLink="/territory/territory-detail/{{loc.id}}" routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                                            <button mat-button class="delete" (click)="deleteLocations(loc.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                                            </div>       
+                                    </td>
+                                  
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

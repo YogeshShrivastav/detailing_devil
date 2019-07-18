@@ -1,0 +1,141 @@
+
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf="loading_list">
+    <div class="outer">
+      <div class="innear">
+        <mat-spinner></mat-spinner>
+        <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  <div class="master-heading">
+    <div class="heading">
+      <h1>MASTER's</h1>
+    </div>
+    
+
+    <div class="top-search wp30 ml30">
+        <input type="text" placeholder="SEARCH. . ." [(ngModel)]="filter.search"  (keyup.enter)="usersList()">
+        <i class="material-icons">search</i>
+      </div>
+      <!-- <input type="file" required (change)="fileChange($event)" placeholder="Upload Copy of Invoice" name="invoice_doc" accept=".png,.jpg,.jpeg" > -->
+  
+      <div class="top-pagination m-right-data">
+        <ul>
+          <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+          <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+          <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="usersList()"></li>
+          <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+        </ul>
+      </div>
+      
+
+  </div>
+  <div class="cs-container">
+      <div class="cs-row cs-tabs-space">
+          <!-- TABS Component -->
+          <app-master-listing-tabs></app-master-listing-tabs>
+          <!-- TABS Component -->
+          <div class="right-data tabs-listing">
+
+
+            <div class="data-not-available" *ngIf="!loading_list && users.length == 0">
+              <div class="outer">
+                  <div class="iinear">
+                  <div class="figure" matRipple>
+                    <div class="header">
+                      <img src="assets/img/data-not-available-header.svg" alt="">
+                    </div>
+
+                    <div class="description">
+                      <div class="cs-heading">
+                        <h2>Users</h2>
+                      </div>
+                      <div class="img">
+                        <i class="material-icons">error_outline</i>
+                      </div>
+                      <div class="psc">
+                        <p>data not available</p>
+                        <p>Tap on <a routerLink="/users-add" >ADD NEW</a> for User</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="cs-table mt15" *ngIf="!loading_list &&  ( users.length > 0 || filtering )">
+                  <div class="header sticky-header">
+                      <table>
+                          <tr>
+                            <th class="w40">S.No</th>
+                            <th class="w120">
+                                <div class="filter">
+                    
+                                        <mat-form-field class="cs-input cs-date-picker">
+                                        <input placeholder="Date Created" [(ngModel)]="filter.date" name="date" matInput (dateChange)="usersList()" [matDatepicker]="picker" >
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                            </th>
+                            <th class="w150">
+                                <div class="filter">
+                                  <mat-form-field>
+                                    <mat-select placeholder="Role" [(ngModel)]="filter.access_level" (selectionChange)="usersList()">
+                                      <mat-option value="">All</mat-option>
+                                      <mat-option  *ngFor="let val of roles; let i = index" [value]="val.id">{{val.role_name ? val.role_name : '-------'}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </th>
+                            <th>Email</th>
+                            <th class="w120">Password</th>
+                            <th class="w120">Name</th>
+                              <th class="w100">Mobile</th>
+                              <th class="w200">Address</th>
+                          </tr>
+                      </table>
+                  </div>
+                  <div class="table-container">
+                      <div class="table-body">
+                          <table>
+                              <tr *ngFor="let v of users; let i = index">
+                                  <!-- <td class="w100"> <a mat-button class="link" routerLink="/users-edit/{{v.id}}" routerLinkActive="active">{{ v.created_name }} {{ v.franchise_created_name }} </a></td> -->
+                                  <td class="w40">{{ i+1 }}</td>
+                                  <td class="w120">{{ v.created_at}}</td>
+                                  <td class="w150">{{ v.role_name }}</td>
+                                  <td><a href="mailto:{{ v.email }}">{{ v.email }}</a></td>
+                                  <td class="w120">{{ v.visible_password }}</td>
+                                  <td class="w120">{{ v.first_name }}</td>
+                                  <td class="w100">{{ v.phone }}</td>
+                                  <td class="w200">{{ v.address }}
+
+                                    <div class="action-btns">
+                                      <a mat-button class="edit" routerLink="/users-edit/{{v.id}}" routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                                      <button mat-button class="delete" (click)="deleteUser(v.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                                      </div>       
+                                  </td>
+                                  <!-- <td class="w100 text-center defult-hover">
+                                      <ul>
+                                        <li>
+                                           <a class="edit" matTooltip="Edit" routerLink="/users-edit/{{v.id}}" routerLinkActive="active"><i class="material-icons green-clr">edit</i></a>
+                                        </li>
+                                        <li>
+                                       <a class="delete" matTooltip="Delete" (click)="deleteUser(v.id)" ><i class="material-icons red-clr">delete_sweep</i></a>
+
+                                        </li>
+                                      </ul>
+                                     
+                                   </td> -->
+                              </tr>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="h100"></div>

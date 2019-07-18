@@ -1,0 +1,285 @@
+<div class="main-container">
+  <div class="cs-spinner full-page" *ngIf = "!loading_list">
+    <div class="outer">
+      <div class="innear">
+      <mat-spinner></mat-spinner>
+      <P>LOADING . . .</P>
+      </div>
+    </div>
+  </div>
+  <div class="master-heading bcspace">
+    <div class="back-btn">
+      <a mat-button routerLink="/123" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li class="af-none"><p><span class="blue">{{db.franchise_name}} </span> <i class="material-icons r-arrow">keyboard_arrow_right</i> <span>{{customer_name}}</span> </p></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <!-- <app-franchise-left-tabs></app-franchise-left-tabs> -->
+      <div class="master-tabs">
+        <ul>
+          <li><a mat-raised-button routerLink="/franchise-detail/{{franchise_id |crypt}}" routerLinkActive="active">{{franchise_name}}</a></li>
+          <li><a mat-raised-button routerLink="/franchise-stock/{{franchise_id |crypt}}" routerLinkActive="active">Stock</a></li>
+          <li><a mat-raised-button routerLink="/franchise-consumers/{{franchise_id |crypt}}" routerLinkActive="active">Leads</a></li>
+          <li><a mat-raised-button routerLink="/franchise-followup/{{franchise_id |crypt}}" routerLinkActive="active">Followup</a></li>
+          <!-- pooja code start-->
+          <li><a mat-raised-button routerLink="/franchise-customers/{{franchise_id |crypt}}/2" routerLinkActive="active">Customers</a></li>
+          <!-- pooja code end-->
+          
+          
+        </ul>
+      </div>
+      
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing">
+        
+        <!-- <div class="row">
+          <div class="col-12">  
+            <div class="form-field ">
+              <div class="row padding15 pr30">
+                <div class="control-field col-12 cs-heading">
+                  <h2>SELECT PRODUCT</h2>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Brand Name" [matAutocomplete]="planname">
+                    <mat-autocomplete #planname="matAutocomplete">
+                      <mat-option>
+                        <small>xyz</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Product Name" [matAutocomplete]="planname">
+                    <mat-autocomplete #planname="matAutocomplete">
+                      <mat-option>
+                        <small>xyz</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Attribute Type" [matAutocomplete]="planname">
+                    <mat-autocomplete #planname="matAutocomplete">
+                      <mat-option>
+                        <small>xyz</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Attribute Options" [matAutocomplete]="planname">
+                    <mat-autocomplete #planname="matAutocomplete">
+                      <mat-option>
+                        <small>xyz</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="QTY.">
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Measurement" [matAutocomplete]="planname">
+                    <mat-autocomplete #planname="matAutocomplete">
+                      <mat-option>
+                        <small>10 ml</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Rate">
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="CGST">
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="SGST">
+                  </mat-form-field>
+                </div>
+                <div class="control-field col-4">
+                  <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="IGST">
+                  </mat-form-field>
+                </div>
+                
+                <div class="col-12">
+                  <div class="cs-btn outline mt32 mr12 text-right">
+                    <div class="in-btn ">
+                      <button mat-raised-button color="primary">Add To List</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="col-12">
+            <div class="control-field col-12 cs-heading">
+              <h2>Item Details</h2>
+            </div>
+            <div class="cs-table mt20 left-right-15">
+              <div class="header">
+                <table>
+                  <tr>
+                    <th>Item & Description</th>
+                    <th class="w80 text-center">QTY</th>
+                    <th class="w80 text-center">Rate</th>
+                    <th class="w100 text-center">CGST</th>
+                    <th class="w100 text-center">SGST</th>
+                    <th class="w100 text-center">IGST</th>
+                    <th class="w110 text-center">Amount</th>
+                  </tr>
+                </table>
+              </div>
+              <div class="table-container">
+                <div class="table-body">
+                  <table>
+                    <tr *ngFor="let row of invoice_items;let i = index;">
+                      <td>{{row.plan_name}}</td>
+                      <td class="w80 text-center">
+                        <div class="td-inputs">
+                          <input type="number" [(ngModel)] = "row.qty" (input)="get_rateqty(row.price,row.qty,i)"> 
+                        </div>
+                      </td>
+                      <td class="w80 text-center"> 
+                        <div class="td-inputs ">
+                          <input type="number" [(ngModel)] = "row.price" (input)="get_rateqty(row.price,row.qty,i)"> 
+                        </div>
+                      </td>
+                      <td class="w100 text-center">{{row.cgst}}</td>
+                      <td class="w100 text-center">{{row.sgst}}</td>
+                      <td class="w100 text-center">{{row.igst}}</td>
+                      <td class="w110 text-center">{{row.amount}}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-12">
+            <div class="invoice-details">
+              <table class="invoice-table">
+                <tr>
+                  <td class="td">Item Total</td>
+                  <td class="w220 td">&#8377;  {{invoice_detail.item_total}}</td>
+                </tr>
+                
+                <tr>
+                  <td class="td">Discount(%) {{dis_edit}}</td>
+                  <td class="td {{dis_edit ? 'active' : ''}}">
+                    {{invoice_detail.dis_per}} 
+                    <div class="dis-input" (click)="dis_edit=1">
+                      <span>
+                        <i class="material-icons dp48">create</i>
+                        
+                      </span>
+                      <input type="text"  [(ngModel)] = "invoice_detail.dis_per" (input)="get_dis_per(invoice_detail.dis_per);dis_edit=0">
+                      <span (click)="dis_edit=0" class="save-icon"><i class="material-icons green-text" title="Save">save</i></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="td">Discount Amount</td>
+                  <td class="td">
+                    &#8377;  {{invoice_detail.dis_amt}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="td">Sub Total</td>
+                  <td class="td">&#8377; {{invoice_detail.sub_total}}</td>
+                </tr>
+                <tr *ngIf="invoice_detail.total_cgst">
+                  <td class="td">CGST</td>
+                  <td class="td">&#8377; {{invoice_detail.total_cgst}}</td>
+                </tr>
+                <tr *ngIf="invoice_detail.total_sgst">
+                  <td class="td">SGST</td>
+                  <td class="td">&#8377; {{invoice_detail.total_sgst}}</td>
+                </tr>
+                <tr *ngIf="invoice_detail.total_igst">
+                  <td class="td">IGST</td>
+                  <td class="td">&#8377; {{invoice_detail.total_igst}}</td>
+                </tr>
+                <tr>
+                  <td class="td">Grand Total</td>
+                  <td class="td">&#8377; {{invoice_detail.total_amount}}</td>
+                </tr>
+                <!-- <tr>
+                  <td class="td">Received Amount</td>
+                  <td class="td">&#8377; 5214000.00</td>
+                </tr> -->
+                <!-- <tr>
+                  <td class="td">Balance</td>
+                  <td class="td">&#8377; 524000.00</td>
+                </tr>
+                <tr>
+                  <td class="td">Payment Followup</td>
+                  <td class="td">
+                    <div class="form-field">
+                      <div class="row">
+                        <div class="control-field" style="padding-top: 0px !important;">
+                          <mat-form-field class="cs-input cs-date-picker">
+                            <input matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr> -->
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-12">
+            <div class="dubble-btn">
+              <!-- <div class="cs-btn outline mt32 mr12 text-right">
+                <div class="in-btn ">
+                  <button mat-raised-button color="primary">PREVIEW</button>
+                </div>
+              </div> -->
+              <div class="cs-btn mt32 mr12 text-right">
+                <div class="in-btn ">
+                  <button mat-raised-button color="warn" [disabled]="!invoice_items.length || !invoice_detail.total_amount" (click)="save_invoice(invoice_detail.jc_id,invoice_detail.customer_id)">SUBMIT INVOICE</button>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

@@ -1,0 +1,294 @@
+<div class="main-container">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+    <div class="cs-container">
+        
+        <div class="cs-row">
+            <form [formGroup]="JobCardForm" (ngSubmit)="submit_form()" autocomplete="off">
+                <div class="right-data left-right-space">
+                    <div class="contst">
+                        <div class="cs-heading">
+                            <h2>Customer Details</h2>
+                            <!-- <p>Indicates required fields ( <span>*</span> ) </p> -->
+                        </div>
+                        <div class="form-field">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        
+                                        <ng-container *ngIf="!JobCardForm.value.isCompany"> 
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('date_created').hasError('required') && JobCardForm.get('date_created').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    
+                                                    <input  placeholder="DATE" formControlName="date_created"  matInput [matDatepicker]="picker1"   >
+                                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                    <mat-datepicker #picker1></mat-datepicker>
+                                                    
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('name').hasError('required') && JobCardForm.get('name').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="NAME" formControlName="name" readonly>
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('name').hasError('required') && JobCardForm.get('name').touched">*Name is Mandatory</p>
+                                            </div>
+                                            
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('email').hasError('required') && JobCardForm.get('email').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Email" formControlName="email" readonly>
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('email').hasError('required') && JobCardForm.get('email').touched">*Email is Mandatory</p>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('contact_no').hasError('required') && JobCardForm.get('contact_no').touched || (JobCardForm.get('contact_no').hasError('minlength') || JobCardForm.get('contact_no').hasError('maxlength')) && JobCardForm.get('contact_no').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput type="tel" placeholder="Contact No. *" formControlName="contact_no" readonly>
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('contact_no').hasError('required') && JobCardForm.get('contact_no').touched">*Contact No. is Mandatory</p>
+                                                <p *ngIf="(JobCardForm.get('contact_no').hasError('minlength') || JobCardForm.get('contact_no').hasError('maxlength')) && JobCardForm.get('contact_no').touched">*Contact No. not valid</p>
+                                            </div>
+                                            
+                                            
+                                            <div class="col-8">
+                                                <div class="control-field col-12" [ngClass]="{'hss-error' : (JobCardForm.get('address').hasError('required') && JobCardForm.get('address').touched )}">
+                                                    <mat-form-field class="example-full-width cs-input">
+                                                        <textarea matInput placeholder="Address" class="h100" formControlName="address" readonly></textarea>
+                                                    </mat-form-field>
+                                                    <p *ngIf="JobCardForm.get('address').hasError('required') && JobCardForm.get('address').touched">*Address is Mandatory</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </ng-container>
+                                        <ng-container *ngIf="JobCardForm.value.isCompany"> 
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Company Name" formControlName="company_name" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Company Contact No" formControlName="company_contact_no" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" >
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput  placeholder="GSTN" formControlName="gstin" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            
+                                            <div class="col-8">
+                                                <div class="control-field col-12" >
+                                                    <mat-form-field class="example-full-width cs-input">
+                                                        <textarea matInput placeholder="Company Address" class="h100" formControlName="company_address" readonly></textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        
+                                        
+                                        <!-- <div class="control-field col-4">
+                                            <mat-form-field class="example-full-width cs-input">
+                                                <input matInput placeholder="Booking ID" formControlName="booking_id">
+                                            </mat-form-field>
+                                        </div> -->
+                                        <div class="col-4 control-field" *ngIf="!lead_data.gstin">
+                                            
+                                        </div>
+                                        <div class="col-4 control-field" *ngIf="company_list.length > 0 && lead_data.gstin">
+                                            <!-- <mat-form-field > -->
+                                                <mat-checkbox formControlName="isCompany"><p>Attach Company Address </p></mat-checkbox> 
+                                                <!-- </mat-form-field> -->
+                                            </div>
+                                            
+                                            <div class="col-4 control-field" *ngIf="vehicle_info?.length > 0 && preventive_id == '0' ">
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Choose Registration No." formControlName="registration_no" (selectionChange)="change_vehicle()">
+                                                        <mat-option *ngFor="let val of vehicle_info; let i = index" [value]="val.regn_no">{{val.regn_no}}</mat-option>
+                                                        <mat-option value="Add New">Add New</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('vehicle_type').hasError('required') && JobCardForm.get('vehicle_type').touched )}">
+                                                <!-- <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Vehicle Type *" formControlName="vehicle_type">
+                                                </mat-form-field> -->
+                                                
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Vehicle Type *" formControlName="vehicle_type" (selectionChange)="get_category()">
+                                                        <mat-option *ngFor="let val of v_type_arr" [value]="val.vehicle_type">{{val.vehicle_type}} </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('vehicle_type').hasError('required') && JobCardForm.get('vehicle_type').touched">*Vehicle Type is Mandatory</p>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('cat_type').hasError('required') && JobCardForm.get('cat_type').touched )}">
+                                                
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Service Type *" multiple formControlName="cat_type" (selectionChange)="getPlan()">
+                                                        <mat-option *ngFor="let val of cat_type_arr" [value]="val.category_type">{{val.category_type}}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('cat_type').hasError('required') && JobCardForm.get('cat_type').touched">*Category Type is Mandatory</p>
+                                            </div>
+                                            
+                                            <div class="col-4 control-field" [ngClass]="{'hss-error' : (JobCardForm.get('services').hasError('required') && JobCardForm.get('services').touched )}">
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Service Opted" multiple formControlName="services" >
+                                                        <mat-optgroup [label]="x" *ngFor="let x of JobCardForm.value.cat_type" >
+                                                            <ng-container *ngFor="let val of plan_name_arr" > 
+                                                                <mat-option *ngIf="val.category_type == x " (click)="checkService(val.plan_name,x)" [disabled]="val.disabled" [value]="val.plan_name">{{val.plan_name}} 
+                                                                </mat-option>
+                                                            </ng-container>
+                                                        </mat-optgroup>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" >
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Make " formControlName="make" (selectionChange)="get_car_model()">
+                                                        <mat-option *ngFor="let val of company_list" [value]="val.company">{{val.company}} </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                
+                                            </div>
+                                            
+                                            <div class="control-field col-4" >
+                                                <mat-form-field class="cs-multi-select">
+                                                    <mat-select placeholder="Make Modal No " formControlName="modal_no" >
+                                                        <mat-option *ngFor="let val of car_model_list" [value]="val.car">{{val.car}} </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('color').hasError('required') && JobCardForm.get('color').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Color" formControlName="color">
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('color').hasError('required') && JobCardForm.get('color').touched">*Color is Mandatory</p>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('year').hasError('required') && JobCardForm.get('year').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Make Year" formControlName="year">
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('year').hasError('required') && JobCardForm.get('year').touched">*Year is Mandatory</p>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('reg_no').hasError('required') && JobCardForm.get('reg_no').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Registration No *" formControlName="reg_no">
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('reg_no').hasError('required') && JobCardForm.get('reg_no').touched">*Registration No is Mandatory</p>
+                                            </div>
+                                            
+                                            <div class="control-field col-4" [ngClass]="{'hss-error' : (JobCardForm.get('chasis_no').hasError('required') && JobCardForm.get('chasis_no').touched )}">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Chassis No" formControlName="chasis_no">
+                                                </mat-form-field>
+                                                <p *ngIf="JobCardForm.get('chasis_no').hasError('required') && JobCardForm.get('chasis_no').touched">*Chassis No is Mandatory</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="cs-divider pt20 left-right-15">
+                                    <mat-divider></mat-divider>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 control-field" [ngClass]="{'hss-error' : (JobCardForm.get('srs').hasError('required') && JobCardForm.get('srs').touched )}">
+                                        <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="SRS (required) *" formControlName="srs">
+                                                <mat-option value="1 (Brand New)">1 (Brand New)</mat-option>
+                                                <mat-option value="2 (Good Condition)">2 (Good Condition)</mat-option>
+                                                <mat-option value="3 (Fair Condition)">3 (Fair Condition)</mat-option>
+                                                <mat-option value="4 (Poor Condition)">4 (Poor Condition)</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <p *ngIf="JobCardForm.get('srs').hasError('required') && JobCardForm.get('srs').touched">*SRS is Mandatory</p>
+                                    </div>
+                                    
+                                    <div class="col-4 control-field" [ngClass]="{'hss-error' : (JobCardForm.get('technician').hasError('required') && JobCardForm.get('technician').touched )}">
+                                        <mat-form-field class="cs-multi-select">
+                                            <mat-select placeholder="Technician" formControlName="technician" multiple>
+                                                <mat-option *ngFor="let val of technician_arr"  [value]="val.id">{{val.first_name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <p *ngIf="JobCardForm.get('technician').hasError('required') && JobCardForm.get('technician').touched">*Technician is Mandatory</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="cs-divider pt20 left-right-15">
+                                    <mat-divider></mat-divider>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="description-box">
+                                            <div class="cs-heading">
+                                                <h2>Damage Waiver</h2>                
+                                            </div>
+                                            <div class="text-box">
+                                                <p>Detailing Devils uses premium quality vehicle care products and highly trained paint technicians. We take pride in delivering world-class results with minimal damage to the vehicle's finish. We guarantee flawless paint finish, but take no responsibility for burnouts, burn marks or any other paint damage caused during the SRS (Skin Restoration System) process on the following paint conditions:
+                                                </p>
+                                            </div>
+                                            
+                                            <ul>
+                                                <li>
+                                                    <mat-checkbox formControlName="isRepainted"><p>Repainted Vehicle</p></mat-checkbox>
+                                                    
+                                                </li>
+                                                <li>
+                                                    <mat-checkbox formControlName="isSingleStagePaint"><p>Single Stage Paint</p></mat-checkbox>
+                                                    
+                                                </li>
+                                                <li>
+                                                    <mat-checkbox formControlName="isPaintThickness"><p>Paint Thickness below 2 MIL</p></mat-checkbox>  
+                                                </li>
+                                                <li>
+                                                    <mat-checkbox  formControlName="isVehicleOlder"><p>Vehicle older than 5 years</p></mat-checkbox>  
+                                                </li>
+                                                <li>
+                                                    <!-- <mat-checkbox formControlName="isCompany"><p>Attach Company Address </p></mat-checkbox>  -->
+                                                    
+                                                </li>
+                                                
+                                            </ul>
+                                            
+                                            <div class="candition" >
+                                                <mat-checkbox formControlName="isDisclaimer"></mat-checkbox>
+                                                <p>I have read the disclaimer above and I understand that Detailing Devils is not responsible for any damage caused to my vehicle's paint during the SRS process.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cs-btn fixedd mt32  text-right" [ngClass]="{loading: savingData}">
+                            <div class="in-btn">
+                                <button mat-raised-button color="primary" [attr.disabled]="savingData" type="submit">save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+    <div class="h80"></div>

@@ -1,0 +1,133 @@
+<mat-dialog-content style="overflow: hidden;">
+	<div class="convert-franchies-modle mr16" style="min-width: inherit; max-width: inherit;">
+		<div class="header">
+			<h1>Consumption Stock Item Details</h1>
+			<button mat-button color="primary" mat-dialog-close><i class="material-icons">clear</i></button>
+		</div>
+	</div>   
+	<div class="cs-spinner full-page" *ngIf = "loading_list">
+		<div class="outer">
+			<div class="innear">
+				<mat-spinner></mat-spinner>
+				<P>LOADING . . .</P>
+			</div>
+		</div>
+		</div>
+		<div class="cs-container">
+			<div class="cs-row">
+				<div class="contst">
+				
+          <div class="row">
+            <div class="col-3">
+              <div class="simple-list">
+                <ul>
+                  <li>
+                    <p>Created By</p>
+                    <span>{{stock.created_name}}</span>
+                  </li>
+                  <li>
+                    <p>Date Created</p>
+                    <span>{{stock.date_created | date: 'dd MMM yyyy'}}</span>
+									</li>
+								
+                 
+                </ul>
+              </div>
+            </div>
+
+
+						<div class="col-3">
+              <div class="simple-list">
+                <ul>
+                 
+									<li>
+                    <p>Franchise</p>
+                    <span> {{stock.location_name}} ({{stock.company_name}})</span>
+									</li>
+									
+                  <li>
+                    <p>Total Item</p>
+                    <span>{{stock.itemTotal}}</span>
+                  </li>
+                 
+                </ul>
+              </div>
+						</div>
+
+						
+						<div class="col-3">
+              <div class="simple-list">
+                <ul>
+								
+									<li>
+                    <p>Issue To</p>
+                    <span> {{stock.issue_to}}</span>
+									</li>
+									
+                  <li>
+                    <p>Purpose</p>
+                    <span>{{stock.purpose}}</span>
+                  </li>
+                 
+                </ul>
+              </div>
+						</div>
+
+						
+						<div class="col-3">
+              <div class="simple-list">
+                <ul>
+                  <li>
+                    <p>Note</p>
+                    <span>{{stock.remark}}</span>
+                  </li>
+                 
+                </ul>
+              </div>
+						</div>
+          </div>
+          
+					
+					<div class="form-field">
+						<div class="row">
+           
+							<div class="cs-table mt20"  >
+								<div class="header">
+									<table>
+										<tr>
+											<th  class="w100">Category</th>
+											<th  class="w100">Brand</th>
+											<th  class="w100">Product</th>
+											<th  class="w100">UOM</th>
+											<th  class="w100">QTY</th>
+										</tr>
+									</table>
+								</div>
+								<div class="table-container">
+									<div class="table-body">
+										<table>
+											<tr *ngFor="let row of items;let i = index">
+												<td  class="w100">{{row.category}}</td>
+												<td  class="w100">{{row.brand}}</td>
+												<td  class="w100">{{row.product}}</td>
+												<td  class="w100">{{row.uom}}</td>
+												<td  class="w100">{{row.qty}}</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</mat-dialog-content>
+	
+	<!-- ACTIONS BUTTONS -->
+	
+
+	
+	

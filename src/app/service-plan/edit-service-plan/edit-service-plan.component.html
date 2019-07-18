@@ -1,0 +1,224 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+  <div class="back-btn">
+    <a mat-button routerLink="/products" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>
+  </div>
+  <div class="heading">
+    <h1>MASTER's</h1>
+  </div>
+</div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-master-add-tabs></app-master-add-tabs>
+      <!-- TABS Component -->
+
+      <div class="right-data">
+        <div class="cs-spinner half-page" *ngIf = "loading_data">
+        <div class="outer">
+          <div class="innear">
+            <mat-spinner></mat-spinner>
+            <P>LOADING . . .</P>
+          </div>
+        </div>
+      </div>
+        <form name="form" (ngSubmit)="f.form.valid && updateServicePlan()" #f="ngForm" novalidate >
+          <div class="contst">
+            <div class="cs-heading">
+              <h2>Edit Service Plan - <span>{{ form.plan_name }}</span></h2>
+            </div>
+
+            <div class="form-field">
+              <div class="row">
+                <div class="control-field col-3">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Vehicle Type" [matAutocomplete]="vehicle_type" name="vehicle_type" [(ngModel)] = "form.vehicle_type" #vehicle_type="ngModel" required>
+                    <mat-autocomplete #vehicle_type="matAutocomplete">
+                      <mat-option *ngFor="let val of filteredVehicleTypes | async" [value]="val.name">
+                        <small>{{ val.name }}</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <div class="control-field col-3">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Plan Name" [matAutocomplete]="plan_name" name="plan_name" [(ngModel)] = "form.plan_name" #plan_name="ngModel" required>
+                    <mat-autocomplete #plan_name="matAutocomplete">
+                      <mat-option *ngFor="let planName of filteredPlanNames | async" [value]="planName.name">
+                        <small>{{ planName.name }}</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <div class="control-field col-3">
+                  <mat-form-field class="example-full-width cs-input select-input">
+                    <input matInput placeholder="Category Type" name="category_type" [matAutocomplete]="category_name"  [(ngModel)] = "form.category_type" #category_type="ngModel" required>
+                    <mat-autocomplete #category_name="matAutocomplete">
+                      <mat-option *ngFor="let categoryName of filteredCategoryTypes | async" [value]="categoryName.name">
+                        <small>{{ categoryName.name }}</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <mat-error *ngIf="f.submitted && !category_type.valid" >Category Type is required</mat-error>
+                </div>
+
+                <div class="control-field col-3">
+                      <mat-form-field class="example-full-width cs-input">
+                          <input matInput placeholder="Invoice Name" [value]="invoice_name" name="invoice_name" [(ngModel)] = "form.invoice_name" #invoice_name="ngModel">
+                        </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+
+
+                  <div class="control-field col-3">
+                      <mat-form-field class="cs-multi-select">
+                        <mat-select placeholder="Number of Visit" name="num_of_visits" [(ngModel)]="form.num_of_visits" #num_of_visits="ngModel" (selectionChange)="setVisitType(num_of_visits.value)" required>
+                          <mat-option>---</mat-option>
+                          <mat-option *ngFor="let item of num_of_visits_options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                  <div class="control-field col-2">
+                      <mat-form-field class="example-full-width cs-input ">
+                          <input matInput placeholder="SAC" name="sac" [(ngModel)] = "form.sac" #price="ngModel">
+                      </mat-form-field>
+                  </div>
+
+                  
+                <div class="control-field col-2">
+                  <mat-form-field class="example-full-width cs-input inr-input">
+                    <input matInput placeholder="Price" name="price" [(ngModel)] = "form.price" #price="ngModel" [value]="price" required>
+                  </mat-form-field>
+                </div>
+
+                <div class="control-field col-2">
+                    <mat-form-field class="example-full-width cs-input ">
+                        <input matInput placeholder="GST" name="gst" [(ngModel)] = "form.gst" #price="ngModel">
+                    </mat-form-field>
+                </div>
+
+
+          
+                <!-- <div class="control-field col-4">
+                  <mat-form-field class="cs-multi-select">
+                    <mat-select placeholder="Year" name="year" [(ngModel)]="form.year" #year="ngModel">
+                      <mat-option *ngFor="let val of year_options" [value]="val">{{val}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div> -->
+
+                <div class="control-field col-2">
+
+                    <mat-form-field class="example-full-width cs-input ">
+                        <input matInput placeholder="Warranty Period" type="number" name="interval_value" [(ngModel)] = "form.interval_value" #price="ngModel" required>
+                      </mat-form-field>
+
+                    <!-- <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Interval Value" name="interval_value" [(ngModel)]="form.interval_value" interval_value="ngModel" required>
+                        <mat-option value="1">1</mat-option>
+                        <mat-option value="2">2</mat-option>
+                        <mat-option value="3">3</mat-option>
+                        <mat-option value="4">4</mat-option>
+                        <mat-option value="5">5</mat-option>
+                        <mat-option value="6">6</mat-option>
+                        <mat-option value="7">7</mat-option>
+                        <mat-option value="8">8</mat-option>
+                        <mat-option value="9">9</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="11">11</mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                  </div>
+                
+                <div class="control-field col-2">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Warranty Type" name="interval_type" [(ngModel)]="form.interval_type" #interval_type="ngModel" required>
+                        <mat-option value="Month">Month</mat-option>
+                        <mat-option value="Year">Year</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                <div class="control-field col-4">
+                  <!-- <mat-form-field class="example-full-width cs-input">
+                    <input matInput placeholder="Description" name="description" [(ngModel)] = "form.description" #description="ngModel" [value]="description">
+                  </mat-form-field> -->
+
+                  <mat-form-field class="example-full-width cs-input">
+                      <textarea matInput placeholder="Description" class="h100" name="description" [(ngModel)] = "form.description" #description="ngModel"></textarea>
+                    </mat-form-field>
+
+                </div>
+              </div>
+
+              <div class="sprate-box">
+                <div class="row">
+                  <div class="control-field col-2">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="No. of Visit" name="visit_type" [(ngModel)] = "form.visit_type" #visit_type="ngModel" (selectionChange)="resetVisitType(visit_type.value)">
+                        <mat-option *ngFor="let n of visitType" value="{{n}}">{{n}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-8 pr70">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Raw Material Consumption - add with (,)" #material_consumptions name="material_consumptions" [(ngModel)] = "form.material_consumptions" #material_consumptions="ngModel">
+                    </mat-form-field>
+                    <div class="plus-btn">
+                      <a mat-raised-button color="warn" (click)="storeVisitData(visit_type.value, material_consumptions.value)">
+                        <i class="material-icons">add</i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cs-table" *ngIf="!!visitData?.length">
+                  <div class="header">
+                    <table>
+                      <tr>
+                        <th class="w300">Visit Type</th>
+                        <th>Raw Material Consumption</th>
+                        <th class="w100">&nbsp;</th>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="table-container">
+                    <div class="table-body">
+                      <table>
+                        <tr *ngFor="let data of visitData;  let i = index">
+                          <td>{{ data.visit_type }}</td>
+                          <td>
+                            <div class="tags">
+                              <span *ngFor="let option of data.raw_materials;  let i = index ">{{ option }}</span>
+                            </div>
+                          </td>
+                          <td class="delete-icon text-center w100">
+                            <a mat-button color="primary"  (click)="removeVisitData(i, data.visit_type_id)">
+                              <i class="material-icons">delete_sweep</i>
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cs-btn fixedd mt32 text-right" [ngClass]="{loading: sendingData}">
+            <div class="in-btn">
+              <button mat-raised-button color="primary" [attr.disabled]="sendingData">save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h100"></div>

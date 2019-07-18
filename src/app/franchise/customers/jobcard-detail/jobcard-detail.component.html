@@ -1,0 +1,562 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="cs-spinner full-page" *ngIf = "loading_list">
+      <div class="outer">
+        <div class="innear">
+          <mat-spinner></mat-spinner>
+          <P>LOADING . . .</P>
+        </div>
+      </div>
+    </div>
+    <div class="back-btn">
+      <a mat-button (click)="db.goBack()" routerLinkActive="active"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li><p>
+          <span class="blue">{{db.franchise_name}} </span> 
+          <i class="material-icons r-arrow">keyboard_arrow_right</i> 
+          <span class="blue">Job Card</span> 
+          <i class="material-icons r-arrow">keyboard_arrow_right</i>
+          <span>#{{detail.id}}</span> </p>
+        </li>
+        <li><p class="light">Status : <span class="yellow-clr">{{detail.status}}</span></p></li> 
+        
+        <li  *ngIf="detail.status == 'Open' ">
+          <div class="item-filter">
+            <mat-form-field class="wp100">
+              <mat-select multiple placeholder="Select Plan" [(ngModel)]="detail.freePlan" (selectionChange)="addToCart()"  name="freePlan">
+                <ng-container *ngFor="let x of plan_category_array; let c = index" >
+                  <mat-optgroup [label]="x" >
+                    <ng-container *ngFor="let plan of all_plans; let i = index" >
+                      <mat-option *ngIf="x == plan.category_type  && plan.checked == false  && plan.plan_start_date == '0000-00-00'" [value]="plan.plan_name" [disabled]="plan.disable_plan" >{{plan.plan_name}}</mat-option>
+                    </ng-container>
+                  </mat-optgroup>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </li> 
+      </ul>
+    </div>
+
+    <div class="m-right-data action-btns-right vl-info">
+      <ul>
+        <li  class="create"   *ngIf="detail.status == 'Open' && price.item_price == 0 && cardraw_material.length > 0" ><a mat-button class="red-clr" (click)="close_job_card(detail.id)">Close Jobcard</a></li>
+        
+        <li class="create"  *ngIf="detail.status == 'Open'"><a mat-button (click)="openAddJobcardRawmaterialDialog(detail.id)">Add Raw Items</a></li>
+
+        <li>
+          <button mat-raised-button color="warn" class="h30" style="line-height: 30px;"  routerLink="/editjobcard/{{detail.id | crypt}}/{{custid | crypt}}/{{franchise_id | crypt}}" routerLinkActive="active">Edit Job Card</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      
+      <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 && detail.type == 2"></app-franchise-left-tabs>
+      
+      <div class="right-data" [ngClass]="{'pl0' : db.datauser.franchise_id ||  detail.type == 1}">
+        <div class="row">
+          <div class="col-12">
+            <div class="contst">
+              <div class="cs-heading" *ngIf="!detail.isCompany">
+                <h2>CUSTOMER DETAIL</h2>
+              </div>
+              
+              <div class="side-by-side mt10" style="display: inherit;" *ngIf="!detail.isCompany">
+                <div class="row mr0">
+                  <div class="figure grid-three">
+                    <p>Name</p>
+                    <p>{{detail.first_name}} {{detail.last_name}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Contact No</p>
+                    <p>{{detail.phone}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Email</p>
+                    <p>{{detail.email}}</p>
+                  </div>
+                  <div class="figure grid-three">
+                    <p>Address</p>
+                    <p>{{detail.address}} {{detail.city}} {{detail.district}} {{detail.state}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>Change Address</p>
+                    <div class="basic-select">
+                      <div class="basic-select">
+                        <select  (change)="changeAddress()" [(ngModel)]="detail.isCompany" name="extra_discount" #isCompany="ngModel" style="background: transparent; border: 0px;" >
+                          <option value="1">Company</option>
+                          <option value="0">Consumer</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              
+              
+              <div class="cs-heading mt10" *ngIf="detail.isCompany">
+                <h2>COMPANY DETAIL</h2>
+              </div>
+              
+              <div class="side-by-side mt10" style="display: inherit;" *ngIf="detail.isCompany">
+                <div class="row mr0">
+                  
+                  <div class="figure grid-three">
+                    <p>Company Name</p>
+                    <p>{{detail.company_name}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>Company Contact No</p>
+                    <p>{{detail.company_contact_no}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>GSTIN</p>
+                    <p>{{detail.gstin}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>Company Addrees</p>
+                    <p>{{detail.company_address}} {{detail.company_city}} {{detail.company_district}} {{detail.company_state}}</p>
+                  </div>
+                  
+                  <div class="figure grid-three">
+                    <p>Change Address</p>
+                    <div class="basic-select">
+                      <div class="basic-select">
+                        <select  (change)="changeAddress()" [(ngModel)]="detail.isCompany" name="extra_discount" #isCompany="ngModel" style="background: transparent; border: 0px;" >
+                          <option value="1">Company</option>
+                          <option value="0">Consumer</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              
+              
+              <div class="cs-heading mt20" >
+                <h2>VEHICLE INFO</h2>
+              </div>
+              
+              <div class="side-by-side mt10">
+                <div class="figure">
+                  <p>Type</p>
+                  <p>{{detail.vehicle_type}}</p>
+                </div>
+                <div class="figure">
+                  <p>Brand / Car Name</p>
+                  <p>{{detail.model_no}}</p>
+                </div>
+                <div class="figure">
+                  <p>Reg No.</p>
+                  <p>{{detail.regn_no}}</p>
+                </div>
+                <div class="figure">
+                  <p>Last Service</p>
+                  <p>{{detail.date_created | date: 'dd MMM yyyy'}}</p>
+                </div>
+                
+                <div class="figure">
+                  <p>Service Type</p>
+                  <p *ngFor="let x  of this.detail.category_type">{{x}},</p>
+                </div>
+                
+              </div>
+              <div class="cs-heading mt20" *ngIf="cardraw_material?.length">
+                <h2>Raw Material Items</h2>
+              </div>
+              
+              <div class="cs-table mt10 left-right-15" *ngIf="cardraw_material?.length">
+                <div class="header">
+                  <table>
+                    <tr>
+                      <th class="w100">Date Created</th>
+                      <th class="w100">Created By</th>
+                      <th>Description</th>
+                      <th class="w70">Qty</th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container info-table">
+                  <div class="table-body">
+                    <table>
+                      <tr *ngFor="let item of cardraw_material">
+                        
+                        <td class="w100">{{item.date_created | date: 'dd MMM yyyy'}}</td>
+                        <td class="w100">{{item.created_name}}</td>
+                        <td>{{item.brand_name}} {{item.item_name}} {{item.attr_type}} {{item.attr_option}} {{item.uom}}</td>
+                        <td class="w70">{{item.quantity}}</td>
+                        
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>  
+              
+              <div class="cs-heading mt20" *ngIf="cardinvoices?.length">
+                <h2>INVOICE LIST</h2>
+              </div>
+              
+              <div class="cs-table mt10 left-right-15" *ngIf="cardinvoices?.length">
+                <div class="header">
+                  <table>
+                    <tr>
+                      <th class="w120">Date Created</th>
+                      <th class="w120">Created By</th>
+                      <th>Invoice</th>
+                      <th>Amount</th>
+                      <th>GST</th>
+                      <th>Total</th>
+                      <th>Balance</th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container info-table">
+                  <div class="table-body">
+                    <table>
+                      <tr *ngFor="let inv of cardinvoices">
+                        <td class="w120">{{inv.date_created | date: 'dd MMM yyyy'}}</td>
+                        <td class="w120">{{inv.created_name}}</td>
+                        <td><a mat-button class="link"  routerLink="/franchise/customer_invoice_detail/{{franchise_id |crypt}}/{{inv.customer_id |crypt}}/{{inv.id |crypt}}" routerLinkActive="active">#{{inv.invoice_id}}</a></td>
+                        <td>{{inv.sub_amount}}</td>
+                        <td>{{inv.gst_price }} </td>
+                        <td>{{inv.amount}}</td>
+                        <td>{{inv.balance}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>  
+              
+              
+              <div class="cs-heading mt20">
+                <h2>PURCHASED PLAN INFO</h2>
+              </div>
+              
+              
+              <div class="cs-table mt10 left-right-15">
+                <div class="header">
+                  <table>
+                    <tr  >
+                      <th>Plan Name</th>
+                      <th>SAC</th>
+                      <th>Description</th>
+                      <th>No. of Visits</th>
+                      <th>Plan Start Date</th>
+                      <th>Plan End Date</th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container info-table">
+                  <div class="table-body">
+                    <table>
+                      <ng-container *ngFor="let plan of all_plans; let i = index">
+                        <tr *ngIf="plan.plan_start_date != '0000-00-00'">
+                          <td>{{plan.plan_name}}</td>
+                          <td>{{plan.sac }}</td>
+                          <td>{{plan.description }}</td>
+                          <td>{{plan.number_of_visits }}</td>
+                          <td>{{plan.plan_start_date }}</td>
+                          <td>{{plan.plan_end_date }}</td>
+                        </tr>
+                      </ng-container>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              
+              
+              <div class="cs-heading mt20"  *ngIf="price.item_price>0 && detail.status == 'Open'">
+                <h2>NEW PLAN INFO</h2>
+              </div>
+              <div class="cs-table mt10 left-right-15"  *ngIf="price.item_price>0 && detail.status == 'Open'">
+                <div class="header">
+                  <table>
+                    <tr>
+                      <th>Plan</th>
+                      <th>Plan Name</th>
+                      <th>SAC</th>
+                      <th>No. of Visits</th>
+                      <th>Price</th>
+                      <th>Dis.(%)</th>
+                      <th>Discount</th>
+                      <th>Sub Amount</th>
+                      <th *ngIf="price.cgst_per > 0">CGST (%)</th>
+                      <th *ngIf="price.sgst_per > 0">SGST (%)</th>
+                      <th *ngIf="price.igst_per > 0">IGST (%)</th>
+                      <th>Amount</th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container info-table">
+                  <div class="table-body">
+                    <table >
+                      <ng-container *ngFor="let plan of all_plans; let i = index">
+                        <tr *ngIf="plan.checked == true && plan.plan_start_date == '0000-00-00'">
+                          <td>
+                            <mat-checkbox [disabled]="plan.disable" class="cs-check w20" value={{plan.checked}} (change)="cal_gst(i)" [(ngModel)]="plan.checked" [checked]="plan.checked" name = "deal_pro_id"  *ngIf="detail.status == 'Open'" style="display: inline-block;"></mat-checkbox>
+                          </td>
+                          <td>{{plan.plan_name}}</td>
+                          <td>{{plan.sac }}</td>
+                          <td>{{plan.number_of_visits }}</td>
+                          <td>{{plan.price }}</td>
+                          <td>
+                            <div class="edit-td-input active">
+                              <input type="number" name="disc_percent" [disabled]="(price.extra_discount && price.extra_discount != '0' ) ? true : false" (input)="discount_per_count(i)" [(ngModel)]="plan.disc_percent" class="wp100">
+                            </div>
+                          </td>
+                          <td>
+                            <div class="edit-td-input active">
+                              <input type="number" name="discount" [disabled]="(price.extra_discount && price.extra_discount != '0' ) ? true : false"  (input)="discount_amt_count(i)"   [(ngModel)]="plan.discount" class="wp100">
+                            </div>
+                          </td>
+                          <td>{{plan.sub_amount}}</td>
+                          <td *ngIf="price.cgst_per > 0">
+                            <div class="tags">
+                              <span class="tran">{{plan.cgst_amt}}</span>
+                              <span class="percs">{{plan.cgst_per}}%</span>
+                            </div>
+                          </td>
+                          <td *ngIf="price.sgst_per > 0">
+                            <div class="tags">
+                              <span class="tran">{{plan.sgst_amt}}</span>
+                              <span class="percs">{{plan.sgst_per}}%</span>
+                            </div>
+                          </td>
+                          <td *ngIf="price.igst_per > 0">
+                            <div class="tags">
+                              <span class="tran">{{plan.igst_amt}}</span>
+                              <span class="percs">{{plan.igst_per}}%</span>
+                            </div>
+                          </td>
+                          <td>{{plan.amount }}</td>
+                        </tr>
+                      </ng-container>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+    </div>
+    <div class="row" *ngIf="price.item_price>0 && detail.status == 'Open'" >
+      <div class="col-12">
+        <div class="invoice-details">
+          <table class="invoice-table">
+            <tr>
+              <td class="td">Item Total</td>
+              <td class="w220 td">&#8377;  {{price.item_price.toFixed(2)}}</td>
+            </tr>
+            
+            <tr >
+              <td class="td">
+                <div class="add-disc">
+                  Discount({{price.dis_per}}%)
+                  <div class="basic-select">
+                    <div class="basic-select">
+                      <select  (change)="cal_gst()"  [(ngModel)]="price.extra_discount" name="extra_discount" #extra_discount="ngModel" style="background: transparent; border: 0px;" >
+                        <option value="0">More</option>
+                        <option value="1">1 %</option>
+                        <option value="2">2 %</option>
+                        <option value="3">3 %</option>
+                        <option value="4">4 %</option>
+                        <option value="5">5 %</option>
+                        <option value="6">6 %</option>
+                        <option value="7">7 %</option>
+                        <option value="8">8 %</option>
+                        <option value="9">9 %</option>
+                        <option value="10">10 %</option>
+                        <option value="11">11 %</option>
+                        <option value="11">11 %</option>
+                        <option value="12">12 %</option>
+                        <option value="13">13 %</option>
+                        <option value="14">14 %</option>
+                        <option value="15">15 %</option>
+                        <option value="16">16 %</option>
+                        <option value="17">17 %</option>
+                        <option value="18">18 %</option>
+                        <option value="19">19 %</option>
+                        <option value="20">20 %</option>
+                        <option value="21">21 %</option>
+                        <option value="22">22 %</option>
+                        <option value="23">23 %</option>
+                        <option value="24">24 %</option>
+                        <option value="25">25 %</option>
+                        <option value="26">26 %</option>
+                        <option value="27">27 %</option>
+                        <option value="28">28 %</option>
+                        <option value="29">29 %</option>
+                        <option value="30">30 %</option>
+                      </select>
+                    </div>
+                    
+                  </div>
+                </div>
+              </td>
+              <td class="w220 td">&#8377;  {{price.disc_price.toFixed(2)}}</td>
+            </tr>
+            <tr *ngIf="price.disc_price.toFixed(0) > 0">
+              <td class="td">Sub Total</td>
+              <td class="td">&#8377; {{price.sub_amount}}</td>
+            </tr>
+            <tr *ngIf="price.sgst_per > 0">
+              <td class="td">SGST</td>
+              <td class="td">&#8377; {{price.sgst_price}}</td>
+            </tr>
+            <tr *ngIf="price.cgst_per > 0">
+              <td class="td">CGST</td>
+              <td class="td">&#8377; {{price.cgst_price}}</td>
+            </tr>
+            <tr *ngIf="price.igst_per > 0">
+              <td class="td">IGST</td>
+              <td class="td">&#8377; {{price.igst_price}}</td>
+            </tr>
+            <tr>
+              <td class="td">Total Amount</td>
+              <td class="td">&#8377; {{price.inv_price}}</td>
+            </tr>
+            
+            <tr>
+              <td class="td">Payment Mode</td>
+              <td class="td">
+                
+                <mat-form-field class="cs-multi-select">
+                  <mat-select name="payment_mode" [(ngModel)]="price.payment_mode" >
+                    
+                    <mat-option value="None">
+                      <small>None</small>
+                    </mat-option>
+                    
+                    <mat-option value="Cash">
+                      <small>Cash</small>
+                    </mat-option>
+                    
+                    <mat-option value="Bank Transfer">
+                      <small>Bank Transfer</small>
+                    </mat-option>
+                    
+                    <mat-option value="Payment Gateway">
+                      <small>Payment Gateway</small>
+                    </mat-option>
+                    
+                    <mat-option value="Cheque">
+                      <small>Cheque</small>
+                    </mat-option>
+                    
+                    <mat-option value="NEFT">
+                      <small>NEFT</small>
+                    </mat-option>
+                    
+                  </mat-select>
+                </mat-form-field>
+                <mat-error color="primary" *ngIf="!price.payment_mode" >This field is required</mat-error>
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="td">Received Amount</td>
+              <td class="td">
+                <input  class="simple-input w70" type="number" [(ngModel)]="price.received" name="received" #receivedAmount="ngModel"  (input)="cal_gst()" style="text-align: right;">                  
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="td">Balance Amount</td>
+              <td class="td">&#8377; {{price.balance}}</td>
+            </tr>
+            
+            
+            <tr >
+              <td class="td">Invoice Date</td>
+              <td class="td">
+                <mat-form-field class="cs-input cs-date-picker w100">
+                  <input placeholder="DATE" [(ngModel)]="price.date_created" name="date_created"  matInput [matDatepicker]="picker" >
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="row" *ngIf="price.item_price>0 && detail.status == 'Open' && pre_fix" >
+      <div class="col-12">
+        <div class="cs-btn  mt32 text-right">
+          <div class="in-btn">
+            <button mat-raised-button color="warn" (click)="price.payment_mode && create_invoice()">CREATE INVOICE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row" *ngIf="price.item_price>0 && detail.status == 'Open' && !pre_fix" >
+      <div class="col-12">
+        <div class="cs-btn  mt32 text-right">
+          <div class="in-btn">
+            <p>Prefix Required</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="cs-row cs-tabs-space">
+      <div class="right-data" [ngClass]="{'pl0' : db.datauser.franchise_id ||  detail.type == 1}">
+        <div class="row">
+          <div class="col-12">
+            <div class="contst">
+              <div class="description-box">
+                <div class="cs-heading">
+                  <h2>Damage Waiver</h2>                
+                </div>
+                <div class="text-box">
+                  <p>Detailing Devils uses premium quality vehicle care products and highly trained paint technicians. We take pride in delivering world-class results with minimal damage to the vehicle's finish. We guarantee flawless paint finish, but take no responsibility for burnouts, burn marks or any other paint damage caused during the SRS (Skin Restoration System) process on the following paint conditions:
+                  </p>
+                </div>
+                
+                <ul>
+                  <li *ngIf="detail.isRepainted">
+                    <p>Repainted Vehicle</p>
+                    
+                  </li>
+                  <li *ngIf="detail.isSingleStagePaint">
+                    <p>Single Stage Paint</p>
+                    
+                  </li >
+                  <li *ngIf="detail.isPaintThickness">
+                    <p>Paint Thickness below 2 MIL</p>
+                  </li>
+                  <li *ngIf="detail.isVehicleOlder">
+                    <p>Vehicle older than 5 years</p>  
+                  </li>
+                </ul>
+                
+                <div class="candition" *ngIf="detail.isDisclaimer">
+                  <p>I have read the disclaimer above and I understand that Detailing Devils is not responsible for any damage caused to my vehicle's paint during the SRS process.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="h100"></div>
+  </div>
+</div>

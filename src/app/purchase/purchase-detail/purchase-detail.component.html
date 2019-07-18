@@ -1,0 +1,392 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>  
+                <li><p class="light">Order ID : <span class="black-clr"> #{{orderdetail.id}}</span></p></li>
+                <li><p class="light">Status : <span class="yellow-clr" style="text-transform: uppercase;"> {{orderdetail.receive_status}}</span></p></li>
+                <li><p class="light">Amount : <span class="black-clr"> &#8377; {{orderdetail.order_total}}</span></p></li>
+                <li class="af-none">
+                    <p class="light"> 
+                        QTY: 
+                        <span class="black-clr">{{qty}}/</span>
+                        <span class="green-clr">{{receiveqty}}</span>
+                    </p>
+                </li>                
+            </ul>
+        </div>        
+        <div class="m-right-data vl-info">
+            <ul>                
+                <li class="af-none">
+                    <button class="ac-btn link" mat-button [matMenuTriggerFor]="menu">
+                        Action
+                        <i class="material-icons icon black-clr " style="right: 0px;left: inherit;">arrow_drop_down</i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <a *ngIf = "orderdetail.receive_status=='Pending'"  routerLink="/purchases/{{orderdetail.id}}/receive" routerLinkActive="active" mat-menu-item>Order Received</a>
+                        <!-- <a *ngIf = "!orderreceive.length"  mat-menu-item>Order Reject</a> -->
+                    </mat-menu>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="cs-container detail">
+        <div class="cs-spinner full-page" *ngIf = "!loading_list">
+            <div class="outer">
+                <div class="innear">
+                    <mat-spinner></mat-spinner>
+                    <P>LOADING . . .</P>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="right-data pl0">
+                    <div class="contst">
+                        <div class="cs-heading">
+                            <h2>{{orderdetail.name}}</h2>
+                            <p><i class="material-icons ic-watch">watch_later</i>{{orderdetail.date_created  | date: 'dd MMM yyyy'}}</p>
+                        </div>
+                        <div class="cs-divider pt10">
+                            <mat-divider></mat-divider>
+                        </div>                        
+                        <div class="form-field">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Name" readonly="" [(ngModel)]="form.name" value="Mohit Singh">
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Mobile No" [(ngModel)]="form.mobile" readonly="" value="9560533107">
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="control-field col-12">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <input matInput placeholder="Landline No."  [(ngModel)]="form.landline" readonly="" value="01292260356">
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="control-field col-12 ">
+                                        <mat-form-field class="example-full-width cs-input">
+                                            <textarea matInput placeholder="ADDRESS"  [(ngModel)]="form.address" readonly="" class="h125" value="5E/7 , B.P., Railway Road, Near Neelam Chowk, NIT Faridabad, Haryana 121005"></textarea>
+                                            <!-- <div class="edit-icon">
+                                                <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                            </div> -->
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cs-divider pt20 left-right-15">
+                                <mat-divider></mat-divider>
+                            </div>
+                            <div class="cs-heading mt20">
+                                <h2>CONTACT PERSON DETAILS</h2>
+                            </div>
+                            <div class="row" *ngFor="let v_contacts of v_contact; let r = index">
+                                <div class="col-12">
+                                    <div class="">
+                                        <div class="row">
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Name" [(ngModel)]="v_contacts.name"  readonly="" value="Mohit">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="MOBILE 1" [(ngModel)]="v_contacts.phone1" readonly="" value="mohitsingh@abacusdesk.co.in">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="MOBILE 2" [(ngModel)]="v_contacts.phone2" readonly="" value="9560533107">
+                                                    <!-- <div class="edit-icon">
+                                                        <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                        <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                                    </div> -->
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <div class="control-field col-4 edit-input pr50">
+                                                <mat-form-field class="cs-multi-select cs-input">
+                                                    <mat-select disabled="" placeholder="Number of Visit">
+                                                        <mat-option>1</mat-option>
+                                                        <mat-option>2</mat-option>
+                                                        <mat-option>3</mat-option>
+                                                        <mat-option>4</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <div class="edit-icon right-side active">
+                                                    <button mat-button class="save"><i class="material-icons" title="EDIT">save</i></button>
+                                                    <button mat-button class="edit"><i class="material-icons" title="EDIT">create</i></button>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <!-- <div class="row">
+                                <div class="col-12">
+                                    <div class="cnt-person">
+                                        <div class="row">
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="Name" readonly="" value="Mohit">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="EMAIL" readonly="" value="mohitsingh@abacusdesk.co.in">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="control-field col-4 edit-input">
+                                                <mat-form-field class="example-full-width cs-input">
+                                                    <input matInput placeholder="MOBILE" readonly="" value="9560533107">
+                                                    <div class="edit-icon">
+                                                        <button mat-button class="save"><i class="material-icons green-text" title="EDIT">save</i></button>
+                                                        <button mat-button class="edit"><i class="material-icons blue-text" title="EDIT">create</i></button>
+                                                    </div> 
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-4">
+                <div class="right-data pl20">
+                    <div class="contst summary">
+                        <div class="cs-heading">
+                            <h2>ORDER LOGS</h2>
+                        </div>                        
+                        <ul style="display:none !important;">
+                            <li class="" *ngFor="let purchase_log of vp_log; let s = index" [ngClass]="purchase_log.remark=='Created'?'grey-bg':purchase_log.remark=='Approved'?'green-bg':purchase_log.remark=='Rejected'?'red-bg':purchase_log.remark=='Invoice Created'?'blue-bg':''">
+                                <div class="head">
+                                    <div class="name">
+                                        <p *ngIf="purchase_log.remark == 'Created'"># ORDER CREATED</p>
+                                        <p *ngIf="purchase_log.remark == 'Approved'"># ORDER APPROVED</p>
+                                        <p *ngIf="purchase_log.remark == 'Rejected'" ># ORDER REJECTED</p>
+                                        <p *ngIf="purchase_log.remark == 'Invoice Created'">INVOICE CREATED #356587</p>
+                                        <p *ngIf="purchase_log.remark == 'Invoice Created'">JOB CARD #DD25324</p>
+                                        <p *ngIf="purchase_log.remark == 'Invoice Created'">Amount: <span class="red-clr">5000</span></p>
+                                        <p>{{created_by['0']['username']}}</p>
+                                    </div>                                    
+                                    <p class="date">
+                                        <i class="material-icons">  watch_later </i>
+                                        {{purchase_log.date_created  | date: 'dd MMM yyyy | HH:mm a'}}                                        
+                                    </p>
+                                </div>
+                            </li>
+                            
+                            <!-- <li class="green-bg">
+                                <div class="head">
+                                    <div class="name">
+                                        <p ># ORDER APPROVED</p>
+                                        <p>Mohit Kumar</p>
+                                    </div>
+                                    
+                                    <p class="date">
+                                        <i class="material-icons">  watch_later </i>
+                                        12 oct 2018 | 11:45am
+                                    </p>
+                                </div>
+                            </li>
+                            
+                            <li class="red-bg">
+                                <div class="head">
+                                    <div class="name">
+                                        <p># ORDER REJECTED</p>
+                                        <p>Mohit Kumar</p>
+                                    </div>
+                                    <p class="date">
+                                        <i class="material-icons">  watch_later </i>
+                                        12 oct 2018 | 11:45am
+                                    </p>
+                                </div>
+                                <div class="description">
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has</p>
+                                </div>
+                            </li>
+                            <li class="blue-bg">
+                                <div class="head">
+                                    <div class="name">
+                                        <p>INVOICE CREATED #356587</p>
+                                        <p>JOB CARD #DD25324</p>
+                                        <p>Mohit Kumar</p>
+                                        <p>Amount: <span class="red-clr">5000</span></p>
+                                    </div>
+                                    <p class="date">
+                                        <i class="material-icons">  watch_later </i>
+                                        12 oct 2018 | 11:45am
+                                    </p>
+                                </div>                                
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+                <div class="col-12">
+                    <div class="cs-heading mt20 mb10">
+                        <h2>ITEM DETAIL</h2>
+                    </div>
+                    </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="cs-table left-right-15">
+                    <div class="header">
+                        <table>
+                            <tr>
+                                <th class="w150">Brand</th>
+                                <th>Product</th>
+                                <th class="w80 text-center">HSN</th>
+                                <th class="w100 text-center">QTY</th>
+                                <th class="w140 text-center">Measurement</th>
+                                <th class="w100 text-center">Rate</th>
+                                <th class="w120 text-center">Amount</th>
+                                <th class="w130 text-center">Receiving Status</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table>
+                                <tr *ngFor="let purchaseitem of itemdetail; let s = index">
+                                    <td class="w150">{{purchaseitem.brand_name}}</td>
+                                    <td class="in-table">
+                                        <table>
+                                            <tr><td><p>{{purchaseitem.category}}, {{purchaseitem.item_name}}, {{purchaseitem.item_attribute_type}}, {{purchaseitem.item_attribute_value}}</p></td></tr>                                            
+                                        </table>
+                                    </td>
+                                
+                                    <td class="in-table w80">
+                                        <table>
+                                            <tr><td class="text-center "><p>{{purchaseitem.hsn_code}}</p></td></tr>                                           
+                                        </table>
+                                    </td>
+                                    <td class="in-table w100">
+                                        <table>
+                                            <tr><td class="text-center red-clr"><p>{{purchaseitem.qty}}</p></td></tr>                                           
+                                        </table>
+                                    </td>
+                                    <td class="in-table w140">
+                                        <table>
+                                            <tr><td class="text-center"><p>{{purchaseitem.measurement}}</p></td></tr>                                            
+                                        </table>
+                                    </td>
+                                    <td class="in-table w100">
+                                        <table>
+                                            <tr><td class="text-center"><p>{{purchaseitem.rate}}</p></td></tr>
+                                        </table>
+                                    </td>
+                                    <td class="in-table w120">
+                                        <table>
+                                            <tr><td class="text-center"><p>{{purchaseitem.item_total}}</p></td></tr>                                            
+                                        </table>
+                                    </td>
+                                    <td class="in-table w130">
+                                        <table>
+                                            <tr><td class="text-center"><p>{{purchaseitem.receive_qty}}</p></td></tr>                                            
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" *ngIf="orderreceive.length > 0">
+            <div class="col-12">
+                <div class="cs-heading mt20 mb10">
+                    <h2>RECEIVED ITEM DETAILS</h2>
+                </div>
+                
+                <div class="cs-table left-right-15">
+                    <div class="header">
+                        <table class="sno-border">
+                            <tr>
+                                <th class="w30 border-right-none"></th>
+                                <th class="w200">Date / Created By</th>
+                                <th class="w140 text-center">Invoice ID</th>
+                                <th>
+                                    <table>
+                                        <tr><td>Description</td>
+                                            <td>HSN</td>
+                                            <td>Qty Accepted</td>
+                                            <td>Qty Rejected</td>
+                                        </tr>
+                                    </table>
+                                </th>
+                                <th class="w150">Amount</th>
+                                <!-- <th class="w150">Invoice</th> -->
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table class="sno-border">
+                                <tr *ngFor = "let receivess of orderreceive; let r = index" > 
+                                    <td class="w30 text-center">{{r+1}}</td>
+                                    <td class="w200">{{receivess.invoice_date  | date: 'dd MMM yyyy'}} / {{receivess.created_by_type}}</td>
+                                    <td class="w140 text-center"><a  mat-button class="link" routerLink="/purchases/{{receivess.invoice_no}}/details/" routerLinkActive="active">#{{receivess.invoice_no}}</a></td>
+                                    <td>
+                                        <table>
+                                            <ng-container *ngFor="let itemnam of allitem">                                            
+                                                <ng-container *ngIf="itemnam.receive_id == receivess.id">
+                                                    <tr>
+                                                        <td>{{ itemnam.category }}, {{ itemnam.item_name }} , {{itemnam.item_attribute_type}}, {{itemnam.item_attribute_value}}</td>
+                                                        <td>{{ itemnam.hsn_code }} </td>
+                                                        <td>{{ itemnam.accept_qty }} </td>
+                                                        <td>{{ itemnam.reject_qty }}</td>
+                                                    </tr>
+                                                </ng-container>
+                                            </ng-container> 
+                                        </table>
+                                    </td>
+                                    <td class="w150">&#8377; {{receivess.invoice_amt}}</td>
+                                   
+                                </tr>                                
+                            </table>
+                        </div>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="h100"></div>

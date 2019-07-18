@@ -1,0 +1,473 @@
+<div class="main-container" *ngIf="lead_type == 'franchise'">
+  <div class="master-heading">
+    <div class="vl-info">
+      <ul>
+        <li><p class="pointer" (click)="showLeadList('franchise')">Franchise : <span>{{ total_franchise_leads }}</span></p></li>
+        <li><p class="light pointer" (click)="showLeadList('consumer')">Consumer : <span>{{ total_consumer_leads }}</span></p></li>
+        <li><p class="pl30"  (click)="orderListReverse()"><i class="material-icons icon">swap_vert</i><span>Sort</span></p></li>
+        <li class="af-none" *ngIf="FranchiseArr.length">
+          <div class="cs-btn">
+            <div class="in-btn ">
+              <button (click)="openAssignUserDialog()" mat-raised-button color="warn" class="h30-btn">Action</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="top-search wp30 ml30">
+      <input type="text" placeholder="SEARCH with Name or Mobile. . ." [(ngModel)]="filter.master"  (keyup.enter)="current_page = 1;getFranchiseLeadList()">
+      <i class="material-icons">search</i>
+    </div>
+    
+    <div class="top-tabs m-right-data">
+      <button mat-button [ngClass]="{active: filter.lead_source_type == 'api'}" (click)="filter.lead_source_type = 'api';getFranchiseLeadList()">Source API</button>
+      <button mat-button [ngClass]="{active: !filter.lead_source_type || filter.lead_source_type == 'all'}" (click)="filter.lead_source_type = 'all';getFranchiseLeadList()">All</button>
+    </div>  
+    
+    
+    <div class="top-pagination m-right-data" style="margin: 0 0 0 20px;">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = "redirect_franchise_previous('franchise')"><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getFranchiseLeadList()"></li>
+        <li><button mat-button class="right-btn" (click) = "redirect_franchise_next('franchise')"><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  
+  
+  
+  <div class="all-container" *ngIf="loading_page">
+    <div class="cs-row">
+      <div class="right-data">
+        <div class="cs-spinner full-page" *ngIf = "!loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        <div class="data-not-available" *ngIf="loading_list && !filtering && (leads.length < 1)">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>Leads</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">error_outline</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                    <p>Tap on <a routerLink="/leads/add" >ADD NEW</a> for Franchise Lead</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cs-table header-fixed" *ngIf="loading_list && (leads.length > 0 || filtering)">
+          <div class="header">
+            <table class="sno-border">
+              <tr>
+                <th class="w40">    
+                  <mat-checkbox class="cs-check" (change)="GetFranchiseArray($event,'','all')"></mat-checkbox>
+                </th>
+                <th class="w170">
+                  <div class="filter">
+                    <mat-form-field class="cs-input cs-date-picker">
+                      <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getFranchiseLeadList()"  [matDatepicker]="picker1" >
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w150">Name </th>
+                <th class="w100">Mobile No.</th>
+                <!-- <th >Company Name</th> -->
+                <th class="w120">
+                  <div class="filter">
+                    <mat-form-field>
+                      <mat-select placeholder="Source" [(ngModel)]="filter.source" (selectionChange)="getFranchiseLeadList()">
+                        <mat-option value="">None</mat-option>
+                        <mat-option value="Email">Email</mat-option>
+                        <mat-option value="Facebook">Facebook</mat-option>
+                        <mat-option value="Facebook Form">Facebook Form</mat-option>
+                        <mat-option value="Inbound">Inbound</mat-option>
+                        <mat-option value="Instagram">Instagram</mat-option>
+                        <mat-option value="Missed Call">Missed Call</mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                        <mat-option value="Outbound">Outbond</mat-option>
+                        <mat-option value="Walk In">Walk in</mat-option>
+                        <mat-option value="ADI">ADI</mat-option>
+                        <mat-option value="Website">Website</mat-option>
+                        <mat-option value="Website Chat">Website Chat</mat-option>
+                        
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w150">
+                  <div class="filter">
+                    <mat-form-field>
+                      <mat-select placeholder="City" [(ngModel)]="filter.city" (selectionChange)="getFranchiseLeadList()">
+                        <mat-option value="">All</mat-option>
+                        <mat-option  *ngFor="let val of cites; let i = index" [value]="val.city ? val.city : '--' ">{{val.city ? val.city : '-------'}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w150 hv-actions">
+                  <div class="filter">
+                    <mat-form-field>
+                      <mat-select placeholder="Status" [(ngModel)]="filter.lead_status" (selectionChange)="getFranchiseLeadList()">
+                        
+                        <mat-option value="">None</mat-option>
+                        <mat-option value="Already finalized">Already finalized</mat-option>
+                        <mat-option value="new">New</mat-option>
+                        <mat-option value="process">Process</mat-option>
+                        <mat-option value="meeting">Meeting</mat-option>
+                        <mat-option value="qualified">Qualified</mat-option>
+                        <mat-option value="not_qualified">Not Qualified</mat-option>
+                        <mat-option value="lost">Lost</mat-option>
+                        <mat-option value="junk">Junk</mat-option>
+                        <mat-option value="converted">Converted</mat-option>
+                        <mat-option value="other state">Other State</mat-option>
+                        <mat-option value="other studio">Other Studio</mat-option>
+                        
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w180">Change Status by</th>
+                <th class="w160 hv-actions">
+                  <div class="filter">
+                    <mat-form-field >
+                      <mat-select placeholder="Assigned User" [(ngModel)]="user_assign_search" (selectionChange)="getFranchiseLeadList()">
+                        <mat-option value="">None</mat-option>
+                        <mat-option value="{{val.id}}" *ngFor="let val of assign_user_list">{{val.first_name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+              </tr>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-body">
+              <table class="sno-border">
+                <tr *ngFor="let val of leads; let i = index" [ngClass]="{'active': val.check == true }">
+                  <td class="w40 text-center">{{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }} <mat-checkbox *ngIf="!val.followup_id" class="cs-check check-all" [checked]="val.check == true" (change)="GetFranchiseArray($event,i,'')"></mat-checkbox></td>
+                  <td class="w170">{{val.created_at | date: 'dd MMM yyyy'}}/  {{ val.created_by == '0' ? 'Source API' : val.created_name }}  </td>
+                  <td class="w150"><a mat-button class="link" routerLink="/franchise_leads/details/{{val.id | crypt}}" routerLinkActive="active">{{val.name}}</a></td>
+                  <td class="w100">{{val.contact_no}}</td>
+                  <!-- <td>{{val.company_name}}</td> -->
+                  <td class="w120 {{ val.source }}">{{val.source | titlecase}}</td>
+                  <td class="w150">{{ val.city ? ( val.city | titlecase ): '--'}}</td>
+                  <td class="w150">
+                    <span *ngIf="val.lead_status">{{val.lead_status | titlecase}}</span>
+                  </td> 
+                  <!-- *ngIf="val.s_name"> -->
+                  <td class="w180">
+                    <ng-container *ngIf="val.status_convert_date != '0000-00-00'">
+                      {{val.s_name}} / {{val.status_convert_date | date:'dd MMM yyyy' }}
+                    </ng-container>
+                  </td>
+                  <td class="w160">
+                    <span *ngIf="val.agents">{{val.agents}}</span>
+                    <div class="action-btns">
+                      <a mat-button class="view" routerLink="/franchise_leads/details/{{val.id |crypt}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                      <button mat-button class="delete" (click)="deleteFranchiseLead(val.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                    </div>         
+                  </td>                                 
+                </tr>
+                <tr *ngIf="leads.count < 1">No data found</tr>
+              </table>
+            </div>
+          </div>
+        </div>                 
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONSUMER SECTION START -->
+<div class="main-container" *ngIf="lead_type == 'consumer'">
+  <div class="master-heading">
+    <div class="vl-info">
+      <ul>
+        <li><p class="light pointer" (click)="showLeadList('franchise')">Franchise : <span>{{ total_franchise_leads }}</span></p></li>
+        <li><p class="pointer" (click)="showLeadList('consumer')">Consumer : <span>{{ total_consumer_leads }}</span></p></li>
+        <li><p class="pl30" (click)="orderListReverse()"><i class="material-icons icon">swap_vert</i><span>Sort</span></p></li>
+        <li class="af-none" *ngIf="ConsumerArr.length">
+          <label>Assign</label>
+        </li>
+        <li class="af-none" *ngIf="ConsumerArr.length">
+          <div class="cs-btn">
+            <div class="in-btn ">
+              <button (click)="openAssignLeadDialog()" mat-raised-button color="warn" class="h30-btn">Franchise</button>
+            </div>
+          </div>
+        </li>
+        <li class="af-none" *ngIf="ConsumerArr.length && login_data.access_level == '1'">
+          <div class="cs-btn">
+            <div class="in-btn ">
+              <button (click)="open_assign_user_dialog()" mat-raised-button color="warn" class="h30-btn">Sales Agent</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="top-search wp30 ml30">
+      <!-- (keyup.enter)="getConsumerLeadList()" -->
+      <input type="text" placeholder="SEARCH with Name or Mobile. . ." [(ngModel)]="filter.master" (keyup.enter)="current_page = 1;getConsumerLeadList()" >
+      <i class="material-icons">search</i>
+    </div>
+    
+    <div class="top-tabs m-right-data">
+      <button mat-button [ngClass]="{active: filter.lead_source_type == 'api'}" (click)="filter.lead_source_type = 'api';getConsumerLeadList()">Source API</button>
+      <button mat-button [ngClass]="{active: !filter.lead_source_type || filter.lead_source_type == 'all'}" (click)="filter.lead_source_type = 'all';getConsumerLeadList()">All</button>
+    </div> 
+    
+    <div class="top-pagination m-right-data" style="margin: 0 0 0 20px;">
+      <ul>
+        <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+        <li><button mat-button class="left-btn" (click) = "redirect_consumer_previous('consumer')"><i class="material-icons">keyboard_arrow_left</i></button></li>
+        <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getConsumerLeadList()"></li>
+        <li><button mat-button class="right-btn" (click) = "redirect_consumer_next('consumer')"><i class="material-icons">keyboard_arrow_right</i></button></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="all-container" *ngIf="loading_page">
+    <div class="cs-row">
+      <div class="right-data">
+        <div class="cs-spinner full-page" *ngIf = "!loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        <div class="data-not-available" *ngIf="loading_list && !filtering && (leads.length < 1)">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>Leads</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">error_outline</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                    <p>Tap on <a routerLink="/leads/add" >ADD NEW</a> for Lead</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="data-not-available" *ngIf="loading_list && search && (leads.length < 1)">
+          <div class="outer">
+            <div class="iinear">
+              <div class="figure" matRipple>
+                <div class="header">
+                  <img src="assets/img/data-not-available-header.svg" alt="">
+                </div>
+                
+                <div class="description">
+                  <div class="cs-heading">
+                    <h2>{{ search }}</h2>
+                  </div>
+                  <div class="img">
+                    <i class="material-icons">search</i>
+                  </div>
+                  <div class="psc">
+                    <p>data not available</p>
+                    <p>Tap on <a routerLink="/leads/add" >ADD NEW</a> for Lead</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="cs-table header-fixed" *ngIf="loading_list && ( (leads.length > 0) || filtering)">
+          <div class="header">
+            <table class="sno-border">
+              <tr>
+                <th class="w40">    
+                  <mat-checkbox class="cs-check" (change)="GetConsumerArray($event,'','all')"></mat-checkbox>
+                </th>
+                <th class="w170">
+                  
+                  <div class="filter">
+                    
+                    <mat-form-field class="cs-input cs-date-picker">
+                      <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getConsumerLeadList()" [matDatepicker]="picker" >
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  
+                  
+                </th>
+                <th class="w150">Name </th>
+                <th class="w100">Interested in</th>
+                <th class="w100">Phone</th>
+                <!-- <th class="w150">Source</th> -->
+                <th class="w120">
+                  <div class="filter">
+                    <mat-form-field>
+                      <mat-select placeholder="Source" [(ngModel)]="filter.source" (selectionChange)="getConsumerLeadList()">
+                        <mat-option value="">None</mat-option>
+                        <mat-option value="Email">Email</mat-option>
+                        <mat-option value="Facebook">Facebook</mat-option>
+                        <mat-option value="Facebook Form">Facebook Form</mat-option>
+                        <mat-option value="Inbound">Inbound</mat-option>
+                        <mat-option value="Instagram">Instagram</mat-option>
+                        <mat-option value="Missed Call">Missed Call</mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                        <mat-option value="Outbound">Outbond</mat-option>
+                        <mat-option value="Walk In">Walk in</mat-option>
+                        <mat-option value="Website">Website</mat-option>
+                        <mat-option value="Website Chat">Website Chat</mat-option>
+                        
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w110">
+                  <div class="filter">
+                    <mat-form-field>
+                      <mat-select placeholder="City" [(ngModel)]="filter.city" (selectionChange)="getConsumerLeadList()">
+                        <mat-option value="">All</mat-option>
+                        <mat-option  *ngFor="let val of consumer_cites; let i = index" [value]="val.city ? val.city : '--' ">{{val.city ? val.city : '-------'}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w120">Car Model</th>
+                <th class="w170 hv-actions">
+                  <div class="filter">
+                    <mat-form-field >
+                      <mat-select placeholder="Status" [(ngModel)]="filter.lead_status" (selectionChange)="getConsumerLeadList()">
+                        <mat-option value="">None</mat-option>
+                        <mat-option value="Already finalized">Already finalized</mat-option>
+                        <mat-option value="new">New</mat-option>
+                        <mat-option value="attempted_to_contact">Attempted to Contact</mat-option>
+                        <mat-option value="booked">Booked</mat-option>
+                        <mat-option value="cancelled_booking">Cancelled Booking</mat-option>
+                        <mat-option value="convert">Convert</mat-option>
+                        <mat-option value="cold">Cold</mat-option>
+                        <mat-option value="contact_in_future">Contact in Future</mat-option>
+                        <mat-option value="contacted">contacted</mat-option>
+                        <mat-option value="demo">Demo</mat-option>
+                        <mat-option value="hot">Hot</mat-option>
+                        <mat-option value="junk">Junk</mat-option>
+                        <mat-option value="lost">Lost</mat-option>
+                        <mat-option value="meeting">Meeting</mat-option>
+                        <mat-option value="other state">Other State</mat-option>
+                        <mat-option value="other studio">Other Studio</mat-option>
+                        <mat-option value="not_contacted">Not Contacted</mat-option>
+                        <mat-option value="not_interested">Not interested</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <th class="w150">
+                  
+                  <div class="filter">
+                    <mat-form-field >
+                      <mat-select placeholder="Company Agents" name="consumer_user_assign_search" [(ngModel)]="consumer_user_assign_search" (selectionChange)="getConsumerLeadList()">
+                        <mat-option value="">None</mat-option>
+                        <mat-option [value]="val.id" *ngFor="let val of dduser_list">{{val.first_name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  
+                </th>
+                
+                <th class="w150 hv-actions">
+                  <div class="filter">
+                    <mat-form-field >
+                      <mat-select placeholder="Assign Franchise" [(ngModel)]="filter.franchise_id" (selectionChange)="getConsumerLeadList()">
+                        <mat-option value="">None</mat-option>
+                        <mat-option [value]="val.id" *ngFor="let val of assign_franchise_list">{{val.location_name}}<small> ({{val.name}})</small> </mat-option>
+                        
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                
+              </tr>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-body">
+              <table class="sno-border">
+                <tr *ngFor="let val of leads; let i = index" [ngClass]="{'active': val.check == true }">
+                  <td class="w40 text-center">
+                    {{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }}
+                    <mat-checkbox *ngIf="!val.followup_id"  class="cs-check check-all" [checked]="val.check == true" (change)="GetConsumerArray($event,i,'')"></mat-checkbox>
+                  </td>
+                  <td class="w180">{{val.created_at | date: 'dd MMM yyyy'}}/  {{ val.created_by == '0' ? 'Source API' : val.created_name }} </td>
+                  <td class="w150"><a mat-button class="link" routerLink="/consumer_leads/details/{{val.id | crypt}}" routerLinkActive="active">{{val.first_name + ' ' + val.last_name}}</a></td>
+                  <td class="w100">{{val.interested_in}}</td>
+                  <td class="w100">{{val.phone}}</td>
+                  <td class="w120">{{val.source}}</td>
+                  <!-- <td class="w110 ">{{val.city}}</td> -->
+                  <td class="w110">{{ val.city ? ( val.city | titlecase ): '--'}}</td>
+                  <td class="w120">{{val.car_model}}</td>
+                  <td class="w170"><span *ngIf="val.lead_status">{{ val.lead_status | titlecase }}</span>
+                    <span *ngIf="!val.lead_status">-</span>
+                    <!-- <div class="action-btns">
+                      <div class="outer">
+                        <div class="innear">
+                          <a mat-button class="view" routerLink="/consumer_leads/details/{{val.id}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                          <a mat-button class="delete" (click)="deleteConsumerLead(val.id)"><i class="material-icons">delete_sweep</i> Delete</a>
+                        </div>
+                      </div>
+                    </div> -->
+                  </td>
+                  <td class="w150">
+                    <span *ngIf="val.agents">{{val.agents}}</span>                    
+                    <span *ngIf="!val.agents">- - - - - </span>       
+                  </td>
+                  
+                  <td class="w150">
+                    <span *ngIf="val.franchise_name">{{ val.location_name | titlecase }}</span>
+                    <span *ngIf="!val.franchise_name">- - - - -</span>
+                    <div class="action-btns">
+                      <a mat-button class="view" routerLink="/consumer_leads/details/{{val.id |crypt}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                      <button mat-button class="delete" (click)="deleteConsumerLead(val.id )"><i class="material-icons">delete_sweep</i> Delete</button>
+                    </div>      
+                  </td>
+                </tr>
+                <tr *ngIf="leads.count < 1">No data found</tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- CONSUMER SECTION END -->
+
+
+<div class="h100"></div>

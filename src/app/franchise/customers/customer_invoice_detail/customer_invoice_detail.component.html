@@ -1,0 +1,862 @@
+<div class="main-container">
+    <div class="cs-spinner full-page" *ngIf = "!loading_list">
+        <div class="outer">
+            <div class="innear">
+                <mat-spinner></mat-spinner>
+                <P>LOADING . . .</P>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="master-heading bcspace">
+        <div class="back-btn">
+            <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+        </div>
+        <div class="vl-info">
+            <ul>
+                <li><p>
+                    <span class="blue">{{db.franchise_name}}</span> 
+                    <i class="material-icons r-arrow">keyboard_arrow_right</i> 
+                    <span class="blue">Invoice</span> 
+                    <i class="material-icons r-arrow">keyboard_arrow_right</i> 
+                    <span>#{{price.invoice_id}}</span> </p>
+                </li>
+                <li class="af-none"><p class="light">Amount : <span class="black-clr">&#8377; {{price.amount}}</span></p></li> 
+                <li *ngIf="price.balance">
+                    <p>
+                        <a class="edit" matTooltip="Payment Receive"  (click) = "openReceivePaymentDialog()"><i class="material-icons red-clr">payment</i></a>
+                    </p>
+                </li>
+                
+                <li *ngIf="!edit">
+                    <p>
+                        <a class="edit" matTooltip="Edit Invoice"  (click) = "edit = true;"><i class="material-icons green-clr">edit</i></a>
+                    </p>
+                </li>
+                
+                <li *ngIf="edit">
+                    <p>
+                        <a class="edit" matTooltip="Cancel Edit"  (click) = "edit = false;getInvoiceDeatil();"><i class="material-icons red-clr">cancel</i></a>
+                    </p>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="cs-container">
+        <div class="cs-row cs-tabs-space">
+            <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+            
+            <div class="right-data" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="contst">
+                            
+                            <div class="row">
+                                <div class="col-6" style="padding-right: 7.5px;">
+                                    <div class="cs-section">
+                                        <div class="cs-heading" *ngIf="!price.isCompany">
+                                            <h2>CUSTOMER DETAIL</h2>
+                                        </div>
+                                        
+                                        <div class="side-by-side mt10" style="display: inherit;" *ngIf="!price.isCompany">
+                                            <div class="row mr0">
+                                                <div class="figure grid-three">
+                                                    <p>Name</p>
+                                                    <p>{{price.first_name}} {{price.last_name}}</p>                          
+                                                </div>
+                                                <div class="figure grid-three">
+                                                    <p>Contact No</p>
+                                                    <p>{{price.phone}}</p>
+                                                    
+                                                </div>
+                                                <div class="figure grid-three">
+                                                    <p>Email</p>
+                                                    <p>{{price.email}}</p>
+                                                </div>
+                                                <div class="figure" style="width: 64%;">
+                                                    <p>Address</p>
+                                                    <p>{{price.address}} {{price.city}} {{price.district}} {{price.state}}</p>
+                                                </div>
+                                                <div class="figure grid-three">
+                                                    <p>State</p>
+                                                    <p>{{price.state}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="cs-heading mt10" *ngIf="price.isCompany">
+                                            <h2>COMPANY DETAIL</h2>
+                                        </div>
+                                        
+                                        <div class="side-by-side mt10" style="display: inherit;" *ngIf="price.isCompany">
+                                            <div class="row mr0">
+                                                <div class="figure grid-three">
+                                                    <p>Company Name</p>
+                                                    <p>{{price.company_name}}</p>
+                                                </div>
+                                                
+                                                <div class="figure grid-three">
+                                                    <p>Company Contact No</p>
+                                                    <p>{{price.company_contact_no}}</p>
+                                                </div>
+                                                
+                                                <div class="figure grid-three">
+                                                    <p>GSTIN</p>
+                                                    <p>{{price.gstin}}</p>
+                                                </div>
+                                                <div class="figure grid-three" style="width: 64%;">
+                                                    <p>Company Addrees</p>
+                                                    <p>{{price.company_address}} {{price.company_city}} {{price.company_district}}</p>
+                                                </div>
+                                                
+                                                <div class="figure grid-three">
+                                                    <p>State</p>
+                                                    <p>{{price.state}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-3" style="padding-left: 7.5px;">
+                                    
+                                    <div class="cs-section">
+                                        <div class="cs-heading">
+                                            <h2>VEHICLE INFO</h2>
+                                        </div>
+                                        <div class="side-by-side mt10" style="display: inherit;">
+                                            <div class="row mr0">
+                                                <div class="figure grid-two">
+                                                    <p>Type</p>
+                                                    <p>{{price.vehicle_type}}</p>
+                                                </div>
+                                                <div class="figure grid-two">
+                                                    <p>Brand / Car Name</p>
+                                                    <p>{{price.model_no}}</p>
+                                                </div>
+                                                <div class="figure grid-two">
+                                                    <p>Reg No.</p>
+                                                    <p>{{price.regn_no}}</p>
+                                                </div>
+                                                <div class="figure grid-two">
+                                                    <p>Last Service</p>
+                                                    <p>{{price.closing_date == '0000-00-00' ? '-------' : ( price.closing_date | date:'dd MMMM y')}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-3" style="padding-left: 7.5px;">
+                                    <div class="cs-section">
+                                        <div class="cs-heading">
+                                            <h2>INVOICE INFO</h2>
+                                        </div>
+                                        <div class="side-by-side mt10" style="display: inherit;">
+                                            <div class="row mr0">
+                                                <div class="figure grid-two">
+                                                    <p>Created Date</p>
+                                                    <p *ngIf="!edit">
+                                                        {{price.date_created == '0000-00-00' ? '-------' : ( price.date_created | date:'dd MMMM y')}}
+                                                    </p>
+                                                    <div class="filter" *ngIf="edit">
+                                                        <mat-form-field class="cs-input cs-date-picker" style="width: 100px;">
+                                                            <input placeholder="Date" [(ngModel)]="price.date_created" name="date_created" matInput [matDatepicker]="picker" >
+                                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                            <mat-datepicker #picker></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="figure grid-two">
+                                                    <p>Created By</p>
+                                                    <p>{{price.created_name | titlecase}}</p>
+                                                </div>
+                                                <div class="figure grid-two">
+                                                    <p>Updated Date</p>
+                                                    <p>{{price.updated_date == '0000-00-00' ? '-------' : ( price.updated_date | date:'dd MMMM y')}}</p>
+                                                </div>
+                                                <div class="figure grid-two">
+                                                    <p>Updated By</p>
+                                                    <p>{{price.updated_name | titlecase}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cs-table left-right-15">
+                            <div class="header">
+                                <table>
+                                    <tr>
+                                        <th class="w40">&nbsp;</th>
+                                        <th>Item</th>
+                                        <th>Description</th>
+                                        <th class="w80">SAC</th>
+                                        <!-- <th class="w80 text-center">QTY</th> -->
+                                        <th class="w80">Price</th>
+                                        <th class="w80"  *ngIf="price.disc_price || edit">Dis%</th>
+                                        <th class="w80"  *ngIf="price.disc_price || edit">Discount</th>
+                                        <th class="w80 text-right"  *ngIf="price.disc_price">Sub Amount</th>
+                                        
+                                        
+                                        
+                                        <th class="w80 text-right"  *ngIf="price.cgst_price">CGST</th>
+                                        <th class="w80 text-right" *ngIf="price.sgst_price">SGST</th>
+                                        <th class="w80 text-right" *ngIf="price.igst_price">IGST</th>
+                                        <th class="w80 text-right">Amount</th>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="table-container">
+                                <div class="table-body">
+                                    <table>
+                                        <tr *ngFor="let item of InvServItem;let i= index;">
+                                            <td class="w40">{{i+1}}</td>
+                                            <td>{{item.invoice_name}}</td>
+                                            <td>{{item.description}}</td>
+                                            <td class="w80 text-center">{{item.sac}}</td>
+                                            <!-- <td class="w80 text-center">{{item.qty}}</td> -->
+                                            <td class="w80">
+                                                
+                                                {{item.price}}
+                                                
+                                            </td>
+                                            <td class="w80"  *ngIf="price.disc_price || edit">
+                                                
+                                                <ng-container *ngIf="price.disc_price && !edit" > {{item.disc_percent ? item.disc_percent+'%' : ''}}</ng-container>
+                                                
+                                                <div class="edit-td-input active" *ngIf="edit">
+                                                    <input type="number" name="disc_percent" [disabled]="(price.extra_discount && price.extra_discount != '0' ) ? true : false" (input)="discount_per_count(i)" [(ngModel)]="item.disc_percent" class="wp100">
+                                                </div>
+                                                
+                                            </td>
+                                            
+                                            <td class="w80"  *ngIf="price.disc_price || edit">
+                                                
+                                                <ng-container *ngIf="price.disc_price && !edit">{{item.discount ? item.discount : ''}} </ng-container>
+                                                <div class="edit-td-input active" *ngIf="edit"> 
+                                                    <input type="number" name="discount" [disabled]="(price.extra_discount && price.extra_discount != '0' ) ? true : false"  (input)="discount_amt_count(i)"   [(ngModel)]="item.discount" class="wp100">
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="w80 text-right"  *ngIf="price.disc_price">{{item.sub_amount}}</td>
+                                            <td class="w80 text-right" *ngIf="price.cgst_price">{{item.cgst_amt ? item.cgst_amt : ''}} {{item.cgst_amt ? '-' : ''}} {{item.cgst_per ? item.cgst_per+'%' : ''}}</td>
+                                            <td class="w80 text-right" *ngIf="price.sgst_price">{{item.sgst_amt ? item.sgst_amt : ''}} {{item.sgst_amt ? '-' : ''}} {{item.sgst_per ? item.sgst_per+'%' : ''}}</td>
+                                            <td class="w80 text-right" *ngIf="price.igst_price">{{item.igst_amt ? item.igst_amt : ''}} {{item.igst_amt ? '-' : ''}} {{item.igst_per ? item.igst_per+'%' : ''}}</td>
+                                            <td class="w80 text-right">{{item.amount}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="invoice-details">
+                            <table class="invoice-table">
+                                <tr>
+                                    <td style="vertical-align: top;">
+                                        <textarea name="note" id="" placeholder="Enter Note . . ." [(ngModel)]="price.note" (change)="updateNote()" cols="30" rows="5" style="width: 100%;"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="invoice-details">
+                            <table class="invoice-table">
+                                <tr>
+                                    <td class="td">Item Total</td>
+                                    <td class="w220 td">&#8377; {{price.item_price}}</td>
+                                </tr>
+                                <tr *ngIf="price.disc_price || edit">
+                                    <td class="td">
+                                        
+                                        
+                                        <div class="add-disc" >
+                                            <ng-container *ngIf="price.disc_price"> Discount({{price.dis_per}}%) </ng-container>
+                                            <div class="basic-select" *ngIf="edit">
+                                                <div class="basic-select">
+                                                    <select  (change)="cal_gst()"  [(ngModel)]="price.extra_discount" name="extra_discount" #extra_discount="ngModel" style="background: transparent; border: 0px;" >
+                                                        <option value="0">More</option>
+                                                        <option value="1">1 %</option>
+                                                        <option value="2">2 %</option>
+                                                        <option value="3">3 %</option>
+                                                        <option value="4">4 %</option>
+                                                        <option value="5">5 %</option>
+                                                        <option value="6">6 %</option>
+                                                        <option value="7">7 %</option>
+                                                        <option value="8">8 %</option>
+                                                        <option value="9">9 %</option>
+                                                        <option value="10">10 %</option>
+                                                        <option value="11">11 %</option>
+                                                        <option value="11">11 %</option>
+                                                        <option value="12">12 %</option>
+                                                        <option value="13">13 %</option>
+                                                        <option value="14">14 %</option>
+                                                        <option value="15">15 %</option>
+                                                        <option value="16">16 %</option>
+                                                        <option value="17">17 %</option>
+                                                        <option value="18">18 %</option>
+                                                        <option value="19">19 %</option>
+                                                        <option value="20">20 %</option>
+                                                        <option value="21">21 %</option>
+                                                        <option value="22">22 %</option>
+                                                        <option value="23">23 %</option>
+                                                        <option value="24">24 %</option>
+                                                        <option value="25">25 %</option>
+                                                        <option value="26">26 %</option>
+                                                        <option value="27">27 %</option>
+                                                        <option value="28">28 %</option>
+                                                        <option value="29">29 %</option>
+                                                        <option value="30">30 %</option>
+                                                    </select>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </td>
+                                    <td class="td" *ngIf="price.disc_price">
+                                        &#8377;  {{price.disc_price}}
+                                    </td>
+                                </tr>
+                                <tr *ngIf="price.disc_price">
+                                    <td class="td">Sub Total</td>
+                                    <td class="td">&#8377; {{price.sub_amount}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="price.cgst_price">
+                                    <td class="td">CGST</td>
+                                    <td class="td">&#8377; {{price.cgst_price}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="price.igst_price">
+                                    <td class="td">IGST</td>
+                                    <td class="td">&#8377; {{price.igst_price}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="price.sgst_price">
+                                    <td class="td">SGST</td>
+                                    <td class="td">&#8377; {{price.sgst_price}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="price.gst_price">
+                                    <td class="td">GST</td>
+                                    <td class="td">&#8377; {{price.gst_price}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="!edit">
+                                    <td class="td">Total Amount</td>
+                                    <td class="td">&#8377; {{price.amount}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="edit">
+                                    <td class="td">Payment Mode</td>
+                                    <td class="td">
+                                        <mat-form-field class="cs-multi-select">
+                                            <mat-select name="payment_mode" [(ngModel)]="price.payment_mode" (selectionChange)="changeMode()">
+                                                <mat-option value=""><small>Select Mode</small></mat-option>
+                                                <mat-option value="None"><small>None</small></mat-option>
+                                                <mat-option value="Cash"><small>Cash</small></mat-option>
+                                                <mat-option value="Bank Transfer"><small>Bank Transfer</small></mat-option>
+                                                <mat-option value="Payment Gateway"><small>Payment Gateway</small></mat-option>
+                                                <mat-option value="Cheque"><small>Cheque</small></mat-option>
+                                                <mat-option value="NEFT"><small>NEFT</small></mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        
+                                        <mat-error color="primary" *ngIf="!price.payment_mode" >This field is required</mat-error>
+                                    </td>
+                                </tr>
+                                
+                                <tr *ngIf="!edit">
+                                    
+                                    <td class="td">Received Amount</td>
+                                    <td class="td">&#8377; {{price.received}}</td>
+                                </tr>
+                                
+                                <tr *ngIf="edit">
+                                    <td class="td">Received Amount</td>
+                                    <td class="td">
+                                        <input  class="simple-input w70" type="number" [(ngModel)]="price.received" name="received" #receivedAmount="ngModel" [disabled]=" price.balance < 0 || ( price.already_received > price.amount )  ? true : false "  (keyup)="cal_gst()" style="text-align: right;">                  
+                                    </td>
+                                </tr>
+                                
+                                <tr *ngIf="edit && ( price.balance < 0 || ( price.already_received > price.amount )  )">
+                                    <td class="td">Refund Amount </td>
+                                    <td class="td">
+                                        <input  class="simple-input w70" type="number" [(ngModel)]="price.refund" name="refund" #refund="ngModel"  (input)="cal_gst()" style="text-align: right;">                  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td">Balance Amount</td>
+                                    <td class="td">&#8377; {{price.balance}}</td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- -->
+                <div class="row" *ngIf="edit" >
+                    <div class="col-12">
+                        <div class="cs-btn  mt32 text-right">
+                            <div class="in-btn">
+                                <button mat-raised-button color="warn" (click)="price.payment_mode && updateInvoice()">UPDATE INVOICE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cs-heading mt20 mb10">
+                            <h2>PAYMENT DETAILS</h2>
+                        </div>
+                        
+                        <div class="cs-table left-right-15">
+                            <div class="header">
+                                <table>
+                                    <tr>
+                                        <!-- <th class="w30 border-right-none"></th> -->
+                                        <th class="w200">Payment Date</th>
+                                        <th class="w140 text-center">Invoice ID</th>
+                                        <th>Payment Mode</th>
+                                        <th>Note</th>
+                                        <th class="w150">Amount</th>
+                                        <th class="w150">Refund Amount</th>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="table-container">
+                                <div class="table-body">
+                                    <table>
+                                        <tr *ngFor="let row of invoicePaymentList">
+                                            <td class="w200">{{row.date_created}}/{{row.first_name}}</td>
+                                            <td class="w140 text-center">#{{row.prfx_invoice_id}}</td>
+                                            <td>{{row.mode}}</td>
+                                            <td>{{row.note}}</td>
+                                            <td class="w150">&#8377; {{row.amount}}</td>
+                                            <td class="w150">&#8377; {{row.refund_amount}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>     
+                    </div>
+                </div>
+            </div>
+            <div class="fix-btn-group">
+                <ul style="display: inline-block;">
+                    <!-- <li >
+                        <a matRipple class="botm-btn"><i class="material-icons">picture_as_pdf</i></a>
+                    </li> -->
+                    <li (click)="print()">
+                        <a matRipple class="botm-btn"><i class="material-icons">print</i></a>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+        
+        <div class="h100"></div>
+    </div>
+    
+    <!-- <button mat-button (click)="print()">print</button> -->
+    
+    <div hidden  id="print-section" class="print-section">
+        
+        <table  width="1024px" style="border-collapse: collapse; vertical-align: top;">
+            <tr>
+                <td width="1024px" style="background: #fff; padding-bottom: 15px;">
+                    <table class="table1" width="1024px" style="border-collapse: collapse;">
+                        <tr>
+                            <td width="324px" style="vertical-align: bottom;">
+                                <img src="/assets/img/logo-invoice.jpg">
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="padding-left: 110px;">
+                                    <h2 style="font-size: 16px; line-height: 10px;">{{price.franchise_name }}</h2>
+                                    <p style="font-size: 16px; line-height: 16px;">{{price.franchise_address }}, {{price.franchise_district }}</p>
+                                    <p style="font-size: 16px; line-height: 10px;">{{price.franchise_state }}, {{price.franchise_pincode }}-{{price.franchise_country}}</p>
+                                    <p style="font-size: 16px; line-height: 10px;">GSTIN: {{price.franchise_company_gstin}}</p>
+                                    <p style="font-size: 16px; line-height: 10px;">Contact: {{price.contact_no}}</p>
+                                    <p style="font-size: 16px; line-height: 10px;">Email: {{price.email_id}}</p>
+                                </div>
+                                
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr>
+                <td width="1024" style="background: #fff; padding: 20px 0px;">
+                    <div style="width: 100%; display:flex; justify-content: center;  align-items: center; position: relative;">
+                        <div style="width: 100%; height: 2px; background: #ccc; "><h2 style="font-size:25px; background: #fff; position: absolute; top: -35px; left:50%; transform: translateX(-50%); padding: 0px 20px; color: #000;">INVOICE</h2></div>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 20px; padding-bottom: 20px;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse; vertical-align: top;">
+                        <tr>
+                            <td width="700px" style="text-align: left; vertical-align: top; background: #fff; vertical-align: top;" *ngIf="!price.isCompany">
+                                <div style="padding-right: 100px;">
+                                    <h2 style="line-height: 10px; font-size: 16px;">Bill To</h2>
+                                    <p style="line-height: 16px; font-size: 16px;">{{price.first_name}} {{price.last_name}} </p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.address}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.district}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.pincode}} {{price.state}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.consumer_country}}</p>
+                                </div>
+                            </td>
+                            
+                            <td width="700px" style="text-align: left; vertical-align: top; background: #fff; vertical-align: top;" *ngIf="price.isCompany">
+                                <div style="padding-right: 100px;">
+                                    <h2 style="line-height: 10px; font-size: 16px;">Bill To</h2>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.company_name}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.company_address}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.district}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.pincode}} {{price.state}}</p>
+                                    <p style="line-height: 10px; font-size: 16px;">{{price.consumer_country}}</p>
+                                </div>
+                            </td>
+                            
+                            
+                            <td  style="vertical-align: top; background: #fff;">
+                                <table width="324px" style="border-collapse: collapse; vertical-align: top;">  
+                                    <tr>
+                                        <td style="border:0px; background: #fff; font-size: 16px; font-weight: 600;">Invoice Id:</td>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: left;">{{price.invoice_id}}</td>
+                                    </tr>
+                                    <tr *ngIf="!price.isCompany">
+                                        <td style="border:0px; background: #fff; font-size: 16px; font-weight: 600;">Phone: </td>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: left;">{{price.phone}}</td>
+                                    </tr>
+                                    
+                                    <tr *ngIf="price.isCompany">
+                                        <td style="border:0px; background: #fff; font-size: 16px; font-weight: 600; ">Contact No: </td>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: left;">{{price.company_contact_no}}</td>
+                                    </tr>
+                                    
+                                    <tr >
+                                        <td style="border:0px; background: #fff; font-size: 16px; font-weight: 600;">Email:</td>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: left;">{{price.email}}</td>
+                                    </tr>
+                                    
+                                    <!-- <tr *ngIf="price.isCompany">
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: right; font-weight: 500; width: 350px;">Email:</td>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: left; padding-left: 20px;">{{price.email}}</td>
+                                    </tr> -->
+                                    <!-- <tr>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: right; font-weight: 500; width: 350px;">Place of Supply:</td>
+                                        <td style="border:0px; background: #fff; font-size: 16px; text-align: left; padding-left: 20px;">Delhi</td>
+                                    </tr> -->
+                                    
+                                    
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            
+            <tr  *ngIf="price.isCompany">
+                <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 20px;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; background: #fff; vertical-align: top;">
+                                <p style="line-height: 10px; font-size: 16px; padding-bottom: 20px;">GSTIN: {{price.gstin}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td width="1024"  style="text-align: right;  background: #fff;">
+                                <table  style="border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width:200px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Invoice Date </td>
+                                        <td style="width:284px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Vehicle Type</td>
+                                        <td style="width: 270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Make</td>
+                                        <td style="width: 270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Model</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="width:200px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.date_created}}</td>
+                                        <td style="width:284px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.vehicle_type}}</td>
+                                        <td style="width:270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.make}}</td>
+                                        <td style="width:270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.model_no}}</td>  
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top; padding-top: 25px;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td width="1024"  style="text-align: right;  background: #fff;">
+                                <table  style="border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width:270px;  border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Vehicle Color</td>
+                                        <td style="width:200px;  border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Vehicle Registration No</td>
+                                        <td style="width: 270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Coating Studio</td>
+                                        <td style="width: 284px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Payment Mode</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="width:270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.color}}</td>
+                                        <td style="width:200px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.regn_no}}</td>
+                                        <td style="width:270px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.location_name}}</td>
+                                        <td style="width:284px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;">{{price.payment_mode}}</td>  
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr>
+                <td width="1024"  style="text-align: right;  background: #fff; padding-top: 25px;">
+                    <table  style="border-collapse: collapse;">
+                        <tr>
+                            <td style="width:24px;  border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">#</td>
+                            <td style="width:400px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Item </td>
+                            <td style="width:400px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000;">Description </td>
+                            <td style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">SAC</td>
+                            <td style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">Price</td>
+                            <td *ngIf="price.disc_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">Discount</td>
+                            <td *ngIf="price.cgst_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">CGST</td>
+                            <td *ngIf="price.sgst_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">SGST</td>
+                            <td *ngIf="price.igst_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">IGST</td>
+                            <td style="width:100px; border: 1px solid #565656; background: #e8f7fe; font-size: 16px; padding:  10px; background: #e75749; font-weight: 500; color: #000; text-align: left;">Amount</td>
+                        </tr>
+                        <tr *ngFor="let item of InvServItem;let i= index;">
+                            <td style="width:24px;  border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: center;">{{i+1}}</td>
+                            <td style="width:400px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;"> {{item.invoice_name}}</td>
+                            <td style="width:400px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000;"> {{item.description}}</td>
+                            <td style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">{{item.sac}}</td>
+                            
+                            <td style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">₹{{item.price}}</td>
+                            <td *ngIf="price.disc_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">₹{{item.discount}}<br><span *ngIf="item.disc_percent > 0" style="font-size:11px; color:#2b2b2b;">{{item.disc_percent}}%</span></td>
+                            <td *ngIf="price.cgst_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">₹{{item.cgst_amt}}<br><span style="font-size:11px; color:#2b2b2b;">{{item.cgst_per}}%</span></td>
+                            <td *ngIf="price.sgst_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">₹{{item.sgst_amt}}<br><span style="font-size:11px; color:#2b2b2b;">{{item.sgst_per}}%</span></td>
+                            <td *ngIf="price.igst_price" style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">₹{{item.igst_amt}}<br><span style="font-size:11px; color:#2b2b2b;">{{item.igst_per}}%</span></td>
+                            <td style="width:100px; border: 1px solid #565656; font-size: 16px; padding:  10px; background: #fff; color: #000; text-align: right;">₹{{item.amount}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top;">
+                    <table class="table3" width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td width="600px"  style="text-align: right; vertical-align: top;  background: #fff;  padding-top: 30px;">
+                                <table  style="border-collapse: collapse;">
+                                    <tr>
+                                        <td style="text-align: center; background: #fff; vertical-align: top; font-size: 16px; text-align: left">
+                                            <p *ngIf="price.note" style="padding:15px; padding-top: 5px; line-height: 24px; border: 1px solid #565656; min-width:300px; max-width:500px; min-height: 70px; height: auto; width: auto; border-radius: 10px;">
+                                                {{price.note}}
+                                            </p>
+                                            <p style="font-size: 16px;">Thanks for the business.</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td  style="text-align: right;  background: #fff;  padding-top: 30px;">
+                                <table width="424px" style="border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width:320px; vertical-align: top;  background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">Item Total</td>
+                                        <td style="vertical-align: top;  background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.item_price}}</td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td width="120"  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 500;">Discount%</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">{{price.dis_per}}</td>
+                                    </tr> -->
+                                    <tr *ngIf="price.disc_price">
+                                        <td style="width:320px; vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;" >Discount({{price.dis_per}}%)</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.disc_price}}</td>
+                                    </tr>
+                                    <tr *ngIf="price.disc_price">
+                                        <td style="width:320px; vertical-align: top;  background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">Sub Total</td>
+                                        <td style="vertical-align: top;  background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.sub_amount}}</td>
+                                    </tr>
+                                    
+                                    <!-- <tr>
+                                        <td  width="120"  style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 500;">CGST</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.cgst}}</td>
+                                    </tr> -->
+                                    
+                                    <tr *ngIf="price.sgst_price">
+                                        <td style="width:320px; vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">SGST</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.sgst_price}}</td>
+                                    </tr>
+                                    <!-- ({{price.sgst_per}}) -->
+                                    <tr *ngIf="price.cgst_price">
+                                        <td style="width:320px; vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">CGST</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.cgst_price}}</td>
+                                    </tr>
+                                    <!-- ({{price.cgst_per}}) -->
+                                    
+                                    <tr *ngIf="price.igst_price">
+                                        <td style="width:320px; vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">IGST</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.igst_price}}</td>
+                                        <!-- ({{price.igst_per}}%) -->
+                                    </tr>
+                                    
+                                    <!-- <tr *ngIf="price.gst_price">
+                                        <td style="width:320px; vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">GST</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.gst_price}}</td>
+                                    </tr> -->
+                                    <tr>
+                                        
+                                        <td style="width:320px; vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px; font-weight: 600;">Total Amount</td>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 7px;">₹{{price.amount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:320px; border-top:1px solid #565656; border-bottom:1px solid #565656; vertical-align: top; background: #fff; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;">Received</td>
+                                        <td style="border-top:1px solid #565656; border-bottom:1px solid #565656;  vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 15px 5px;">₹{{price.received  }}</td>
+                                    </tr>
+                                    
+                                    
+                                    
+                                    <tr>
+                                        <td style="width:320px; border-top:1px solid #565656; border-bottom:1px solid #565656; vertical-align: top; background: #fff; font-size: 16px; font-weight: 600; text-align: right; padding: 15px 5px;">Balance</td>
+                                        <td style="border-top:1px solid #565656; border-bottom:1px solid #565656;  vertical-align: top; background: #fff; font-size: 16px; text-align: right; padding: 15px 5px;">₹{{price.balance}}</td>
+                                    </tr>
+                                    
+                                    
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td width="1024px" style="background: #fff; vertical-align: top; text-align: right;">
+                    <table  width="1024px" style="background: #fff; table-layout:fixed; border-collapse: collapse;">
+                        <tr>
+                            <td  style=" background: #fff; float: right;">
+                                <table >
+                                    <tr>
+                                        <td style="vertical-align: top; background: #fff; font-size: 16px; padding: 15px 5px; font-weight: 600;">Total Amount In Words:</td> 
+                                        <td style="vertical-align: top; background: #fff;font-size: 16px; text-transform: capitalize;  padding: 15px 5px;"><i>{{price.amount | converToWord }}</i> </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr>
+                <td style="background: #fff;  border-bottom: 1px solid #565656; padding:30px 0px 15px 0px;"><h2 style="font-size: 16px; font-weight: 600px; margin:0px; ">Terms & Conditions</h2></td>
+            </tr>
+            <tr>
+                <td style="text-align: left; background: #fff; border: 1px solid #565656; vertical-align: top; padding: 30px 15px;">
+                    
+                    <p style="line-height: 20px; font-size: 16px;">
+                        1) Detailing Devils warranty is non-transferable and applicable only after you complete all
+                        the registration formalities.
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        2) It is not valid on soiling, damages, discoloration or stains caused due to bleaches, solv
+                        ents, acid, <br>
+                        burns, dye, accident, vandalism or negligence/ faults on part of the automobile owner.
+                        
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        3) To uphold the authenticity of the warranty, follow the car care instructions and consult
+                        an authorized Detailing Devils coating studio.
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        4) First car assessment should be done after one year of coating treatment if necessary and
+                        thereafter, <br>
+                        once a year assessment.
+                        
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        5) Post-treatment, coating shall neither be removed nor over coated with any other products.
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        6) After application, avoid washing/cleaning your vehicle for 2 days. Bring your vehicle aft
+                        er 2 days for a <br>
+                        Complimentary first wash. (Note: only first wash is complimentary)
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        7) Only wet clean the car/Bike with plain water. Dry cleaning of the car/Bike can result in
+                        scratches and <br>
+                        no warranty can be claimed for the same.
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        8) In case of any coating damage during the warranty period, follow the given procedure: <br>
+                        
+                        <span style="padding-left: 20px; line-height: 20px;">
+                            a) Contact your nearest coating studio right away and inform them about the damage issue<br>
+                        </span>
+                        
+                        <span style="padding-left: 20px; line-height: 20px;">
+                            b) Detailing Devils service inspection in charge will then examine your vehicle during the business hours in the nearest coating studio allotted by them.<br>
+                        </span>
+                        
+                        <span style="padding-left: 20px; line-height: 20px;">
+                            c) Post assessment if your claims get accepted, then our service inspector will contact you with a  mutually convenient time and location. <br>
+                        </span>
+                        
+                        <span style="padding-left: 20px; line-height: 20px;">
+                            d) Provide your Invoice/warranty card to avail warranty <br>
+                        </span>
+                        
+                        <span style="padding-left: 20px; line-height: 20px;">
+                            e) If the claim is not made within 30 days of observing the problem, it will automatically set Detailing Devils dealer free of any legal obligations. 
+                        </span> 
+                        
+                    </p>
+                    <p style="line-height: 20px; font-size: 16px;">
+                        9) Goods once sold will not be taken back or exchanged except as required by law.
+                    </p>
+                    
+                    <p style="line-height: 20px; font-size: 16px;">
+                        10) This is a Computer Generated Invoice, hence signature not required.
+                    </p>
+                </td>
+            </tr>
+            
+        </table>
+    </div>
+    
+    
+    
+</div>

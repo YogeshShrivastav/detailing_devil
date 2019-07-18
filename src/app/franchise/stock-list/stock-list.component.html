@@ -1,0 +1,184 @@
+<div class="main-container">
+  <div class="master-heading bcspace">
+    <div class="back-btn">
+      <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+    </div>
+    <div class="vl-info">
+      <ul>
+        <li class="af-none">
+          <p>
+            <span class="blue">{{db.franchise_name}} </span> 
+            <i class="material-icons r-arrow">keyboard_arrow_right</i>
+            <span>Stock</span> 
+          </p>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+  <div class="cs-container">
+    <div class="cs-row cs-tabs-space">
+      <!-- TABS Component -->
+      <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+      
+      <!-- TABS Component -->
+      <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+        
+        <div class="cs-spinner full-page" *ngIf="loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt20">
+          <div class="col-12">
+            <div class="form-field" *ngIf="db.datauser.franchise_id == 0 " style="background: #fff; padding: 0px 15px; margin-right: -15px;">
+             
+             <!-- //////////////////// IMPORTAINT ////////////////////////// -->
+             
+              <!-- <form name="product_item" (ngSubmit)="a.form.valid && addProductItem(a)" #a="ngForm" novalidate autocomplete="off">
+                <div class="row pt15">
+                  <div class="control-field col-3" style="padding-top: 0px !important;">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Category Name" name="category" [(ngModel)]="addProduct.category" (selectionChange)="getBrandList()" required>
+                        <mat-option *ngFor="let row of categoryList; let b = index" [value]="row.category">
+                          <small>{{ row.category }}</small>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="control-field col-3" style="padding-top: 0px !important;">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Brand" name="brand" [(ngModel)]="addProduct.brand" (selectionChange)="get_products()" required>
+                        <mat-option *ngFor="let val of brands;let i = index" [value]="val.brand_name"> {{val.brand_name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-3" style="padding-top: 0px !important;">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Product" name="product_id"  [(ngModel)]="addProduct.product_id" (selectionChange)="get_unit()" required>
+                        <mat-option *ngFor="let val of products;let i = index" [value]="val.id">{{val.product_name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-3" style="padding-top: 0px !important;">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Unit of Measurement" name="unit_measurement"  [(ngModel)]="addProduct.unit_measurement" (selectionChange)="getCurrentStock()" >
+                        <mat-option *ngFor="let val of units;let i = index" [value]="val.unit_of_measurement">{{val.unit_of_measurement}}</mat-option>                            
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-3" [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Attribute type" name="attribute_type" [(ngModel)]="addProduct.attribute_type" (selectionChange)="getAttributeOptionList()">
+                        <mat-option *ngFor="let row of attributeTypeList; let r = index" [value]="row.attr_type">
+                          <small>{{row.attr_type}}</small>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-3"  [ngClass]="{'slide-none':attributeTypeList.length == 0}">
+                    <mat-form-field class="cs-multi-select">
+                      <mat-select placeholder="Attribute Option" name="attribute_option" [(ngModel)]="addProduct.attribute_option">
+                        <mat-option *ngFor="let row of attributeOptionList; let r = index" [value]="row.attr_option">
+                          <small>{{row.attr_option}}</small>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-3" >
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Current Stock" name="sale_qty" [(ngModel)] = "addProduct.sale_qty" #sale_qty="ngModel" disabled required>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="control-field col-3" *ngIf="addProduct.sale_qty > 0">
+                    <mat-form-field class="example-full-width cs-input">
+                      <input matInput placeholder="Qty" name="quantity" [(ngModel)] = "addProduct.quantity" #quantity="ngModel" required>
+                    </mat-form-field>
+                    <div class="plus-btn" *ngIf="addProduct.quantity > 0 && addProduct.quantity <= addProduct.sale_qty"> 
+                      <div class="in-btn">
+                        <button mat-raised-button type="submit" color="warn" [attr.disabled]="savingData == 'true' ? true : false " color="primary">Add</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </form> -->
+            
+            
+              <!-- ////////////////////// END ////////////////////////////// -->
+            
+            </div>
+            <div class="cs-table ">
+              <div class="header sticky-header">
+                <table>
+                  <tr>
+                    <th class="w130">Category</th>
+                    <th class="w130">Brand</th>
+                    <th>Product</th>
+                    <th class="w100">HSN</th>
+                    
+                    <th class="w380 text-center">
+                      <table>
+                        <tr>
+                          <td class="text-center">UOM</td>
+                          <td class="text-center">Qty</td>
+                          <td class="text-center">Stock Alert</td>
+                          <td class="text-center">Transaction </td>
+                        </tr>
+                      </table>
+                    </th>
+                  </tr>
+                </table>
+              </div>
+              <div class="table-container">
+                <div class="table-body">
+                  <table>
+                    <tr *ngFor="let val of stock;let i = index">
+                      <td class="w130">{{val[1].category}}</td>
+                      <td class="w130">{{val[1].brand}}</td>
+                      <td><a class="mat-button link">{{val[1].product}} {{val[1].attribute_type?'-':''}} {{val[1].attribute_type}} {{val[1].attribute_option}}</a></td>
+                      <td class="w100">{{val[1].hsn_code}}</td>
+                      <td class="w380 in-table">
+                        <table>
+                          <tr *ngFor="let m of val[0];let x = index">
+                            <td class="text-center"><p>{{m.unit_measurement}}</p></td>
+                            <td class="text-center green-clr" [ngClass]="{'green-clr': m.current_stock >= m.stock_limit, 'red-clr': m.current_stock <= m.stock_limit}"><p>{{m.current_stock}}</p></td>
+                            <td class="w80 text-center in-table">
+                              <div class="edit-td-input" [ngClass]="{'active' : top_index == i && bottom_index == x }">
+                                <ng-container *ngIf="top_index != i || bottom_index != x ">
+                                  {{ m.stock_limit}}
+                                </ng-container>
+                                <i class="material-icons td-icon edit-icon" (click)=" top_index = i;bottom_index = x;stock_val =  m.stock_limit " *ngIf="top_index != i || bottom_index != x " >create</i>
+                                <ng-container *ngIf=" top_index == i && bottom_index == x " >
+                                  <input  placeholder="Stock Limit" [(ngModel)]="stock_val" (keyup.enter)="update_stock(m.id)" type="number" [name]="'stock_limit'+i+x" #update_qty="ngModel" required >
+                                  <i class="material-icons td-icon save-icon" (click)="update_stock(m.id)" >save</i>
+                                </ng-container>
+                              </div>
+                            </td> 
+                            <td class="text-center " ><p> <a mat-button  routerLink="/franchise-consumption-outgoing/{{franchise_id |crypt}}/{{m.id |crypt}}" routerLinkActive="active"  class="link">Transaction</a></p></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="h100"></div>
+  </div>
+</div>

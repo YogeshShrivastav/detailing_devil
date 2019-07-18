@@ -1,0 +1,96 @@
+<div class="main-container"> 
+    <div class="master-heading">
+        <div class="vl-info">
+            <ul>
+                <li><p>Franchise : <span>{{ total_leads }}</span></p></li>
+                <li (click)="orderListReverse()"><p class="pl30"><i class="material-icons icon">swap_vert</i><span>Sort</span></p></li>
+            </ul>
+        </div>
+        <div class="top-search wp30 ml30">
+            <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getLeadList()">
+            <i class="material-icons">search</i>
+        </div>
+        <div class="top-pagination m-right-data">
+            <ul>
+                <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getLeadList()"></li>
+                <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+        </div>
+    </div>
+    <div class="all-container" *ngIf="loading_page">
+        <div class="cs-row">
+            <div class="right-data">
+                <div class="cs-spinner full-page" *ngIf = "!loading_list">
+                    <div class="outer">
+                        <div class="innear">
+                            <mat-spinner></mat-spinner>
+                            <P>LOADING . . .</P>
+                        </div>
+                    </div>
+                </div>
+                <div class="cs-table header-fixed">
+                    <div class="header">
+                        <table class="sno-border">
+                            <tr>
+                                <th class="w50 border-right-none">S.no.</th>
+                                <th class="w150">
+                                    <div class="filter">
+                                        <mat-form-field class="cs-input cs-date-picker">
+                                            <input placeholder="Date" [(ngModel)]="filter.date" name="date" matInput (dateChange)="getLeadList()" [matDatepicker]="picker" >
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th class="w200">Franchise Name  </th>
+                                <th class="w170">Contact</th>
+                                <th class="w100">Phone</th>
+                                <th class="w50">Lead</th>
+                                <th class="w100">Counsumer</th>
+                                <th class="w200">
+                                    <div class="filter">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Location" [(ngModel)]="filter.location_id" (selectionChange)="getLeadList()">
+                                                <mat-option value="">All</mat-option>
+                                                <mat-option  *ngFor="let val of locations; let i = index" [value]="val.id">{{val.location_name ? val.location_name : '-------'}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </th>
+                                <th>Username</th> 
+                                <th class="w150">Password</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-body">
+                            <table class="sno-border">
+                                <tr *ngFor="let val of leads; let i = index">
+                                    <td class="w50 text-center">{{ ( (current_page - 1 ) * 20 ) + ( i+1 ) }}</td>
+                                    <td class="w150">{{val.created_at | date: 'dd MMM yyyy'}} / {{val.created_name}}</td>
+                                    <td class="w200"><a mat-button class="link" routerLink="/franchise-dashboard/{{val.id |crypt}}" routerLinkActive="active"> {{val.company_name}}</a></td>
+                                    <td class="w170">{{val.name}}</td>
+                                    <td class="w100">{{val.contact_no}}</td>
+                                    <td class="w50">{{val.consumer_lead}}</td>
+                                    <td class="w100">{{ val.consumer }}</td>
+                                    <td class="w200">{{ val.location_name }}</td>
+                                    <td>{{ val.username }}</td>
+                                    <td  class="w150">{{ val.visible_password }}
+                                        <div class="action-btns">
+                                            <a mat-button class="view" routerLink="/franchise-detail/{{val.id |crypt}}" routerLinkActive="active"><i class="material-icons">remove_red_eye</i> View</a>
+                                            <button mat-button class="delete" (click)="deleteLead(val.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                                        </div>     
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h100"></div>

@@ -1,0 +1,141 @@
+<div class="main-container">
+        <div class="cs-spinner full-page" *ngIf = "loading_list">
+          <div class="outer">
+            <div class="innear">
+              <mat-spinner></mat-spinner>
+              <P>LOADING . . .</P>
+            </div>
+          </div>
+        </div>
+        <div class="master-heading">
+          <div class="heading">
+            <h1>MASTER's</h1>
+
+          </div>
+          <!-- <div class="top-search wp50 ml190">
+            <input type="text" placeholder="SEARCH. . ." [(ngModel)]="search"  (keyup.enter)="current_page = 1;getProductList()">
+            <i class="material-icons">search</i>
+          </div> -->
+          <!-- <div class="top-pagination m-right-data">
+            <ul>
+              <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+              <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+              <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="getProductList()"></li>
+              <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+            </ul>
+          </div> -->
+          <div class="m-right-data action-btns-right vl-info" >
+            <ul>
+                <li class="create"><a routerLink="/organization-add" routerLinkActive="active"   mat-button>Add organization</a></li>
+            </ul>
+        </div> 
+        </div>
+        
+        <div class="cs-container" >
+            <div class="cs-row cs-tabs-space">
+                <!-- TABS Component -->
+                <app-master-listing-tabs></app-master-listing-tabs>
+                <!-- TABS Component -->
+                <div class="right-data tabs-listing">
+                    <!-- <div class="cs-spinner half-page" *ngIf="!loading_list">
+                      <div class="outer">
+                        <div class="innear">
+                          <mat-spinner></mat-spinner>
+                          <P>LOADING . . .</P>
+                        </div>
+                      </div>
+                    </div> -->
+     
+      
+<!--       
+                    <div class="data-not-available" *ngIf="loading_list && searchData && (products.length < 1)">
+                        <div class="outer">
+                          <div class="iinear">
+                            <div class="figure" matRipple>
+                              <div class="header">
+                                <img src="assets/img/data-not-available-header.svg" alt="">
+                              </div>
+        
+                              <div class="description">
+                                <div class="cs-heading">
+                                  <h2>for Product</h2>
+                                </div>
+                                <div class="img">
+                                  <i class="material-icons">error_outline</i>
+                                </div>
+                                <div class="psc">
+                                  <p>data not available</p>
+                                  <p>Tap on <a routerLink="/products/add" >ADD NEW</a> for for Product</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+       -->
+                    <!-- <div class="data-not-available" *ngIf="loading_list && !searchData && search">
+                        <div class="outer">
+                          <div class="iinear">
+                            <div class="figure" matRipple>
+                              <div class="header">
+                                <img src="assets/img/data-not-available-header.svg" alt="">
+                              </div>
+      
+                              <div class="description">
+                                <div class="cs-heading">
+                                  <h2>{{ search }}</h2>
+                                </div>
+                                <div class="img">
+                                  <i class="material-icons">search</i>
+                                </div>
+                                <div class="psc">
+                                  <p>data not available</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+                    <div class="cs-table mt15" *ngIf="!loading_list && (organization_list.length > 0)">
+                          <div class="header sticky-header">
+                              <table>
+                                  <tr>
+                                    <!-- <th class="w30">&nbsp;</th> -->
+                                      <th class="w150">Company Name</th>
+                                      <th class="w200">Email</th>
+                                      <th class="w90">Prefix</th>
+                                      <th class="w150">GSTN</th>
+                                      <th >Address</th>
+                                      <th class="w120 text-right">Bank Name</th>
+                                  </tr>
+                              </table>
+                          </div>
+                          <div class="table-container">
+                              <div class="table-body">
+                                  <table>
+                                      <tr *ngFor="let val of organization_list; let i = index">
+                                          <td class="w150">{{ val.company_name }}</td>
+                                          <td class="w200">{{ val.Email }}</td>
+                                          <td class="w90">{{ val.invoice_prefix }}</td>
+                                          <td class="w150">{{ val.company_gstin }}</td>
+                                          <td >{{ val.address }}</td>
+                                          <td class="w120 text-right">{{val.bank_name}}
+
+                                            <div class="action-btns">
+                                              <a mat-button class="edit" routerLink="/organization/edit/{{val.id}}"  routerLinkActive="active"><i class="material-icons">edit</i> Edit</a>
+                                              <button mat-button class="delete" (click)="organization/deleteorganization(val.id)"><i class="material-icons">delete_sweep</i> Delete</button>
+                                              </div>      
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="h100"></div>
+    

@@ -1,0 +1,23 @@
+
+LEAD
+
+	LEAD Listing
+
+		Consumer (Table : consumers type=1) & Franchise (Table :franchises type=1)
+
+		Source API (table value : created_by = 0 )
+
+		ALL (All values form table)
+
+		Consumer Lead
+
+			Checked Lead can assign to existing franchise(table : franchise type=2) or any sales agent (table: users access_level 1 or 3)
+		Franchise Lead	
+			
+			Checked Lead can assign to existing user(table: users access_level 1 or 3)
+
+	LEAD Detail/View
+
+		Edit all the basic detail of lead
+	
+		

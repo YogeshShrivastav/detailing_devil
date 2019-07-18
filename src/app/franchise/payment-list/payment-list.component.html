@@ -1,0 +1,116 @@
+<div class="main-container">
+    <div class="master-heading bcspace">
+      <div class="back-btn">
+        <a mat-button (click)="db.goBack()"><i class="material-icons">arrow_right_alt</i></a>
+      </div>
+      <div class="vl-info">
+        <ul>
+          <li class="af-none"><p><span class="blue">  {{db.franchise_name}} </span> 
+            <i class="material-icons r-arrow">keyboard_arrow_right</i> <span>Payment</span> </p></li>
+        </ul>
+      </div>
+      <div class="top-search wp30 ml30">
+          <input type="text" placeholder="SEARCH. . ." [(ngModel)]="filter.search"  (keyup.enter)="current_page = 1;franchise_payment()">
+          <i class="material-icons">search</i>
+        </div>
+  
+      <div class="top-pagination m-right-data">
+              <ul>
+                  <li><p>Pages {{ current_page }} of {{ last_page }}</p></li>
+                  <li><button mat-button class="left-btn" (click) = 'redirect_previous()'><i class="material-icons">keyboard_arrow_left</i></button></li>
+                  <li><input type="text" placeholder="GO TO" [(ngModel)]="current_page"  (keyup.enter)="franchise_payment()"></li>
+                  <li><button mat-button class="right-btn" (click) = 'redirect_next()'><i class="material-icons">keyboard_arrow_right</i></button></li>
+              </ul>
+          </div>
+
+
+    </div>
+    <div class="cs-container">
+      <div class="cs-row cs-tabs-space">
+        <!-- TABS Component -->
+        <app-franchise-left-tabs *ngIf="db.datauser.franchise_id == 0 "></app-franchise-left-tabs>
+     
+        <!-- TABS Component -->
+        <div class="right-data tabs-listing" [ngClass]="{'pl0' : db.datauser.franchise_id}">
+            <div class="cs-spinner full-page" *ngIf="loading_list">
+                <div class="outer">
+                  <div class="innear">
+                    <mat-spinner></mat-spinner>
+                    <P>LOADING . . .</P>
+                  </div>
+                </div>
+              </div>
+
+            <div class="row">
+              <div class="cs-table" *ngIf="!loading_list && (payment.length > 0  || filtering ) ">
+                <div class="header sticky-header">
+                  <table>
+                    <tr>
+                        <th  class="w130">
+                            <div class="filter">
+                                <mat-form-field class="cs-input cs-date-picker">
+                                  <input placeholder="Date/Created By" [(ngModel)]="filter.date" name="date" matInput (dateChange)="franchise_payment()"  [matDatepicker]="picker1" >
+                                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                                </div>
+      
+                        </th> 
+                      <th class="w130 text-center">Invoice ID</th>
+                      <!-- <th  class="w130 text-center">JC no.</th>
+                      <th>Customer Name</th> -->
+                      <th class="w130">
+                          <div class="filter">
+                              <mat-form-field>
+                                <mat-select placeholder="Mode" [(ngModel)]="filter.mode" (selectionChange)="franchise_payment()">
+                                  <mat-option value="">All</mat-option>
+                                  <mat-option value="Cash">Cash</mat-option>
+                                  <mat-option value="Bank Transfer">Bank Transfer</mat-option>
+                                  <mat-option value="Payment Gateway">Payment Gateway</mat-option>   
+                                  <mat-option value="Cheque">Cheque</mat-option>
+                                  <mat-option value="NEFT">NEFT</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                      </th>
+                      <th class="w130 text-center">Amount</th>
+                      <!-- <th class="w130">
+                          <div class="filter">
+                              <mat-form-field class="w80" >
+                                  <mat-select placeholder="Status">
+                                      <mat-option value="pending"  (click)="franchise_saleinvoice('')">All</mat-option>
+                                      <mat-option value="pending"  (click)="franchise_saleinvoice('pending')">Pending</mat-option>
+                                      <mat-option value="done"  (click)="franchise_saleinvoice('paid')">Paid</mat-option>
+                                  </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </th> -->
+                    </tr>
+                  </table>
+                </div>
+                <div class="table-container">
+                  <div class="table-body">
+                    <table>
+                      <tr *ngFor = "let pay of payment;let i = index">
+                        <td class="w130">{{pay.date_created | date: 'dd MMM yyyy'}} / {{pay.created_by_type}}</td>
+                        <td class="w130 text-center">
+                          <!-- <a mat-button class="link"  routerLink="/invoice-detail" routerLinkActive="active">#{{inv.id}}</a> -->
+                          <a mat-button routerLink="/order-invoice-detail/{{pay.invoice_id |crypt}}" routerLinkActive="active" class="link ">#{{pay.invoice_id}}</a>                                                                           
+                        </td>
+                        <!-- <td class="w130 text-center"><a mat-button class="link" routerLink="/invoice-detail" routerLinkActive="active">#125412</a></td>
+                        <td>Rahul Verma</td> -->
+                        <td class="w130 text-center">{{pay.mode}}</td>
+                        <td class="w130 text-center">&#8377; {{pay.amount}}</td>
+                        <!-- <td class="w130 yellow-clr ft-wt">{{pay.payment_status}}</td> -->
+                      </tr>                      
+                    </table>
+                  </div>
+                </div>
+              </div>   
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="h100"></div>
