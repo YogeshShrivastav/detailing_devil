@@ -42,7 +42,7 @@
     "ng2-toastr": "^4.1.2",
     "ngx-push-notifications": "^7.0.2",
     "node-sass": "^4.11.0",
-    "npm": "^6.5.0",
+    "npm": "^6.13.4",
     "num-words": "^1.0.1",
     "redirect-https": "^1.3.0",
     "rxjs": "^6.0.0",
